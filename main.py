@@ -76,6 +76,6 @@ def add_rocket_terminal():
                         'S2 Isp [s]',
                         'S2 M0 [tons]',
                         'S2 Mp [tons]'])
-    new_rocket = rkt_module.rocket(data.loc[0,:]))
+    new_rocket = rkt_module.rocket(data.loc[0,:])
     new_rocket.add2db()
     return data
