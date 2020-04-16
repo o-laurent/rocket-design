@@ -19,6 +19,9 @@ class StageNumberIsNaN(Exception):
 class StageNumberNotInInterval(Exception):
     pass
 
+class NumberMustBePositive(Exception):
+    pass
+
 class rocket:
     """ 
         class which contains every useful info about a rocket
@@ -84,9 +87,22 @@ class trajectory:
     def __init__(self, data):
         self.name = data['Name']
         self.mission = data['Mission']
-        self.a = data['semi-major axis']
-        self.e = data['excentricity']
-        self.diameter = data['diameter']
+        if not 0<data['Semi-major axis']:
+                raise(NumberMustBePositive)
+        else:
+             self.a = data['Semi-major axis']
+        if not 0<data['Semi-minor axis']:
+                raise(NumberMustBePositive)
+        else:
+            self.b = data['Semi-minor axis'] 
+        if not 0<data['Excentricity']:
+                raise(NumberMustBePositive)
+        else:
+            self.e = data['Excentricity']
+        if not 0<data['Diameter']:
+                raise(NumberMustBePositive)
+        else:
+            self.diameter = data['Diameter']
         self.centerx = data['X-center coordinate']
         self.centery = data['Y-center coordinate']
         self.centerz = data['Z-center coordinate']
