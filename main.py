@@ -15,7 +15,7 @@ def importDB(rocket_list):
 def add_rocket_terminal():
     name = input('Enter the name of the rocket: ')
     year = input('Enter the launch year of the rocket: ')
-    country = input('Enter the country which built rocket: ')
+    country = input('Enter the country which builds the rocket: ')
     mission = input('Enter the rocket mission: ') 
     stage_number = int(input('Enter the number of stages: '))
     height = int(input('Enter the total height of the rocket: '))

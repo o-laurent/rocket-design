@@ -1,9 +1,75 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="fr">
     <head>
-		<link rel ="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}"
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Rocket-Design">
+        <meta name="author" content="Johnny Yammine et Olivier Laurent">
+
+        <link rel ="stylesheet" href="../static/css/main.css">
+        <link rel="stylesheet" href="../static/css/uikit.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <!--<link rel="icon" type="image/png" href="images/logo.png"/>-->
     </head>
     <body>
-	    <h1 > {{ message }}</h1>
+        <h3>Add a rocket to the database :</h3>
+	    <form class="uk-form-horizontal">
+            <div class="uk-margin">
+                <label class="uk-form-label" for="rocketName">Name :</label>
+                <input class="uk-input uk-form-width-medium" id="rocketName" type="text" placeholder="Name" name='rocketName' autocomplete="off">
+            </div>
+
+            <div class="uk-margin">
+                <label class="uk-form-label" for="rocketYear">Date of the first launch :</label>
+                <input id='rocketYear' class="uk-input uk-form-width-small"></input>
+            </div>
+
+            <div class="uk-margin">
+                <label class="uk-form-label" for="rocketCountry">Country :</label>
+                <input id='rocketcountry' class="uk-input uk-form-width-medium" type='text'>                      
+            </input>
+            </div>
+
+            <div class="uk-margin">
+                <label class="uk-form-label" for="missionSelect">Mission :</label>
+                <select id='missionSelect' class="uk-select uk-form-width-small">
+                    <option value='LEO'> LEO </option>
+                    <option value='GEO'> GEO </option>             
+                </select>
+            </div>
+
+            <div class="uk-margin">
+                <label class="uk-form-label"for="stageNumber">Stage Number:</label>
+                <input class="uk-input uk-form-width-medium" id="stageNumber" type="number" placeholder="Stage Number" name='stageNumber' autocomplete="off">
+            </div> 
+
+            <div class="uk-margin">
+                <label class="uk-form-label" for="rocketHeight">Height (m)</label>
+                <input class="uk-input uk-form-width-medium" id="rocketHeight" type="number" placeholder="Quantité" name='rocketHeight' autocomplete="off">
+            </div>   
+            <div class="uk-margin">
+                <label class="uk-form-label" for="rocketDiameter">Maximum Diameter (m)</label>
+                <input class="uk-input uk-form-width-medium" id="rocketDiameter" type="number" placeholder="Diameter" name='rocketDiameter' autocomplete="off">
+            </div>  
+
+            <div class="uk-margin">
+                <label class="uk-form-label" for="liftOffMass">Lift-off mass (tons)</label>
+                <input class="uk-input uk-form-width-medium" id="liftOffMass" type="number" placeholder="Lift-off Mass" name='liftOffMass' autocomplete="off">
+            </div>  
+
+            <div class="uk-margin">
+                <label class="uk-form-label" for="payloadMass">Payload mass (tons)</label>
+                <input class="uk-input uk-form-width-medium" id="payloadMass" type="number" placeholder="Payload mass (tons)"  step="0.01" name='payloadMass' autocomplete="off">
+            </div> 
+            <div class="uk-margin">
+                <button id="AddBaseButton" class="uk-button uk-button-primary" type="button" onClick='addProduct()' disabled="">Ajouter à la base de données</button>
+            </div>
+            <br>
+        </form>
+        
+        <!-- UIKIT Theme -->
+        <script src="../static/js/uikit.min.js"></script>
+        <script src="../static/js/uikit-icons.min.js"></script>
     </body>
 </html>
