@@ -22,7 +22,7 @@
 
             <div class="uk-margin">
                 <label class="uk-form-label" for="rocketYear">Date of the first launch :</label>
-                <input id='rocketYear' class="uk-input uk-form-width-small"></input>
+                <input id='rocketYear' class="uk-input uk-form-width-small" type='number'></input>
             </div>
 
             <div class="uk-margin">
@@ -35,35 +35,46 @@
                 <label class="uk-form-label" for="missionSelect">Mission :</label>
                 <select id='missionSelect' class="uk-select uk-form-width-small">
                     <option value='LEO'> LEO </option>
-                    <option value='GEO'> GEO </option>             
+                    <option value='GEO'> GEO </option>           
                 </select>
             </div>
 
             <div class="uk-margin">
-                <label class="uk-form-label"for="stageNumber">Stage Number:</label>
-                <input class="uk-input uk-form-width-medium" id="stageNumber" type="number" placeholder="Stage Number" name='stageNumber' autocomplete="off">
+                <label class="uk-form-label" for="stageNumber">Stage Number:</label>
+                <select id='stageNumber' class="uk-select uk-form-width-medium">
+                    <option value='1'> One Stage </option>
+                    <option value='2'> Two Stages </option>           
+                </select>
             </div> 
 
             <div class="uk-margin">
-                <label class="uk-form-label" for="rocketHeight">Height (m)</label>
+                <label class="uk-form-label" for="boosterSelect">Boosters:</label>
+                <select id='boosterSelect' class="uk-select uk-form-width-medium">
+                    <option value='1'> With boosters </option>
+                    <option value='2'> No boosters </option>           
+                </select>
+            </div>
+
+            <div class="uk-margin">
+                <label class="uk-form-label" for="rocketHeight">Height (m):</label>
                 <input class="uk-input uk-form-width-medium" id="rocketHeight" type="number" placeholder="Quantity" name='rocketHeight' autocomplete="off">
             </div>   
             <div class="uk-margin">
-                <label class="uk-form-label" for="rocketDiameter">Maximum Diameter (m)</label>
+                <label class="uk-form-label" for="rocketDiameter">Maximum Diameter (m):</label>
                 <input class="uk-input uk-form-width-medium" id="rocketDiameter" type="number" placeholder="Diameter" name='rocketDiameter' autocomplete="off">
             </div>  
 
             <div class="uk-margin">
-                <label class="uk-form-label" for="liftOffMass">Lift-off mass (tons)</label>
+                <label class="uk-form-label" for="liftOffMass">Lift-off mass (tons):</label>
                 <input class="uk-input uk-form-width-medium" id="liftOffMass" type="number" placeholder="Lift-off Mass" name='liftOffMass' autocomplete="off">
             </div>  
 
             <div class="uk-margin">
-                <label class="uk-form-label" for="payloadMass">Payload mass (tons)</label>
-                <input class="uk-input uk-form-width-medium" id="payloadMass" type="number" placeholder="Payload mass (tons)"  step="0.01" name='payloadMass' autocomplete="off">
+                <label class="uk-form-label" for="payloadMass">Payload mass (tons):</label>
+                <input class="uk-input uk-form-width-medium" id="payloadMass" type="number" placeholder="Payload mass"  step="0.01" name='payloadMass' autocomplete="off">
             </div> 
             <div class="uk-margin">
-                <button id="AddBaseButton" class="uk-button uk-button-primary" type="button" onClick='addProduct()' disabled="">Ajouter à la base de données</button>
+                <button id="AddBaseButton" class="uk-button uk-button-primary" type="button" onClick='addRocket()' disabled="">Add to the DataBase</button>
             </div>
             <br>
         </form>
