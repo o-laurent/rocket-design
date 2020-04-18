@@ -6,79 +6,192 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Rocket-Design">
         <meta name="author" content="Johnny Yammine et Olivier Laurent">
-
-        <link rel ="stylesheet" href="../static/css/main.css">
         <link rel="stylesheet" href="../static/css/uikit.min.css" />
+        <link rel ="stylesheet" href="../static/css/main.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <!--<link rel="icon" type="image/png" href="images/logo.png"/>-->
     </head>
     <body>
-        <h3>Add a rocket to the database :</h3>
-	    <form class="uk-form-horizontal">
-            <div class="uk-margin">
-                <label class="uk-form-label" for="rocketName">Name :</label>
-                <input class="uk-input uk-form-width-medium" id="rocketName" type="text" placeholder="Name" name='rocketName' autocomplete="off">
+        <div class='page-wrap'>
+            <div class="form">
+            <h3>Add a rocket to the database :</h3>
+            <form class="uk-form-horizontal">
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="rocketName">Name :</label>
+                    <input class="uk-input uk-form-width-medium" id="rocketName" type="text" placeholder="Name" name='rocketName' autocomplete="off">
+                </div>
+
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="rocketYear">Date of the first launch (YYYY):</label>
+                    <input id='rocketYear' class="uk-input uk-form-width-small" type='number' min='1940' step='1'></input>
+                </div>
+
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="rocketCountry">Country :</label>
+                    <input id='rocketcountry' class="uk-input uk-form-width-medium" type='text'>                      
+                </input>
+                </div>
+
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="missionSelect">Mission :</label>
+                    <select id='missionSelect' class="uk-select uk-form-width-small">
+                        <option value='LEO'> LEO </option>
+                        <option value='GEO'> GEO </option>           
+                    </select>
+                </div>
+
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="stageNumber">Stage Number:</label>
+                    <select id='stageNumber' class="uk-select uk-form-width-medium">
+                        <option value='1'> One Stage </option>
+                        <option value='2'> Two Stages </option>           
+                    </select>
+                </div> 
+
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="boosterSelect">Boosters:</label>
+                    <select id='boosterSelect' class="uk-select uk-form-width-medium">
+                        <option value='False'> No Boosters </option>
+                        <option value='True'> With boosters </option>           
+                    </select>
+                </div>
+
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="rocketHeight">Height (m):</label>
+                    <input class="uk-input uk-form-width-medium" id="rocketHeight" type="number" placeholder="Height" name='rocketHeight' autocomplete="off">
+                </div>   
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="rocketDiameter">Maximum Diameter (m):</label>
+                    <input class="uk-input uk-form-width-medium" id="rocketDiameter" type="number" placeholder="Diameter" name='rocketDiameter' autocomplete="off">
+                </div>  
+
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="liftOffMass">Lift-off mass (tons):</label>
+                    <input class="uk-input uk-form-width-medium" id="liftOffMass" type="number" placeholder="Lift-off Mass" name='liftOffMass' autocomplete="off">
+                </div>  
+
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="payloadMass">Payload mass (tons):</label>
+                    <input class="uk-input uk-form-width-medium" id="payloadMass" type="number" placeholder="Payload mass"  step="0.01" name='payloadMass' autocomplete="off">
+                </div> 
+
+                <hr />
+                <div id='firstStageDiv'>
+                    <h4>First stage</h4>
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="stage1Height">Height (m):</label>
+                        <input class="uk-input uk-form-width-medium" id="stage1Height" type="number" placeholder="Height"  step="0.01" name='stage1Height' autocomplete="off">
+                    </div> 
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="stage1Diameter">Diameter (m)</label>
+                        <input class="uk-input uk-form-width-medium" id="stage1Diameter" type="number" placeholder="Diameter"  step="0.01" name='stage1Diameter' autocomplete="off">
+                    </div> 
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="Stage1Thrust">Thrust (kN):</label>
+                        <input class="uk-input uk-form-width-medium" id="Stage1Thrust" type="number" placeholder="Thrust"  step="0.01" name='Stage1Thrust' autocomplete="off">
+                    </div> 
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="stage1ISP">ISP (s):</label>
+                        <input class="uk-input uk-form-width-medium" id="stage1ISP" type="number" placeholder="ISP"  step="0.01" name='stage1ISP' autocomplete="off">
+                    </div> 
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="stage1M0">Initial mass (tons):</label>
+                        <input class="uk-input uk-form-width-medium" id="stage1M0" type="number" placeholder="Initial mass"  step="0.01" name='stage1M0' autocomplete="off">
+                    </div> 
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="stage1Mp">Final mass (tons):</label>
+                        <input class="uk-input uk-form-width-medium" id="stage1Mp" type="number" placeholder="Final mass"  step="0.01" name='stage1Mp' autocomplete="off">
+                    </div> 
+                </div>
+                <div id='boosterDiv' style="display: none;">
+                    <hr />
+                    <h4>Boosters</h4>
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="boosterHeight">Height (m):</label>
+                        <input class="uk-input uk-form-width-medium" id="boosterHeight" type="number" placeholder="Height"  step="0.01" name='boosterHeight' autocomplete="off">
+                    </div> 
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="boosterDiameter">Diameter (m)</label>
+                        <input class="uk-input uk-form-width-medium" id="boosterDiameter" type="number" placeholder="Diameter"  step="0.01" name='boosterDiameter' autocomplete="off">
+                    </div> 
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="boosterThrust">Thrust (kN):</label>
+                        <input class="uk-input uk-form-width-medium" id="boosterThrust" type="number" placeholder="Thrust"  step="0.01" name='boosterThrust' autocomplete="off">
+                    </div> 
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="boosterISP">ISP (s):</label>
+                        <input class="uk-input uk-form-width-medium" id="boosterISP" type="number" placeholder="ISP"  step="0.01" name='boosterISP' autocomplete="off">
+                    </div> 
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="boosterM0">Initial mass (tons):</label>
+                        <input class="uk-input uk-form-width-medium" id="boosterM0" type="number" placeholder="Initial mass"  step="0.01" name='boosterM0' autocomplete="off">
+                    </div> 
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="boosterMp">Final mass (tons):</label>
+                        <input class="uk-input uk-form-width-medium" id="boosterMp" type="number" placeholder="Final mass"  step="0.01" name='boosterMp' autocomplete="off">
+                    </div> 
+                </div>
+                <div id='secondStageDiv' style="display: none;">
+                    <hr />
+                    <h4>Second stage</h4>
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="stage2Height">Height (m):</label>
+                        <input class="uk-input uk-form-width-medium" id="stage2Height" type="number" placeholder="Height"  step="0.01" name='stage2Height' autocomplete="off">
+                    </div> 
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="stage2Diameter">Diameter (m)</label>
+                        <input class="uk-input uk-form-width-medium" id="stage2Diameter" type="number" placeholder="Diameter"  step="0.01" name='stage2Diameter' autocomplete="off">
+                    </div> 
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="stage2Thrust">Thrust (kN):</label>
+                        <input class="uk-input uk-form-width-medium" id="stage2Thrust" type="number" placeholder="Thrust"  step="0.01" name='stage2Thrust' autocomplete="off">
+                    </div> 
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="stage2Isp">ISP (s):</label>
+                        <input class="uk-input uk-form-width-medium" id="stage2Isp" type="number" placeholder="ISP"  step="0.01" name='stage2Isp' autocomplete="off">
+                    </div> 
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="stage2M0">Initial mass (tons):</label>
+                        <input class="uk-input uk-form-width-medium" id="stage2M0" type="number" placeholder="Initial mass"  step="0.01" name='stage2M0' autocomplete="off">
+                    </div> 
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="stage2Mp">Final mass (tons):</label>
+                        <input class="uk-input uk-form-width-medium" id="stage2Mp" type="number" placeholder="Final mass"  step="0.01" name='stage2Mp' autocomplete="off">
+                    </div> 
+                </div>
+                <div class="uk-margin">
+                    <button id="AddBaseButton" class="uk-button uk-button-primary" type="button" onClick='addRocket()' disabled="">Add to the DataBase</button>
+                </div>
+                
+            </br>
+            </form>
             </div>
-
-            <div class="uk-margin">
-                <label class="uk-form-label" for="rocketYear">Date of the first launch :</label>
-                <input id='rocketYear' class="uk-input uk-form-width-small" type='number'></input>
+            <div id="sidebar" class="sidebar">
+                <canvas id="myCanvas"></canvas>
+                <div id='dName'></div>
+                <div id='dYear'></div>
+                <script src="../static/js/draw.js"></script>
             </div>
+        </div>
+            
 
-            <div class="uk-margin">
-                <label class="uk-form-label" for="rocketCountry">Country :</label>
-                <input id='rocketcountry' class="uk-input uk-form-width-medium" type='text'>                      
-            </input>
-            </div>
-
-            <div class="uk-margin">
-                <label class="uk-form-label" for="missionSelect">Mission :</label>
-                <select id='missionSelect' class="uk-select uk-form-width-small">
-                    <option value='LEO'> LEO </option>
-                    <option value='GEO'> GEO </option>           
-                </select>
-            </div>
-
-            <div class="uk-margin">
-                <label class="uk-form-label" for="stageNumber">Stage Number:</label>
-                <select id='stageNumber' class="uk-select uk-form-width-medium">
-                    <option value='1'> One Stage </option>
-                    <option value='2'> Two Stages </option>           
-                </select>
-            </div> 
-
-            <div class="uk-margin">
-                <label class="uk-form-label" for="boosterSelect">Boosters:</label>
-                <select id='boosterSelect' class="uk-select uk-form-width-medium">
-                    <option value='1'> With boosters </option>
-                    <option value='2'> No boosters </option>           
-                </select>
-            </div>
-
-            <div class="uk-margin">
-                <label class="uk-form-label" for="rocketHeight">Height (m):</label>
-                <input class="uk-input uk-form-width-medium" id="rocketHeight" type="number" placeholder="Quantity" name='rocketHeight' autocomplete="off">
-            </div>   
-            <div class="uk-margin">
-                <label class="uk-form-label" for="rocketDiameter">Maximum Diameter (m):</label>
-                <input class="uk-input uk-form-width-medium" id="rocketDiameter" type="number" placeholder="Diameter" name='rocketDiameter' autocomplete="off">
-            </div>  
-
-            <div class="uk-margin">
-                <label class="uk-form-label" for="liftOffMass">Lift-off mass (tons):</label>
-                <input class="uk-input uk-form-width-medium" id="liftOffMass" type="number" placeholder="Lift-off Mass" name='liftOffMass' autocomplete="off">
-            </div>  
-
-            <div class="uk-margin">
-                <label class="uk-form-label" for="payloadMass">Payload mass (tons):</label>
-                <input class="uk-input uk-form-width-medium" id="payloadMass" type="number" placeholder="Payload mass"  step="0.01" name='payloadMass' autocomplete="off">
-            </div> 
-            <div class="uk-margin">
-                <button id="AddBaseButton" class="uk-button uk-button-primary" type="button" onClick='addRocket()' disabled="">Add to the DataBase</button>
-            </div>
-            <br>
-        </form>
-        
+        <!-- Front script -->
+        <script src="../static/js/newrocket.js"></script>
         <!-- UIKIT Theme -->
         <script src="../static/js/uikit.min.js"></script>
         <script src="../static/js/uikit-icons.min.js"></script>
