@@ -38,6 +38,7 @@ body {
 
 #myCanvas {
     height: 80%;
+    margin-bottom: 10%;
     position: fixed;
 }
 
@@ -45,7 +46,6 @@ body {
     width: auto;
     height: auto;
     position: fixed;
-    margin-top: 780px;
     font-size: large;
 }
 
@@ -53,6 +53,6 @@ body {
     width: auto;
     height: auto;
     position: fixed;
-    margin-top: 815px;
-    font-size: small;
+    margin-top: 30px;
+    font-size: x-small;
 }
