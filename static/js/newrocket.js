@@ -24,3 +24,45 @@ document.getElementById("rocketName").addEventListener("keyup", function (e){
 document.getElementById("rocketYear").addEventListener("keyup", function (e){
     document.getElementById("dYear").innerHTML = document.getElementById("rocketYear").value
 })
+
+document.getElementById("stageNumber").addEventListener("click", function (e){
+    stageNumber = Number(document.getElementById("stageNumber").value)
+    booster =  Boolean(Number(document.getElementById("boosterSelect").value))
+    if (stageNumber==1 && booster==false) {
+        clearCanvas()
+        draw1()
+    }
+    else if (stageNumber == 1){
+        clearCanvas()
+        draw1B()
+    }
+    else if (stageNumber==2 && booster==false) {
+        clearCanvas()
+        draw2()
+    }
+    else {
+        clearCanvas()
+        draw2B()
+    }
+})
+
+document.getElementById("boosterSelect").addEventListener("click", function (e){
+    stageNumber = Number(document.getElementById("stageNumber").value)
+    booster = Boolean(Number(document.getElementById("boosterSelect").value))
+    if (stageNumber==1 && booster==false) {
+        clearCanvas()
+        draw1()
+    }
+    else if (stageNumber == 1){
+        clearCanvas()
+        draw1B()
+    }
+    else if (stageNumber==2 && booster==false) {
+        clearCanvas()
+        draw2()
+    }
+    else {
+        clearCanvas()
+        draw2B()
+    }
+})

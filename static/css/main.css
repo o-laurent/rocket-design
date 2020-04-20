@@ -56,3 +56,8 @@ body {
     margin-top: 30px;
     font-size: x-small;
 }
+
+#divF {
+    margin-top: 50%;
+    position: fixed;
+}

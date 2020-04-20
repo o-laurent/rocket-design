@@ -36,6 +36,7 @@
                 <div class="uk-margin">
                     <label class="uk-form-label" for="missionSelect">Mission :</label>
                     <select id='missionSelect' class="uk-select uk-form-width-small">
+                        <option value='SUB'>SubOrbital</oprion>
                         <option value='LEO'> LEO </option>
                         <option value='GEO'> GEO </option>           
                     </select>
@@ -52,8 +53,8 @@
                 <div class="uk-margin">
                     <label class="uk-form-label" for="boosterSelect">Boosters:</label>
                     <select id='boosterSelect' class="uk-select uk-form-width-medium">
-                        <option value='False'> No Boosters </option>
-                        <option value='True'> With boosters </option>           
+                        <option value='0'> No Boosters </option>
+                        <option value='1'> With boosters </option>           
                     </select>
                 </div>
 
@@ -186,13 +187,18 @@
                 <canvas id="myCanvas"></canvas>
                 <div id='dName'></div>
                 <div id='dYear'></div>
-                <script src="../static/js/draw.js"></script>
+                
+                <div id="divF" class="uk-grid-small uk-child-width-auto uk-grid">
+                    <label><input class="uk-checkbox" type="checkbox" checked> Show Fairing</label>
+                    <label><input class="uk-checkbox" type="checkbox"> Show fuel</label>
+                </div>
             </div>
         </div>
             
 
         <!-- Front script -->
         <script src="../static/js/newrocket.js"></script>
+        <script src="../static/js/draw.js"></script>
         <!-- UIKIT Theme -->
         <script src="../static/js/uikit.min.js"></script>
         <script src="../static/js/uikit-icons.min.js"></script>
