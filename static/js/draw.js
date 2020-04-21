@@ -24,7 +24,7 @@ function draw1Adapt(fStageHeight, fStageDiameter) {
     CanvasfStageHeight = fStageHeight*(canvas.height-50-fStageHeight*0.07)/140
     CanvasfStageWidth = fStageDiameter*(canvas.height-50-fStageHeight*0.07)/140
 
-    //Dessin du moteur central 
+    //Drawing of the central engine
     ctx.fillStyle = '#000000'
     ctx.beginPath();
     ctx.moveTo(midx, (basisX - 0.07*CanvasfStageHeight));
@@ -33,7 +33,7 @@ function draw1Adapt(fStageHeight, fStageDiameter) {
     ctx.closePath()
     ctx.fill();
 
-    //Dessin du premier Etage;
+    //Drawing of the first floor
     ctx.fillStyle = '#CCE6FF'
     baseXfStage = basisX - 0.07*CanvasfStageHeight
     ctx.fillRect(midx-CanvasfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight, CanvasfStageWidth, 0.8*CanvasfStageHeight)
@@ -48,7 +48,7 @@ function draw1Adapt(fStageHeight, fStageDiameter) {
 
     baseXfairing = baseXfStage - CanvasfStageHeight
 
-    //Dessin de la coiffe
+    //Drawing of the headdress
     ctx.beginPath();
     ctx.moveTo(midx-CanvasfStageWidth/3, baseXfairing);
     ctx.quadraticCurveTo(midx, +baseXfairing-150, midx+CanvasfStageWidth/3, baseXfairing);
@@ -63,7 +63,7 @@ function draw1Adapt(fStageHeight, fStageDiameter) {
 
 
 function draw1() {
-    /*Dessin d'une fusée avec 1 étages sans boosters*/
+    //Drawing of the rocket with one floor without boosters
     canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
     canvas.height = document.getElementById('sidebar').getBoundingClientRect().height
     midy = canvas.height/2
@@ -71,7 +71,7 @@ function draw1() {
     ratioV = canvas.height/410
     ratioH = canvas.width/150
 
-    //Dessin du contour
+    //Drawing of the bordures
     ctx.beginPath();
     ctx.moveTo(midx-150*ratioV, 0);
     ctx.lineTo(midx-150*ratioV, canvas.height);
@@ -81,7 +81,7 @@ function draw1() {
     ctx.stroke();
 
 
-    //Dessin de la coiffe
+    //Drawing of the headdress
     ctx.fillStyle = '#cce6ff'
     ctx.beginPath();
     ctx.moveTo(midx-15*ratioV, 150*ratioV+10);
@@ -94,7 +94,7 @@ function draw1() {
     ctx.closePath()
     ctx.stroke()
 
-    //Dessin du premier Etage;
+    //Drawing of the first floor
     ctx.beginPath()
     ctx.moveTo(midx-20*ratioV, 180*ratioV+10)
     ctx.lineTo(midx-15*ratioV, 150*ratioV+10)
@@ -105,7 +105,7 @@ function draw1() {
     ctx.fill()
     ctx.fillRect(midx-20*ratioV, 180*ratioV+10-1, 40*ratioV, 170*ratioV+1);
 
-    //Dessin du moteur central 
+    //Drawing of the central engine 
     ctx.fillStyle = '#000000'
     ctx.beginPath();
     ctx.moveTo(midx, 350*ratioV+10);
@@ -116,7 +116,7 @@ function draw1() {
 }
 
 function draw1B() {
-    /*Dessin d'une fusée avec 2 étages et boosters*/
+    //Drawing of the rocket with one floor and boosters
     canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
     canvas.height = document.getElementById('sidebar').getBoundingClientRect().height
     midy = canvas.height/2
@@ -124,7 +124,7 @@ function draw1B() {
     ratioV = canvas.height/410
     ratioH = canvas.width/150
 
-    //Dessin du contour
+    //Drawing of the bordures
     ctx.beginPath();
     ctx.moveTo(midx-150*ratioV, 0);
     ctx.lineTo(midx-150*ratioV, canvas.height);
@@ -134,7 +134,7 @@ function draw1B() {
     ctx.stroke();
 
 
-    /*Dessin de la coiffe*/
+    //Drawing of the headdress
     ctx.fillStyle = '#cce6ff'
     ctx.beginPath();
     ctx.moveTo(midx-15*ratioV, 150*ratioV+10);
@@ -147,7 +147,7 @@ function draw1B() {
     ctx.closePath()
     ctx.stroke()
 
-    //Dessin du premier Etage;
+    //Drawing of the first floor
     ctx.beginPath()
     ctx.moveTo(midx-20*ratioV, 180*ratioV+10)
     ctx.lineTo(midx-15*ratioV, 150*ratioV+10)
@@ -158,7 +158,7 @@ function draw1B() {
     ctx.fill()
     ctx.fillRect(midx-20*ratioV, 180*ratioV+10-1, 40*ratioV, 170*ratioV+1);
 
-    //Dessin du booster gauche;
+    //Drawing of the left booster
     ctx.fillRect(midx-(20+20)*ratioV, 220*ratioV+10, 20*ratioV, 130*ratioV);
 
     ctx.beginPath()
@@ -175,7 +175,7 @@ function draw1B() {
     ctx.closePath()
     ctx.stroke()
 
-    //Dessin du booster droit
+    //Drawing of the right booster 
     ctx.fillRect(midx+(20)*ratioV, 220*ratioV+10, 20*ratioV, 130*ratioV);
 
     ctx.beginPath()
@@ -192,7 +192,7 @@ function draw1B() {
     ctx.closePath()
     ctx.stroke()
 
-    //Dessin du moteur central 
+    //Drawing of the central engine 
     ctx.fillStyle = '#000000'
     ctx.beginPath();
     ctx.moveTo(midx, 350*ratioV+10);
@@ -201,7 +201,7 @@ function draw1B() {
     ctx.closePath()
     ctx.fill();
 
-    //Dessin du moteur gauche
+    //Drawing of the left engine
     ctx.beginPath();
     ctx.moveTo(midx-30*ratioV-1, 350*ratioV+10);
     ctx.lineTo(midx-40*ratioV, 375*ratioV+10);
@@ -209,7 +209,7 @@ function draw1B() {
     ctx.closePath()
     ctx.fill();
 
-    //Dessin du moteur droit
+    //Drawing of the right engine
     ctx.beginPath();
     ctx.moveTo(midx+30*ratioV+1, 350*ratioV+10);
     ctx.lineTo(midx+40*ratioV, 375*ratioV+10);
@@ -220,7 +220,7 @@ function draw1B() {
 
 
 function draw2() {
-    /*Dessin d'une fusée avec 2 étages et boosters*/
+    //Drawing of the rocket with two floors and without boosters 
     canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
     canvas.height = document.getElementById('sidebar').getBoundingClientRect().height
     midy = canvas.height/2
@@ -229,7 +229,7 @@ function draw2() {
     ratioV = canvas.height/410
     ratioH = canvas.width/150
 
-    //Dessin du contour
+    //Drawing of the bordures
     ctx.beginPath();
     ctx.moveTo(midx-150*ratioV, 0);
     ctx.lineTo(midx-150*ratioV, canvas.height);
@@ -239,14 +239,14 @@ function draw2() {
     ctx.stroke();
 
 
-    /*Dessin de la coiffe*/
+    //Drawing of the headdress
     ctx.fillStyle = '#cce6ff'
     ctx.beginPath();
     ctx.moveTo(midx-20*ratioV, 50*ratioV+10);
     ctx.quadraticCurveTo(midx, -50*ratioV+10, midx+20*ratioV, 50*ratioV+10);
     ctx.fill();
 
-    //Dessin du second Etage
+    //Drawing of the second floor
     ctx.fillRect(midx-20*ratioV, 50*ratioV+10, 40*ratioV, 100*ratioV-1+10);
     ctx.beginPath()
     ctx.moveTo(midx-20*ratioV, 50*ratioV+10)
@@ -260,7 +260,7 @@ function draw2() {
     ctx.closePath()
     ctx.stroke()
 
-    //Dessin du premier Etage;
+    //Drawing of the first floor
     ctx.beginPath()
     ctx.moveTo(midx-30*ratioV, 180*ratioV+10)
     ctx.lineTo(midx-20*ratioV, 150*ratioV+10)
@@ -271,7 +271,7 @@ function draw2() {
     ctx.fill()
     ctx.fillRect(midx-30*ratioV, 180*ratioV+10-1, 60*ratioV, 170*ratioV+1);
 
-    //Dessin du moteur central 
+    //Drawing of the central engine
     ctx.fillStyle = '#000000'
     ctx.beginPath();
     ctx.moveTo(midx, 350*ratioV+10);
@@ -282,7 +282,7 @@ function draw2() {
 }
 
 function draw2B() {
-    /*Dessin d'une fusée avec 2 étages et boosters*/
+    //Drawing of the rocket with two floors and boosters 
     canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
     canvas.height = document.getElementById('sidebar').getBoundingClientRect().height
     midy = canvas.height/2
@@ -291,7 +291,7 @@ function draw2B() {
     ratioV = canvas.height/410
     ratioH = canvas.width/150
 
-    //Dessin du contour
+    //Drawing of the bordures
     ctx.beginPath();
     ctx.moveTo(midx-150*ratioV, 0);
     ctx.lineTo(midx-150*ratioV, canvas.height);
@@ -301,14 +301,14 @@ function draw2B() {
     ctx.stroke();
 
 
-    /*Dessin de la coiffe*/
+    //Drawing of the headdress
     ctx.fillStyle = '#cce6ff'
     ctx.beginPath();
     ctx.moveTo(midx-20*ratioV, 50*ratioV+10);
     ctx.quadraticCurveTo(midx, -50*ratioV+10, midx+20*ratioV, 50*ratioV+10);
     ctx.fill();
 
-    //Dessin du second Etage
+    //Drawing of the second floor 
     ctx.fillRect(midx-20*ratioV, 50*ratioV+10, 40*ratioV, 100*ratioV-1+10);
     ctx.beginPath()
     ctx.moveTo(midx-20*ratioV, 50*ratioV+10)
@@ -322,7 +322,7 @@ function draw2B() {
     ctx.closePath()
     ctx.stroke()
 
-    //Dessin du premier Etage;
+    //Drawing of the first floor
     ctx.beginPath()
     ctx.moveTo(midx-30*ratioV, 180*ratioV+10)
     ctx.lineTo(midx-20*ratioV, 150*ratioV+10)
@@ -333,7 +333,7 @@ function draw2B() {
     ctx.fill()
     ctx.fillRect(midx-30*ratioV, 180*ratioV+10-1, 60*ratioV, 170*ratioV+1);
 
-    //Dessin du booster gauche;
+    //Drawing of the left booster
     ctx.fillRect(midx-(30+20)*ratioV-1, 220*ratioV+10, 20*ratioV, 130*ratioV);
 
     ctx.beginPath()
@@ -350,7 +350,7 @@ function draw2B() {
     ctx.closePath()
     ctx.stroke()
 
-    //Dessin du booster droit
+    //Drawing of the right booster 
     ctx.fillRect(midx+30*ratioV+1, 220*ratioV+10, 20*ratioV, 130*ratioV);
 
     ctx.beginPath()
@@ -367,7 +367,7 @@ function draw2B() {
     ctx.closePath()
     ctx.stroke()
 
-    //Dessin du moteur central 
+    //Drawing of the central engine
     ctx.fillStyle = '#000000'
     ctx.beginPath();
     ctx.moveTo(midx, 350*ratioV+10);
@@ -376,7 +376,7 @@ function draw2B() {
     ctx.closePath()
     ctx.fill();
 
-    //Dessin du moteur gauche
+    //Drawing of the left engine
     ctx.beginPath();
     ctx.moveTo(midx-40*ratioV-1, 350*ratioV+10);
     ctx.lineTo(midx-50*ratioV, 375*ratioV+10);
@@ -384,7 +384,7 @@ function draw2B() {
     ctx.closePath()
     ctx.fill();
 
-    //Dessin du moteur droit
+    //Drawing of the right engine
     ctx.beginPath();
     ctx.moveTo(midx+40*ratioV+1, 350*ratioV+10);
     ctx.lineTo(midx+50*ratioV, 375*ratioV+10);
