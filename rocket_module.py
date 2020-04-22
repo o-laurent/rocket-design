@@ -1,5 +1,28 @@
+#Importing modules
 import pandas as pd
+import unittest
 
+#Introducing new errors
+class InputError(Exception):
+    pass
+
+class InsufficientInput(Exception):
+    pass
+
+class NoStageGiven(Exception):
+    pass
+
+class StageNumberIsNaN(Exception):
+    pass
+
+class StageNumberNotInInterval(Exception):
+    pass
+
+class NumberMustBePositive(Exception):
+    pass
+
+
+#Defining the major classes
 class rocket:
     """ 
         class which contains every useful info about a rocket
@@ -98,3 +121,137 @@ class trajectory:
 
     def getName(self):
         return self.name
+
+#Adding tests
+class TestRocket(unittest.TestCase):
+    def test_add(self):
+        data = pd.DataFrame([['A',2020,'France','LEO',2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]], 
+                                            columns = ['Name',
+                                                    'Year',
+                                                    'Country',
+                                                    'Mission',
+                                                    'Stage number',
+                                                    'Height [m]',
+                                                    'Diameter [m]',
+                                                    'Lift-off mass [tons]',
+                                                    'Payload mass [kg]',
+                                                    'S1 length [m]',
+                                                    'S1 diameter [m]',
+                                                    'S1 thrust [kN]','S1 Isp [s]',
+                                                    'S1 M0 [tons]',
+                                                    'S1 Mp [tons]',
+                                                    'S2 length [m]',
+                                                    'S2 diameter [m]',
+                                                    'S2 thrust [kN]',
+                                                    'S2 Isp [s]',
+                                                    'S2 M0 [tons]',
+                                                    'S2 Mp [tons]'])
+        self.assertEqual(rocket(data.loc[0]).getName(), 'A') 
+    
+    def test_no_stage(self):
+        data = pd.DataFrame([['A',2020,'France','LEO',1,1,1,1,1]], 
+                                            columns = ['Name',
+                                                    'Year',
+                                                    'Country',
+                                                    'Mission',
+                                                    'Stage number',
+                                                    'Height [m]',
+                                                    'Diameter [m]',
+                                                    'Lift-off mass [tons]',
+                                                    'Payload mass [kg]'])
+        self.assertRaises(NoStageGiven, lambda: rocket(data.loc[0])) 
+
+    def test_stage_NAN(self):
+        data = pd.DataFrame([['A',2020,'France','LEO','A',1,1,1,1]], 
+                                            columns = ['Name',
+                                                    'Year',
+                                                    'Country',
+                                                    'Mission',
+                                                    'Stage number',
+                                                    'Height [m]',
+                                                    'Diameter [m]',
+                                                    'Lift-off mass [tons]',
+                                                    'Payload mass [kg]'])
+        self.assertRaises(StageNumberIsNaN, lambda: rocket(data.loc[0])) 
+    
+    def test_stage_NotInInterval(self):
+        data = pd.DataFrame([['A',2020,'France','LEO',3,1,1,1,1]], 
+                                            columns = ['Name',
+                                                    'Year',
+                                                    'Country',
+                                                    'Mission',
+                                                    'Stage number',
+                                                    'Height [m]',
+                                                    'Diameter [m]',
+                                                    'Lift-off mass [tons]',
+                                                    'Payload mass [kg]'])
+        self.assertRaises(StageNumberNotInInterval, lambda: rocket(data.loc[0])) 
+        data = pd.DataFrame([['A',2020,'France','LEO',0,1,1,1,1]], 
+                                            columns = ['Name',
+                                                    'Year',
+                                                    'Country',
+                                                    'Mission',
+                                                    'Stage number',
+                                                    'Height [m]',
+                                                    'Diameter [m]',
+                                                    'Lift-off mass [tons]',
+                                                    'Payload mass [kg]'])
+        self.assertRaises(StageNumberNotInInterval, lambda: rocket(data.loc[0])) 
+
+class TestTrajectory(unittest.TestCase):
+    def test_add(self):
+        data = pd.DataFrame([['A','LEO',1,1,1,1,1,1,1]], 
+                                            columns = ['Name',
+                                                    'Mission',
+                                                    'Semi-major axis',
+                                                    'Semi-minor axis',
+                                                    'Excentricity',
+                                                    'Diameter',
+                                                    'X-center coordinate',
+                                                    'Y-center coordinate',
+                                                    'Z-center coordinate'])
+        self.assertEqual(trajectory(data.loc[0]).getName(), 'A') 
+    
+    def test_positivity(self):
+        data = pd.DataFrame([['A','LEO',-1,1,1,1,1,1,1]], 
+                                            columns = ['Name',
+                                                    'Mission',
+                                                    'Semi-major axis',
+                                                    'Semi-minor axis',
+                                                    'Excentricity',
+                                                    'Diameter',
+                                                    'X-center coordinate',
+                                                    'Y-center coordinate',
+                                                    'Z-center coordinate'])
+        self.assertRaises(NumberMustBePositive, lambda: trajectory(data.loc[0])) 
+        data1 = pd.DataFrame([['A','LEO',1,-1,1,1,1,1,1]], 
+                                            columns = ['Name',
+                                                    'Mission',
+                                                    'Semi-major axis',
+                                                    'Semi-minor axis',
+                                                    'Excentricity',
+                                                    'Diameter',
+                                                    'X-center coordinate',
+                                                    'Y-center coordinate',
+                                                    'Z-center coordinate'])
+        self.assertRaises(NumberMustBePositive, lambda: trajectory(data1.loc[0])) 
+
+    def test_modify_center(self): 
+        data = pd.DataFrame([['A','LEO',1,1,1,1,1,1,1]], 
+                                            columns = ['Name',
+                                                    'Mission',
+                                                    'Semi-major axis',
+                                                    'Semi-minor axis',
+                                                    'Excentricity',
+                                                    'Diameter',
+                                                    'X-center coordinate',
+                                                    'Y-center coordinate',
+                                                    'Z-center coordinate'])
+        data1 = pd.DataFrame([['A','LEO',1,1,1,1]], 
+                                            columns = ['Name',
+                                                    'Mission',
+                                                    'Semi-major axis',
+                                                    'Semi-minor axis',
+                                                    'Excentricity',
+                                                    'Diameter'])
+        self.assertRaises(InputError, lambda: (trajectory(data.loc[0])).modifyCenter(data1.loc[0])) 

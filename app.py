@@ -14,5 +14,5 @@ def start():
 def addrocket():
     return render_template("addrocket.html")
 
-if __name__ == "__main__":
-    app.run()
+#if __name__ == "__main__":
+#    app.run()

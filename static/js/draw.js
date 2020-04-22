@@ -33,7 +33,7 @@ function draw1Adapt(fStageHeight, fStageDiameter) {
     ctx.closePath()
     ctx.fill();
 
-    //Drawing of the first floor
+    //Drawing of the first stage
     ctx.fillStyle = '#CCE6FF'
     baseXfStage = basisX - 0.07*CanvasfStageHeight
     ctx.fillRect(midx-CanvasfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight, CanvasfStageWidth, 0.8*CanvasfStageHeight)
@@ -48,7 +48,7 @@ function draw1Adapt(fStageHeight, fStageDiameter) {
 
     baseXfairing = baseXfStage - CanvasfStageHeight
 
-    //Drawing of the headdress
+    //Drawing of the fairing
     ctx.beginPath();
     ctx.moveTo(midx-CanvasfStageWidth/3, baseXfairing);
     ctx.quadraticCurveTo(midx, +baseXfairing-150, midx+CanvasfStageWidth/3, baseXfairing);
@@ -63,7 +63,7 @@ function draw1Adapt(fStageHeight, fStageDiameter) {
 
 
 function draw1() {
-    //Drawing of the rocket with one floor without boosters
+    //Drawing of the rocket with one stage without boosters
     canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
     canvas.height = document.getElementById('sidebar').getBoundingClientRect().height
     midy = canvas.height/2
@@ -81,7 +81,7 @@ function draw1() {
     ctx.stroke();
 
 
-    //Drawing of the headdress
+    //Drawing of the fairing
     ctx.fillStyle = '#cce6ff'
     ctx.beginPath();
     ctx.moveTo(midx-15*ratioV, 150*ratioV+10);
@@ -94,7 +94,7 @@ function draw1() {
     ctx.closePath()
     ctx.stroke()
 
-    //Drawing of the first floor
+    //Drawing of the first stage
     ctx.beginPath()
     ctx.moveTo(midx-20*ratioV, 180*ratioV+10)
     ctx.lineTo(midx-15*ratioV, 150*ratioV+10)
@@ -116,7 +116,7 @@ function draw1() {
 }
 
 function draw1B() {
-    //Drawing of the rocket with one floor and boosters
+    //Drawing of the rocket with one stage and boosters
     canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
     canvas.height = document.getElementById('sidebar').getBoundingClientRect().height
     midy = canvas.height/2
@@ -134,7 +134,7 @@ function draw1B() {
     ctx.stroke();
 
 
-    //Drawing of the headdress
+    //Drawing of the fairing
     ctx.fillStyle = '#cce6ff'
     ctx.beginPath();
     ctx.moveTo(midx-15*ratioV, 150*ratioV+10);
@@ -147,7 +147,7 @@ function draw1B() {
     ctx.closePath()
     ctx.stroke()
 
-    //Drawing of the first floor
+    //Drawing of the first stage
     ctx.beginPath()
     ctx.moveTo(midx-20*ratioV, 180*ratioV+10)
     ctx.lineTo(midx-15*ratioV, 150*ratioV+10)
@@ -220,7 +220,7 @@ function draw1B() {
 
 
 function draw2() {
-    //Drawing of the rocket with two floors and without boosters 
+    //Drawing of the rocket with two stages and without boosters 
     canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
     canvas.height = document.getElementById('sidebar').getBoundingClientRect().height
     midy = canvas.height/2
@@ -239,14 +239,14 @@ function draw2() {
     ctx.stroke();
 
 
-    //Drawing of the headdress
+    //Drawing of the fairing
     ctx.fillStyle = '#cce6ff'
     ctx.beginPath();
     ctx.moveTo(midx-20*ratioV, 50*ratioV+10);
     ctx.quadraticCurveTo(midx, -50*ratioV+10, midx+20*ratioV, 50*ratioV+10);
     ctx.fill();
 
-    //Drawing of the second floor
+    //Drawing of the second stage
     ctx.fillRect(midx-20*ratioV, 50*ratioV+10, 40*ratioV, 100*ratioV-1+10);
     ctx.beginPath()
     ctx.moveTo(midx-20*ratioV, 50*ratioV+10)
@@ -260,7 +260,7 @@ function draw2() {
     ctx.closePath()
     ctx.stroke()
 
-    //Drawing of the first floor
+    //Drawing of the first stage
     ctx.beginPath()
     ctx.moveTo(midx-30*ratioV, 180*ratioV+10)
     ctx.lineTo(midx-20*ratioV, 150*ratioV+10)
@@ -282,7 +282,7 @@ function draw2() {
 }
 
 function draw2B() {
-    //Drawing of the rocket with two floors and boosters 
+    //Drawing of the rocket with two stages and boosters 
     canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
     canvas.height = document.getElementById('sidebar').getBoundingClientRect().height
     midy = canvas.height/2
@@ -301,14 +301,14 @@ function draw2B() {
     ctx.stroke();
 
 
-    //Drawing of the headdress
+    //Drawing of the fairing
     ctx.fillStyle = '#cce6ff'
     ctx.beginPath();
     ctx.moveTo(midx-20*ratioV, 50*ratioV+10);
     ctx.quadraticCurveTo(midx, -50*ratioV+10, midx+20*ratioV, 50*ratioV+10);
     ctx.fill();
 
-    //Drawing of the second floor 
+    //Drawing of the second stage 
     ctx.fillRect(midx-20*ratioV, 50*ratioV+10, 40*ratioV, 100*ratioV-1+10);
     ctx.beginPath()
     ctx.moveTo(midx-20*ratioV, 50*ratioV+10)
@@ -322,7 +322,7 @@ function draw2B() {
     ctx.closePath()
     ctx.stroke()
 
-    //Drawing of the first floor
+    //Drawing of the first stage
     ctx.beginPath()
     ctx.moveTo(midx-30*ratioV, 180*ratioV+10)
     ctx.lineTo(midx-20*ratioV, 150*ratioV+10)
