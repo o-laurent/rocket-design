@@ -1,11 +1,13 @@
 #include <stdlib.h>
 
+//2D vector corresponding to 2D-data
 typedef struct vector vector;
 struct vector {
     long double x;
     long double y;
 };
 
+//4D vector corresponding to 2D-data and its derivatives
 typedef struct bivector bivector;
 struct bivector {
     long double x;
@@ -14,14 +16,25 @@ struct bivector {
     long double dy;
 };
 
-vector linVector(long double l1, vector* vA) {
+//1D linear transformation
+vector* linVector(long double l1, vector* vA) {
     vector* v = malloc(sizeof(vector)+1);
     v->x = vA->x*l1;
     v->y = vA->y*l1;
-    return *v;
+    return v;
 }
 
-/*Do r = l1*x+l2*y*/
+//2D linear transformation
+vector* linVector2(long double l1, vector* vA,
+                    long double l2, vector* vB) {
+    vector* v = malloc(sizeof(vector)+1);
+    v->x = vA->x*l1 + vB->x*l2;
+    v->y = vA->y*l1 + vB->y*l2;
+    return v;
+}
+
+
+//2D linear transformation for bivectors
 bivector linBivector2(long double l1, bivector* vA, 
                     long double l2, bivector* vB) {
 
@@ -34,7 +47,7 @@ bivector linBivector2(long double l1, bivector* vA,
 }
 
 
-/*Do r = l1*x+l2*y*/
+//5D linear transformation for bivectors (RK4)
 bivector linBivector5(long double l1, bivector* vA, 
                     long double l2, bivector* vB, 
                     long double l3, bivector* vC, 
