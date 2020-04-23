@@ -60,6 +60,7 @@ vector* thrust (long double c, long double t, rocket_data* rocketD) {
 
 //Computes the mass at a certain time
 long double mass(long double t, rocket_data* rocketD) {
+    printf("t = %Lf", t);
     long double totalM = 0;
     if (t < rocketD->T1 && t < rocketD->TB) {
         totalM = rocketD->pM + rocketD->fM + rocketD->sM + rocketD->bM - t*(rocketD->fO + rocketD->bO);
