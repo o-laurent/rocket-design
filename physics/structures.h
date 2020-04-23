@@ -16,7 +16,36 @@ struct bivector {
     long double dy;
 };
 
-//1D linear transformation
+//Struct containing the heading
+typedef struct commandList commandList;
+struct commandList {
+    long double t; //max time of the current angle
+    long double c; //current angle
+    commandList* next; 
+};
+
+//Structure containing all useful information concerning the rocket 
+typedef struct rocket_data rocket_data;
+struct rocket_data {
+    int stageNumber; //Number of stages 1 or 2
+    int boosters; //=1 if with boosters else =0 
+    long double fO; //Output of the first stage
+    long double fISP; //Specific Impulse of the first stage
+    long double sO; //Output of the second stage
+    long double sISP; //Specific Impulse of the second stage
+    long double bO; //Output of the boosters
+    long double bISP; //Specific Impulse of the boosters
+    long double T1; // Time | 1 Stage stops
+    long double T2; // Time | 2 Stage stops
+    long double TB; // Time | Boosters stop
+    long double fM; //first stage's mass
+    long double sM; //second stage's mass
+    long double bM; //boosters' mass
+    long double pM; //Payload mass
+    commandList* cList; //List of the commands
+};
+
+//1D linear transformation of vectors
 vector* linVector(long double l1, vector* vA) {
     vector* v = malloc(sizeof(vector)+1);
     v->x = vA->x*l1;
@@ -24,7 +53,7 @@ vector* linVector(long double l1, vector* vA) {
     return v;
 }
 
-//2D linear transformation
+//2D linear transformation of vectors
 vector* linVector2(long double l1, vector* vA,
                     long double l2, vector* vB) {
     vector* v = malloc(sizeof(vector)+1);

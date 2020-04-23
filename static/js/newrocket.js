@@ -1,4 +1,10 @@
 /*Need to verify a lot of data*/ 
+
+//Check that the heights, the masses are good
+//Check that the times are good : boosters will leave before the 1 stage, 
+//If not, maybe reduce the size of the boosters
+//Think how to input thz different masses 
+
 document.getElementById("stageNumber").addEventListener("change", function (e){
     if (document.getElementById('stageNumber').value=='2') {
         document.getElementById('secondStageDiv').style.display = 'block';
