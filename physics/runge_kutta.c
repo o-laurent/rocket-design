@@ -12,10 +12,10 @@ bivector runge_kutta4 (int step_nb, double h, int t_0, bivector init_state) {
         bivector k1, k2, k3, k4;
         for (step=0; step<step_nb; step++) {
             k1 = forces(t, state);
-            k2 = forces(t+h/2, linVector(1, &state, h/2, &k1));
-            k3 = forces(t+h/2, linVector(1, &state, h/2, &k2));
-            k4 = forces(t+h, linVector(1, &state, h, &k3));
-            state = linVector5(1, &state, h/6, &k1, h/3, &k2, h/3, &k3, h/6, &k4);
+            k2 = forces(t+h/2, linBivector2(1, &state, h/2, &k1));
+            k3 = forces(t+h/2, linBivector2(1, &state, h/2, &k2));
+            k4 = forces(t+h, linBivector2(1, &state, h, &k3));
+            state = linBivector5(1, &state, h/6, &k1, h/3, &k2, h/3, &k3, h/6, &k4);
             t += h;
         }
     }
