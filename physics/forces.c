@@ -23,7 +23,6 @@ long double command(long double t, rocket_data* rocketD) {
 
 //Computes the gravitationnal field anywhere in Earth's influence sphere (disc)
 vector* weight (vector* r) {
-    printf("r.x = %Lf, r.y = %Lf", r->x, r->y);
     long double norm_value = norm(r->x, r->y);
     long double mu = (long double)398600*1000*1000*1000;
     return linVector(-mu/(norm_value*norm_value*norm_value), r);

@@ -56,28 +56,40 @@ def is_almost_equal(first, second, places):
     if first == second: 
         return True
     else:
-        cut_first = round(first, places)
-        cut_second = round(second, places)
+        print(first)
+        print(second)
+        cut_first = round(float(first), places)
+        cut_second = round(float(second), places)
     return cut_first == cut_second
 
 def list_almost_equal(first, second, places):
     boolean = True
     i = 0
     while boolean and i < len(first) and i < len(second):
-        boolean = is_almost_equal(first[0], second[0], places)
+        boolean = is_almost_equal(first[i], second[i], places)
+        if not boolean:
+            print(first[i])
+            print(second[i])
+        i += 1
     return boolean
 
 class TestNorm(unittest.TestCase):
     def test_null(self):
-        x = 0
-        y = 0
-        norm_value = forces.norm(x,y)
-        self.assertEqual(norm_value, 0)
+        x = ctypes.c_longdouble(0)
+        y = ctypes.c_longdouble(0)
+        norm_value = forces.norm(x, y)
+        print(norm_value)
+        self.assertEqual(norm_value, 0.0)
 
     def test_pos(self):
-        first = np.random.randn(1000)*1000000-500000
-        second = np.random.randn(1000)*1000000-500000
-        self.assertTrue(list_almost_equal)
+        xy = np.random.randn(1000, 2)*100-50
+        first = []
+        for i in range(1000):
+            first.append((xy[i][0]**2+xy[i][1]**2)**(1/2))
+        second = []
+        for i in range(1000):
+            second.append(forces.norm(ctypes.c_longdouble(xy[i][0]),ctypes.c_longdouble(xy[i][1]**2)))
+        self.assertTrue(list_almost_equal(first, second, 4))
 
 class TestWeight(unittest.TestCase):
     def test_g0y(self):
@@ -85,7 +97,6 @@ class TestWeight(unittest.TestCase):
         R0 = vector(0, ctypes.c_longdouble(6371000))
         g0 = 9.81
         a = forces.weight(ctypes.pointer(R0))
-        print(a)
         self.assertTrue(0.9*g0 <= -a.contents.y <= 1.1*g0)
 
     def test_g0x(self):
@@ -102,6 +113,9 @@ class TestThrust(unittest.TestCase):
 
 
 class TestMass(unittest.TestCase):
+    #Avec boosters 
+    #sans boosters
+    #au bout d'un certain temps...
     -1
 
 
