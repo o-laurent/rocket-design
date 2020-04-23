@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+
 app = Flask(__name__)
 
 @app.route("/")
@@ -14,5 +15,11 @@ def start():
 def addrocket():
     return render_template("addrocket.html")
 
+@app.route('/api/newrocket', methods = ['POST'])
+def api_newrocket():
+    print(request.is_json)
+    content = request.get_json()
+    print(content)
+    return 'JSON posted'
 #if __name__ == "__main__":
 #    app.run()
