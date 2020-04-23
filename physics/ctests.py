@@ -20,6 +20,8 @@ except :
 forces.weight.restype = ctypes.POINTER(vector)
 
 class TestNorm(unittest.TestCase):
+    #test null
+    #random test always positive
     -1
 
 class TestWeight(unittest.TestCase):

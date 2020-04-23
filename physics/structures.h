@@ -35,29 +35,29 @@ vector* linVector2(long double l1, vector* vA,
 
 
 //2D linear transformation for bivectors
-bivector linBivector2(long double l1, bivector* vA, 
+bivector* linBivector2(long double l1, bivector* vA, 
                     long double l2, bivector* vB) {
 
-    bivector r;
-    r.x = l1*(*vA).x + l2*(*vB).x;
-    r.y = l1*(*vA).y + l2*(*vB).y;
-    r.dx = l1*(*vA).dx + l2*(*vB).dx;
-    r.dy = l1*(*vA).dy + l2*(*vB).dy;
+    bivector* r = malloc(sizeof(bivector)+1);
+    r->x = l1*vA->x + l2*vB->x;
+    r->y = l1*vA->y + l2*vB->y;
+    r->dx = l1*vA->dx + l2*vB->dx;
+    r->dy = l1*vA->dy + l2*vB->dy;
     return r; 
 }
 
 
 //5D linear transformation for bivectors (RK4)
-bivector linBivector5(long double l1, bivector* vA, 
+bivector* linBivector5(long double l1, bivector* vA, 
                     long double l2, bivector* vB, 
                     long double l3, bivector* vC, 
                     long double l4, bivector* vD,
                     long double l5, bivector* vE) {
 
-    bivector r;
-    r.x = l1*vA->x + l2*vB->x + l3*vC->x + l4*vD->x + l5*vE->x;
-    r.y = l1*vA->y + l2*vB->y + l3*vC->y + l4*vD->y + l5*vE->y;
-    r.dx = l1*vA->dx + l2*vB->dx + l3*vC->dx + l4*vD->dx + l5*vE->dx;
-    r.dy = l1*vA->dy + l2*vB->dy + l3*vC->dy + l4*vD->dy + l5*vE->dy;
+    bivector* r = malloc(sizeof(bivector)+1);
+    r->x = l1*vA->x + l2*vB->x + l3*vC->x + l4*vD->x + l5*vE->x;
+    r->y = l1*vA->y + l2*vB->y + l3*vC->y + l4*vD->y + l5*vE->y;
+    r->dx = l1*vA->dx + l2*vB->dx + l3*vC->dx + l4*vD->dx + l5*vE->dx;
+    r->dy = l1*vA->dy + l2*vB->dy + l3*vC->dy + l4*vD->dy + l5*vE->dy;
     return r; 
 }
