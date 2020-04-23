@@ -15,7 +15,7 @@ long double command(long double t, rocket_data* rocketD) {
     commandList* tempList = rocketD->cList;
     long double c = 0;
     while (tempList->next != NULL && tempList->t < t) {
-        tempList->next;
+        tempList = tempList->next;
         c = tempList->c;
     }
     return c;
@@ -89,4 +89,5 @@ bivector* forces (long double t, bivector* X, rocket_data* rocketD) {
     acceleration = linVector2(1, weight(r), 1/mass(t, rocketD), thrust(c, t, rocketD));
     force->dx = acceleration->x;
     force->dy = acceleration->y;
+    return force;
 }
