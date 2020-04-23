@@ -1,5 +1,5 @@
 __pycache__/
 TD3/my_sum/__pycache__/__init__.cpython-37.pyc
 .vscode/
-physics/forces.so
-physics/forces.o
+physics/*.so
+physics/*.o
