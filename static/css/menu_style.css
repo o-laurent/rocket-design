@@ -53,12 +53,18 @@
     }
 }
 
+html {
+    margin: 0;
+    height: 100%;
+}
 body {
     background-image: url("../src/menu_wallpaper.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
+    margin: 0;
+    height: 100%;
     text-align: center;
 }
 
