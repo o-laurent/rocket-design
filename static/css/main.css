@@ -38,7 +38,7 @@ body {
 
 #myCanvas {
     height: 80%;
-    margin-bottom: 10%;
+    margin-bottom: 0;
     position: fixed;
 }
 
