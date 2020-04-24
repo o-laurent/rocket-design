@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include "structures.h"
 #include "forces.h"
 
 //Computes the norm2 of a vector

@@ -6,8 +6,7 @@ bivector* runge_kutta4 (int step_nb, long double h, int t_0, bivector* init_stat
     bivector* state = malloc(sizeof(bivector)+1);
     if (step_nb >=1 && h>0) {
         int step = 0;
-        double sh = h*h;
-        double t = t_0;
+        long double t = t_0;
         state->x = init_state->x;
         state->y = init_state->y;
         state->dx = init_state->dx;
@@ -18,10 +17,10 @@ bivector* runge_kutta4 (int step_nb, long double h, int t_0, bivector* init_stat
         bivector* k4 = malloc(sizeof(bivector)+1);
         for (step=0; step<step_nb; step++) {
             k1 = forces(t, state, rocketD);
-            k2 = forces(t+h/2, linBivector2(1, &state, h/2, &k1), rocketD);
-            k3 = forces(t+h/2, linBivector2(1, &state, h/2, &k2), rocketD);
-            k4 = forces(t+h, linBivector2(1, &state, h, &k3), rocketD);
-            state = linBivector5(1, &state, h/6, &k1, h/3, &k2, h/3, &k3, h/6, &k4);
+            k2 = forces(t+h/2, linBivector2(1, state, h/2, k1), rocketD);
+            k3 = forces(t+h/2, linBivector2(1, state, h/2, k2), rocketD);
+            k4 = forces(t+h, linBivector2(1, state, h, k3), rocketD);
+            state = linBivector5(1, state, h/6, k1, h/3, k2, h/3, k3, h/6, k4);
             t += h;
         }
         free(k1);
