@@ -11,8 +11,8 @@ class vector(ctypes.Structure):
 #4D vector corresponding to 2D-data and its derivatives
 class bivector(ctypes.Structure):
     _fields_ = [("x", ctypes.c_longdouble),
-                ("dx", ctypes.c_longdouble),
                 ("y", ctypes.c_longdouble),
+                ("dx", ctypes.c_longdouble),
                 ("dy", ctypes.c_longdouble)]
 
 #Struct containing the heading
@@ -41,14 +41,19 @@ class rocket_data(ctypes.Structure):
                 ("pM", ctypes.c_longdouble),
                 ("cList", ctypes.POINTER(commandList))]
 
+class stockBivectors(ctypes.Structure):
+    pass
 
-#Opening the shared library
+stockBivectors._fields_ = [("state", ctypes.POINTER(bivector)),
+                    ("previous", ctypes.POINTER(stockBivectors))]
+
+#Opening the shared libraries
 try :
-    forces = ctypes.CDLL(os.path.abspath('./physics/forces.so'))
+    forces = ctypes.CDLL(os.path.abspath('./physics/physics.so'))
 except :
     forces = ctypes.CDLL(os.path.abspath('./physics.so'))
+    
 
-#Modifying the default output of the functions
 forces.norm.restype = ctypes.c_longdouble
 forces.command.restype = ctypes.c_longdouble
 forces.weight.restype = ctypes.POINTER(vector)
@@ -56,7 +61,7 @@ forces.d_isp.restype = ctypes.c_longdouble
 forces.thrust.restype = ctypes.POINTER(vector)
 forces.mass.restype = ctypes.c_longdouble
 forces.forces.restype = ctypes.POINTER(bivector)
-
+forces.runge_kutta4.restype = ctypes.POINTER(stockBivectors)
 
 def is_almost_equal(first, second, places):
     if first == second: 
@@ -80,7 +85,6 @@ class TestNorm(unittest.TestCase):
         x = ctypes.c_longdouble(0)
         y = ctypes.c_longdouble(0)
         norm_value = forces.norm(x, y)
-        print(norm_value)
         self.assertEqual(norm_value, 0.0)
 
     def test_pos(self):
@@ -109,6 +113,7 @@ class TestWeight(unittest.TestCase):
         self.assertEqual(weight.contents.x, 0)
 
     def test_null_limit(self):
+        #Check that gravitationnal field is nearly null when far from Earth
         R0 = vector(0, ctypes.c_longdouble(10**(300)))
         weight = forces.weight(ctypes.pointer(R0))
         self.assertAlmostEqual(weight.contents.y, 0, 10)
@@ -117,15 +122,26 @@ class TestWeight(unittest.TestCase):
 # Tester que la force en 0 renvoie une erreur
 class TestD_ISP(unittest.TestCase):
     def test_s1_ns2_nb(self):
+        #Check the value of a specific ISP
         t = 0
         cList = commandList(0, 0, None) 
         rocketD = rocket_data(1, 0, 10, 10, 0, 0, 0, 0, 100, 0, 0, 1000, 0, 0, 1000, ctypes.pointer(cList))
         d_isp = forces.d_isp(ctypes.c_longdouble(t), ctypes.pointer(rocketD))
         self.assertEqual(d_isp, 100.0)
 
+class TestCommand(unittest.TestCase):
+    #NOT FINISHED
+    def test_zero(self):
+        t = 0
+        cList = commandList(0, 0, None)
+        command = forces.command(ctypes.c_longdouble(t), ctypes.pointer(cList))
+        self.assertEqual(command, 0)
+
+    #Vérifier que la commande 
 
 class TestThrust(unittest.TestCase):
     def test_s1_ns2_nbx(self):
+        #Check the value of a specific thrust on x axis
         t = 0
         G0 = 6.67430*10**(-11)
         cList = commandList(0, 0, None) 
@@ -134,6 +150,7 @@ class TestThrust(unittest.TestCase):
         self.assertEqual(thrust.x, G0*100.0)
 
     def test_s1_ns2_nby(self):
+        #Check the value of a specific thrust on y axis
         t = 0
         cList = commandList(0, 0, None) 
         rocketD = rocket_data(1, 0, 10, 10, 0, 0, 0, 0, 100, 0, 0, 1000, 0, 0, 1000, ctypes.pointer(cList))
@@ -141,6 +158,7 @@ class TestThrust(unittest.TestCase):
         self.assertEqual(thrust.y, 0)
 
     def test_s1_ns2_nby_radians(self):
+        #Check the value of a specific thrust with a non-zero angle
         t = 0
         G0 = 6.67430*10**(-11)
         cList = commandList(0, 0, None) 
@@ -151,6 +169,7 @@ class TestThrust(unittest.TestCase):
 
 class TestMass(unittest.TestCase):
     def test_t0(self):
+        #Check the value of the mass at t0
         t = 0
         cList = commandList(0, 0, None) 
         rocketD = rocket_data(1, 1, 3, 4, 5, 6, 7, 8, 10, 10, 10, 1000, 0, 1000, 1000, ctypes.pointer(cList))
@@ -158,6 +177,7 @@ class TestMass(unittest.TestCase):
         self.assertEqual(mass, 3000.0)
 
     def test_s1_ns2_nb(self):
+        #Check the value of the mass before ending 1stage 
         t = 99
         cList = commandList(0, 0, None) 
         rocketD = rocket_data(1, 0, 1, 0, 0, 0, 0, 0, 100, 0, 0, 1000, 0, 0, 100, ctypes.pointer(cList))
@@ -165,19 +185,89 @@ class TestMass(unittest.TestCase):
         self.assertEqual(mass, 1001.0)
         
     def test_ns1_ns2_nb(self):
+        #Check the value of the mass after ending 1stage 
         t = 100
         cList = commandList(0, 0, None) 
         rocketD = rocket_data(1, 0, 1, 0, 0, 0, 0, 0, 100, 0, 0, 1000, 0, 0, 100, ctypes.pointer(cList))
         mass = forces.mass(ctypes.c_longdouble(t), ctypes.pointer(rocketD))
         self.assertEqual(mass, 100.0)
-    #Avec boosters 
-    #sans boosters
-    #au bout d'un certain temps...
 
 
 class TestForces(unittest.TestCase):
-    -1
+    def test_force0x(self):
+        t = 100
+        cList = commandList(0, 0, None)
+        cBivector = bivector(0,0,0,0)
+        rocketD = rocket_data(1, 0, 1, 0, 0, 0, 0, 0, 100, 0, 0, 1000, 0, 0, 100, ctypes.pointer(cList))
+        force = forces.forces(ctypes.c_longdouble(t), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
+        self.assertEqual(force.contents.x, 0.0)
+    
+    def test_force0y(self):
+        t = 100
+        cList = commandList(0, 0, None) 
+        cBivector = bivector(0,0,0,0)
+        rocketD = rocket_data(1, 0, 1, 0, 0, 0, 0, 0, 100, 0, 0, 1000, 0, 0, 100, ctypes.pointer(cList))
+        force = forces.forces(ctypes.c_longdouble(t), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
+        self.assertEqual(force.contents.y, 0.0)
+
+    def test_force0dx(self):
+        t = 0
+        cList = commandList(0, 0, None) 
+        cBivector = bivector(0, ctypes.c_longdouble(6371000),0,0)
+        rocketD = rocket_data(1, 0, 1, 0, 0, 0, 0, 0, 100, 0, 0, 1000, 0, 0, 100, ctypes.pointer(cList))
+        force = forces.forces(ctypes.c_longdouble(t), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
+        self.assertEqual(force.contents.dx, 0.0)
+
+    def test_force0dy(self):
+        t = 0
+        cList = commandList(0, 0, None) 
+        cBivector = bivector(0, ctypes.c_longdouble(6371000), 0, 0)
+        rocketD = rocket_data(1, 1, 3, 4, 5, 6, 7, 8, 10, 10, 10, 1000, 0, 1000, 1000, ctypes.pointer(cList))
+        force = forces.forces(ctypes.c_longdouble(t), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
+        self.assertNotEqual(force.contents.dy, 0.0)
+    
 # Tester qu'on s'éloigne bien indéfiniment si on dépasse la vitesse de libérationmy_sum=CDLL('sum.so')
+
+
+class Test_RK4(unittest.TestCase):
+    def test_nostep_state(self):
+        cList = commandList(10000, 0, None)
+        rocketD = rocket_data(1, 0, 1, 0, 0, 0, 0, 0, 100, 0, 0, 1000, 0, 0, 100, ctypes.pointer(cList))
+        cBivector = bivector(0,0,0,0)
+        stock = forces.runge_kutta4(ctypes.c_int(0), ctypes.c_longdouble(0), ctypes.c_int(0), cBivector, ctypes.pointer(rocketD))
+        self.assertEqual(ctypes.cast(stock.contents.state, ctypes.c_void_p).value, None)
+
+    def test_nostep_previous(self):
+        cList = commandList(10000, 0, None)
+        rocketD = rocket_data(1, 0, 1, 0, 0, 0, 0, 0, 100, 0, 0, 1000, 0, 0, 100, ctypes.pointer(cList))
+        cBivector = bivector(0,0,0,0)
+        stock = forces.runge_kutta4(ctypes.c_int(0), ctypes.c_longdouble(0), ctypes.c_int(0), cBivector, ctypes.pointer(rocketD))
+        self.assertEqual(ctypes.cast(stock.contents.previous, ctypes.c_void_p).value, None)
+
+    def test_hzero_state(self):
+        cList = commandList(10000, 0, None) 
+        rocketD = rocket_data(1, 0, 1, 0, 0, 0, 0, 0, 100, 0, 0, 1000, 0, 0, 100, ctypes.pointer(cList))
+        cBivector = bivector(0,0,0,0)
+        stock = forces.runge_kutta4(ctypes.c_int(10), ctypes.c_longdouble(0), ctypes.c_int(0), cBivector, ctypes.pointer(rocketD))
+        self.assertEqual(ctypes.cast(stock.contents.state, ctypes.c_void_p).value, None)
+
+    def test_hzero_previous(self):
+        cList = commandList(100000, 0, None) 
+        rocketD = rocket_data(1, 0, 1, 0, 0, 0, 0, 0, 100, 0, 0, 1000, 0, 0, 100, ctypes.pointer(cList))
+        cBivector = bivector(0,0,0,0)
+        stock = forces.runge_kutta4(ctypes.c_int(10), ctypes.c_longdouble(0), ctypes.c_int(0), cBivector, ctypes.pointer(rocketD))
+        self.assertEqual(ctypes.cast(stock.contents.previous, ctypes.c_void_p).value, None)
+
+    def test_10step(self):
+        cList = commandList(0, 0, None)
+        rocketD = rocket_data(1, 0, 1, 0, 0, 0, 0, 0, 100, 0, 0, 1000, 0, 0, 100, ctypes.pointer(cList))
+        cBivector = bivector(1,0,4,0)
+        stock = forces.runge_kutta4(ctypes.c_int(10), ctypes.c_longdouble(2), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
+        print(stock.contents.state.contents.x,stock.contents.state.contents.dx,stock.contents.state.contents.y,stock.contents.state.contents.dy)
+        self.assertNotEqual(stock.contents.state.contents, bivector(0,0,0,0))
+
+class Test_Verlet(unittest.TestCase):
+    -1
 
 if __name__ == '__main__':
     unittest.main()

@@ -10,12 +10,13 @@ long double norm (long double x, long double y) {
 }
 
 //Computes the angle of the rocket 
-long double command(long double t, rocket_data* rocketD) {
-    commandList* tempList = rocketD->cList;
+long double command(long double t, commandList* cList) {
+    commandList* tmpList = malloc(sizeof(commandList)+1);
+    tmpList = cList;
     long double c = 0;
-    while (tempList->next != NULL && tempList->t < t) {
-        tempList = tempList->next;
-        c = tempList->c;
+    while (tmpList->next != NULL && tmpList->t < t) {
+        tmpList = tmpList->next;
+        c = tmpList->c;
     }
     return c;
 }
@@ -23,7 +24,7 @@ long double command(long double t, rocket_data* rocketD) {
 //Computes the gravitationnal field anywhere in Earth's influence sphere (disc)
 vector* weight (vector* r) {
     long double norm_value = norm(r->x, r->y);
-    long double mu = (long double)398600*1000*1000*1000;
+    long double mu = (long double)398600.0*1000*1000*1000;
     return linVector(-mu/(norm_value*norm_value*norm_value), r);
 }
 
@@ -59,7 +60,6 @@ vector* thrust (long double c, long double t, rocket_data* rocketD) {
 
 //Computes the mass at a certain time
 long double mass(long double t, rocket_data* rocketD) {
-    printf("t = %Lf", t);
     long double totalM = 0;
     if (t < rocketD->T1 && t < rocketD->TB) {
         totalM = rocketD->pM + rocketD->fM + rocketD->sM + rocketD->bM - t*(rocketD->fO + rocketD->bO);
@@ -79,7 +79,7 @@ long double mass(long double t, rocket_data* rocketD) {
 //X.x and X.y are the position and X.dx, X.dy the speed of the rocket
 bivector* forces (long double t, bivector* X, rocket_data* rocketD) {
     vector* r = malloc(sizeof(vector)+1);
-    long double c = command(t, rocketD);
+    long double c = command(t, rocketD->cList);
     r->x = X->x;
     r->y = X->y;
     bivector* force = malloc(sizeof(bivector)+1); //is the variation of (X.x, X.y, X.dx, D.dy)
@@ -90,4 +90,52 @@ bivector* forces (long double t, bivector* X, rocket_data* rocketD) {
     force->dx = acceleration->x;
     force->dy = acceleration->y;
     return force;
+}
+
+//Runge_Kutta function
+stockBivectors* runge_kutta4 (int step_nb, long double h, int t_0, bivector* init_state, rocket_data* rocketD) { 
+    stockBivectors* stock = malloc(sizeof(stockBivectors));
+    printf("step : %p\n", stock);
+    stock->state = NULL;
+    stock->previous = NULL;
+    if (step_nb >=1 && h>0) {
+        bivector* state = malloc(sizeof(bivector)+1);
+        int step = 0;
+        long double t = t_0;
+        state->x = init_state->x;
+        state->y = init_state->y;
+        state->dx = init_state->dx;
+        state->dy = init_state->dy;
+        stock->state = state;
+        bivector* k1 = malloc(sizeof(bivector)+1);
+        bivector* k2 = malloc(sizeof(bivector)+1);
+        bivector* k3 = malloc(sizeof(bivector)+1);
+        bivector* k4 = malloc(sizeof(bivector)+1);
+        for (step=0; step<step_nb; step++) {
+            printf("step : %d\n", step);
+            k1 = forces(t, state, rocketD);
+            printf("step : %d\n", step);
+            k2 = forces(t+h/2, linBivector2(1, state, h/2, k1), rocketD);
+            k3 = forces(t+h/2, linBivector2(1, state, h/2, k2), rocketD);
+            k4 = forces(t+h, linBivector2(1, state, h, k3), rocketD);
+            state = linBivector5(1, state, h/6, k1, h/3, k2, h/3, k3, h/6, k4);
+            printf("step : %d\n", step);
+            stock = consSTOCK(state, stock);
+            bivector* state = malloc(sizeof(bivector)+1);
+            state->x = stock->state->x;
+            state->y = stock->state->y;
+            state->dx = stock->state->dx;
+            state->dy = stock->state->dy;
+            t += h;
+        }
+        free(k1);
+        free(k2);
+        free(k3);
+        free(k4);
+        free(state);
+        return stock;
+    }
+    else {
+        return stock;
+    }
 }

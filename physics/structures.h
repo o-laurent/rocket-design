@@ -11,38 +11,9 @@ struct vector {
 typedef struct bivector bivector;
 struct bivector {
     long double x;
-    long double dx;
     long double y;
+    long double dx;
     long double dy;
-};
-
-//Struct containing the heading
-typedef struct commandList commandList;
-struct commandList {
-    long double t; //max time of the current angle
-    long double c; //current angle
-    commandList* next; 
-};
-
-//Structure containing all useful information concerning the rocket 
-typedef struct rocket_data rocket_data;
-struct rocket_data {
-    int stageNumber; //Number of stages 1 or 2
-    int boosters; //=1 if with boosters else =0 
-    long double fO; //Output of the first stage
-    long double fISP; //Specific Impulse of the first stage
-    long double sO; //Output of the second stage
-    long double sISP; //Specific Impulse of the second stage
-    long double bO; //Output of the boosters
-    long double bISP; //Specific Impulse of the boosters
-    long double T1; // Time | 1 Stage stops
-    long double T2; // Time | 2 Stage stops
-    long double TB; // Time | Boosters stop
-    long double fM; //first stage's mass
-    long double sM; //second stage's mass
-    long double bM; //boosters' mass
-    long double pM; //Payload mass
-    commandList* cList; //List of the commands
 };
 
 //1D linear transformation of vectors
@@ -89,4 +60,51 @@ bivector* linBivector5(long double l1, bivector* vA,
     r->dx = l1*vA->dx + l2*vB->dx + l3*vC->dx + l4*vD->dx + l5*vE->dx;
     r->dy = l1*vA->dy + l2*vB->dy + l3*vC->dy + l4*vD->dy + l5*vE->dy;
     return r; 
+}
+
+//Struct containing the heading
+typedef struct commandList commandList;
+struct commandList {
+    long double t; //max time of the current angle
+    long double c; //current angle
+    commandList* next; 
+};
+
+//Structure containing all useful information concerning the rocket 
+typedef struct rocket_data rocket_data;
+struct rocket_data {
+    int stageNumber; //Number of stages 1 or 2
+    int boosters; //=1 if with boosters else =0 
+    long double fO; //Output of the first stage
+    long double fISP; //Specific Impulse of the first stage
+    long double sO; //Output of the second stage
+    long double sISP; //Specific Impulse of the second stage
+    long double bO; //Output of the boosters
+    long double bISP; //Specific Impulse of the boosters
+    long double T1; // Time | 1 Stage stops
+    long double T2; // Time | 2 Stage stops
+    long double TB; // Time | Boosters stop
+    long double fM; //first stage's mass
+    long double sM; //second stage's mass
+    long double bM; //boosters' mass
+    long double pM; //Payload mass
+    commandList* cList; //List of the commands
+};
+
+typedef struct stockBivectors stockBivectors;
+struct stockBivectors {
+    bivector* state;
+    stockBivectors* previous;
+};
+
+stockBivectors* consSTOCK(bivector* state, stockBivectors* stock) {
+    //Add a vector on the top of the list
+    stockBivectors* tmp = malloc(sizeof(stockBivectors));
+    if (tmp == NULL) { //Insufficent space
+        printf("ERREUR");
+        return NULL;
+    }
+    tmp->state = state;
+    tmp->previous = stock; //Previous Step
+    return tmp;
 }
