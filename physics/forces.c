@@ -83,10 +83,10 @@ bivector* forces (long double t, bivector* X, rocket_data* rocketD) {
     r->x = X->x;
     r->y = X->y;
     bivector* force = malloc(sizeof(bivector)+1); //is the variation of (X.x, X.y, X.dx, D.dy)
-    force->x = X->x;
-    force->y = X->y;
+    force->x = X->dx;
+    force->y = X->dy;
     vector* acceleration = malloc(sizeof(vector)+1);
-    acceleration = linVector2(1, weight(r), 1/mass(t, rocketD), thrust(c, t, rocketD));
+    acceleration = weight(r);//linVector2(1, weight(r), 1/mass(t, rocketD), thrust(c, t, rocketD));
     force->dx = acceleration->x;
     force->dy = acceleration->y;
     return force;
@@ -95,7 +95,7 @@ bivector* forces (long double t, bivector* X, rocket_data* rocketD) {
 //Runge_Kutta function
 stockBivectors* runge_kutta4 (int step_nb, long double h, int t_0, bivector* init_state, rocket_data* rocketD) { 
     stockBivectors* stock = malloc(sizeof(stockBivectors));
-    printf("step : %p\n", stock);
+    //printf("h : %Lf\n", h);
     stock->state = NULL;
     stock->previous = NULL;
     if (step_nb >=1 && h>0) {
@@ -106,20 +106,24 @@ stockBivectors* runge_kutta4 (int step_nb, long double h, int t_0, bivector* ini
         state->y = init_state->y;
         state->dx = init_state->dx;
         state->dy = init_state->dy;
+        //printf("state.x %Lf\nstate.y %Lf\nstate.dx %Lf\nstate.dy %Lf\n", state->x, state->y, state->dx, state->dy);
         stock->state = state;
         bivector* k1 = malloc(sizeof(bivector)+1);
         bivector* k2 = malloc(sizeof(bivector)+1);
         bivector* k3 = malloc(sizeof(bivector)+1);
         bivector* k4 = malloc(sizeof(bivector)+1);
         for (step=0; step<step_nb; step++) {
-            printf("step : %d\n", step);
             k1 = forces(t, state, rocketD);
-            printf("step : %d\n", step);
+            //printf("k1.x %Lf k1.y %Lf k1.dx %Lf k1.dy %Lf\n", k1->x, k1->y, k1->dx, k1->dy);
+            //printf("k1.x %Lf k1.y %Lf k1.dx %Lf k1.dy %Lf\n", linBivector2(1, state, h/2, k1)->x, linBivector2(1, state, h/2, k1)->y, linBivector2(1, state, h/2, k1)->dx, linBivector2(1, state, h/2, k1)->dy);
             k2 = forces(t+h/2, linBivector2(1, state, h/2, k1), rocketD);
+            //printf("k2.x %Lf k2.y %Lf k2.dx %Lf k2.dy %Lf\n", k2->x, k2->y, k2->dx, k2->dy);
             k3 = forces(t+h/2, linBivector2(1, state, h/2, k2), rocketD);
+            //printf("k3.x %Lf k3.y %Lf k3.dx %Lf k3.dy %Lf\n", k3->x, k3->y, k3->dx, k3->dy);            
             k4 = forces(t+h, linBivector2(1, state, h, k3), rocketD);
+            //printf("k4.x %Lf k4.y %Lf k4.dx %Lf k4.dy %Lf\n", k4->x, k4->y, k4->dx, k4->dy);            
             state = linBivector5(1, state, h/6, k1, h/3, k2, h/3, k3, h/6, k4);
-            printf("step : %d\n", step);
+            //printf("state.x %Lf\nstate.y %Lf\nstate.dx %Lf\nstate.dy %Lf\n\n", state->x, state->y, state->dx, state->dy);
             stock = consSTOCK(state, stock);
             bivector* state = malloc(sizeof(bivector)+1);
             state->x = stock->state->x;

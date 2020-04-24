@@ -261,8 +261,8 @@ class Test_RK4(unittest.TestCase):
     def test_10step(self):
         cList = commandList(0, 0, None)
         rocketD = rocket_data(1, 0, 1, 0, 0, 0, 0, 0, 100, 0, 0, 1000, 0, 0, 100, ctypes.pointer(cList))
-        cBivector = bivector(1,0,4,0)
-        stock = forces.runge_kutta4(ctypes.c_int(10), ctypes.c_longdouble(2), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
+        cBivector = bivector(ctypes.c_longdouble(0), ctypes.c_longdouble(6371000),ctypes.c_longdouble(0),ctypes.c_longdouble(0))
+        stock = forces.runge_kutta4(ctypes.c_int(1000000), ctypes.c_longdouble(0.001), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
         print(stock.contents.state.contents.x,stock.contents.state.contents.dx,stock.contents.state.contents.y,stock.contents.state.contents.dy)
         self.assertNotEqual(stock.contents.state.contents, bivector(0,0,0,0))
 
