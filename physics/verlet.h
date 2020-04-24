@@ -9,8 +9,12 @@ struct pointVerlet{
     double old_y;
     double ax;
     double ay;
+    double m;
 };
 
+pointVerlet* new_m(pointVerlet* u,double M);
 pointVerlet* new_position(pointVerlet* x);
+pointVerlet* new_acceleration(pointVerlet* u);
+
 
 #endif
