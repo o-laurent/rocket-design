@@ -84,10 +84,10 @@ struct rocket_data {
     long double T1; // Time | 1 Stage stops
     long double T2; // Time | 2 Stage stops
     long double TB; // Time | Boosters stop
-    long double fM; //first stage's mass
-    long double sM; //second stage's mass
-    long double bM; //boosters' mass
-    long double pM; //Payload mass
+    long double fM; //first stage's total mass
+    long double sM; //second stage's total mass
+    long double bM; //boosters' total mass
+    long double pM; //Payload total mass
     commandList* cList; //List of the commands
 };
 

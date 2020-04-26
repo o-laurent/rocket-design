@@ -2,6 +2,7 @@ import unittest
 import ctypes 
 import os
 import numpy as np
+import matplotlib.pyplot as plt
 
 #2D vector corresponding to 2D-data
 class vector(ctypes.Structure):
@@ -63,6 +64,7 @@ forces.mass.restype = ctypes.c_longdouble
 forces.forces.restype = ctypes.POINTER(bivector)
 forces.runge_kutta4.restype = ctypes.POINTER(stockBivectors)
 
+#Utilities for tests
 def is_almost_equal(first, second, places):
     if first == second: 
         return True
@@ -79,6 +81,42 @@ def list_almost_equal(first, second, places):
         i += 1
     return boolean
 
+#Utilities for linked list 
+def gen_commandList(commands, times):
+    if len(commands)==len(times):
+        cList_next = ctypes.pointer(commandList())
+        cFirst = cList_next
+        for i in range(len(commands)-1):
+            cList = cList_next
+            cList_next = ctypes.pointer(commandList())
+            cList.content.t = ctypes.c_longdouble(times[i])
+            cList.content.c = ctypes.c_longdouble(commands[i])
+            cList.next = cList_next
+        cList = cList_next
+        cList.content.t = ctypes.c_longdouble(times[i])
+        cList.content.c = ctypes.c_longdouble(commands[i])
+        cList.next = ctypes.c_void_p(None)
+    return cFirst
+            
+            
+
+def read_stock(pstock):
+    stock_list = []
+    test = True
+    i = 0
+    while test:
+        if i%1000==0:
+            print(i)
+        stock = pstock.contents
+        x = stock.state.contents.x
+        y = stock.state.contents.y
+        dx = stock.state.contents.dx
+        dy = stock.state.contents.dy
+        stock_list.append([x,y,dx,dy])
+        pstock = stock.previous
+        test = not ctypes.cast(pstock, ctypes.c_void_p).value == None
+        i+=1
+    return stock_list
 
 class TestNorm(unittest.TestCase):
     def test_null(self):
@@ -234,40 +272,58 @@ class Test_RK4(unittest.TestCase):
         cList = commandList(10000, 0, None)
         rocketD = rocket_data(1, 0, 1, 0, 0, 0, 0, 0, 100, 0, 0, 1000, 0, 0, 100, ctypes.pointer(cList))
         cBivector = bivector(0,0,0,0)
-        stock = forces.runge_kutta4(ctypes.c_int(0), ctypes.c_longdouble(0), ctypes.c_int(0), cBivector, ctypes.pointer(rocketD))
-        self.assertEqual(ctypes.cast(stock.contents.state, ctypes.c_void_p).value, None)
+        pstock = forces.runge_kutta4(ctypes.c_int(0), ctypes.c_longdouble(0), ctypes.c_int(0), cBivector, ctypes.pointer(rocketD))
+        self.assertEqual(ctypes.cast(pstock.contents.state, ctypes.c_void_p).value, None)
 
     def test_nostep_previous(self):
         cList = commandList(10000, 0, None)
         rocketD = rocket_data(1, 0, 1, 0, 0, 0, 0, 0, 100, 0, 0, 1000, 0, 0, 100, ctypes.pointer(cList))
         cBivector = bivector(0,0,0,0)
-        stock = forces.runge_kutta4(ctypes.c_int(0), ctypes.c_longdouble(0), ctypes.c_int(0), cBivector, ctypes.pointer(rocketD))
-        self.assertEqual(ctypes.cast(stock.contents.previous, ctypes.c_void_p).value, None)
+        pstock = forces.runge_kutta4(ctypes.c_int(0), ctypes.c_longdouble(0), ctypes.c_int(0), cBivector, ctypes.pointer(rocketD))
+        self.assertEqual(ctypes.cast(pstock.contents.previous, ctypes.c_void_p).value, None)
 
     def test_hzero_state(self):
         cList = commandList(10000, 0, None) 
         rocketD = rocket_data(1, 0, 1, 0, 0, 0, 0, 0, 100, 0, 0, 1000, 0, 0, 100, ctypes.pointer(cList))
         cBivector = bivector(0,0,0,0)
-        stock = forces.runge_kutta4(ctypes.c_int(10), ctypes.c_longdouble(0), ctypes.c_int(0), cBivector, ctypes.pointer(rocketD))
-        self.assertEqual(ctypes.cast(stock.contents.state, ctypes.c_void_p).value, None)
+        pstock = forces.runge_kutta4(ctypes.c_int(10), ctypes.c_longdouble(0), ctypes.c_int(0), cBivector, ctypes.pointer(rocketD))
+        self.assertEqual(ctypes.cast(pstock.contents.state, ctypes.c_void_p).value, None)
 
     def test_hzero_previous(self):
         cList = commandList(100000, 0, None) 
         rocketD = rocket_data(1, 0, 1, 0, 0, 0, 0, 0, 100, 0, 0, 1000, 0, 0, 100, ctypes.pointer(cList))
         cBivector = bivector(0,0,0,0)
-        stock = forces.runge_kutta4(ctypes.c_int(10), ctypes.c_longdouble(0), ctypes.c_int(0), cBivector, ctypes.pointer(rocketD))
-        self.assertEqual(ctypes.cast(stock.contents.previous, ctypes.c_void_p).value, None)
+        pstock = forces.runge_kutta4(ctypes.c_int(10), ctypes.c_longdouble(0), ctypes.c_int(0), cBivector, ctypes.pointer(rocketD))
+        self.assertEqual(ctypes.cast(pstock.contents.previous, ctypes.c_void_p).value, None)
 
     def test_10step(self):
         cList = commandList(0, 0, None)
         rocketD = rocket_data(1, 0, 1, 0, 0, 0, 0, 0, 100, 0, 0, 1000, 0, 0, 100, ctypes.pointer(cList))
         cBivector = bivector(ctypes.c_longdouble(0), ctypes.c_longdouble(6371000),ctypes.c_longdouble(0),ctypes.c_longdouble(0))
-        stock = forces.runge_kutta4(ctypes.c_int(1000000), ctypes.c_longdouble(0.001), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
-        print(stock.contents.state.contents.x,stock.contents.state.contents.dx,stock.contents.state.contents.y,stock.contents.state.contents.dy)
-        self.assertNotEqual(stock.contents.state.contents, bivector(0,0,0,0))
+        pstock = forces.runge_kutta4(ctypes.c_int(10000), ctypes.c_longdouble(0.001), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
+        self.assertNotEqual(pstock.contents.state.contents, bivector(0,0,0,0))
 
 class Test_Verlet(unittest.TestCase):
     -1
 
+cList = commandList(0, 0, None) 
+ArianeD = rocket_data(
+    2,
+    1,
+    318.857/1000, #fO
+    334.4,
+    15.31338/1000,
+    446,
+    2569.7729/1000, #bO
+    274.5,
+    125, #T1
+    375,
+    1375,
+    184.7*1000,
+    556*1000,
+    19.44*1000,
+    6*1000,
+    ctypes.pointer(cList)
+)
 if __name__ == '__main__':
     unittest.main()

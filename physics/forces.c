@@ -52,13 +52,13 @@ long double d_isp (long double t, rocket_data* rocketD) {
 vector* thrust (long double c, long double t, rocket_data* rocketD) {
     //To be modified
     vector* T = malloc(sizeof(vector)+1);
-    long double G0 = 6.67430/(100000000000); //G0 = 6.67430*10^(-11)
-    T->x = G0*d_isp(t, rocketD)*cos(c);
-    T->y = G0*d_isp(t, rocketD)*sin(c);
-    return T;
+    long double g0 = 9.81; //g0 = 9.81
+    T->x = g0*d_isp(t, rocketD)*cos(c);
+    T->y = g0*d_isp(t, rocketD)*sin(c);
+    return linVector(1000, T);
 }
 
-//Computes the mass at a certain time
+//Computes the mass (in kg) at a certain time
 long double mass(long double t, rocket_data* rocketD) {
     long double totalM = 0;
     if (t < rocketD->T1 && t < rocketD->TB) {
