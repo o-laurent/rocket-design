@@ -97,8 +97,7 @@ def gen_commandList(commands, times):
         cList.content.c = ctypes.c_longdouble(commands[i])
         cList.next = ctypes.c_void_p(None)
     return cFirst
-            
-            
+
 
 def read_stock(pstock):
     stock_list = []
@@ -118,6 +117,8 @@ def read_stock(pstock):
         i+=1
     return stock_list
 
+
+#Tests
 class TestNorm(unittest.TestCase):
     def test_null(self):
         x = ctypes.c_longdouble(0)

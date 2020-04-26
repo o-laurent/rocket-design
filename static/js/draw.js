@@ -2,7 +2,9 @@ var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
 
-draw1Adapt(120,10)
+draw1Adapt(80, 8)
+document.getElementById("stageNumber").value = '1'
+document.getElementById("boosterSelect").value = '0'
 
 function draw1Adapt(fStageHeight, fStageDiameter) {
     canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
@@ -21,8 +23,8 @@ function draw1Adapt(fStageHeight, fStageDiameter) {
     ctx.lineTo(midx-150*ratioV, 0);
     ctx.stroke();
 
-    CanvasfStageHeight = fStageHeight*(canvas.height-50-fStageHeight*0.07)/140
-    CanvasfStageWidth = fStageDiameter*(canvas.height-50-fStageHeight*0.07)/140
+    CanvasfStageHeight = fStageHeight*((canvas.height-50)/140-0.07)
+    CanvasfStageWidth = fStageDiameter*((canvas.height-50)/140-0.07)
 
     //Drawing of the central engine
     ctx.fillStyle = '#000000'
@@ -61,6 +63,121 @@ function draw1Adapt(fStageHeight, fStageDiameter) {
     ctx.stroke()
 }
 
+function draw1BAdapt(fStageHeight, fStageDiameter, bHeight, bDiameter) {
+    canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
+    canvas.height = document.getElementById('sidebar').getBoundingClientRect().height
+    midy = canvas.height/2
+    midx = canvas.width/2
+    ratioV = canvas.height/410
+    ratioH = canvas.width/150
+    basisX = canvas.height - 50
+
+    ctx.beginPath();
+    ctx.moveTo(midx-150*ratioV, 0);
+    ctx.lineTo(midx-150*ratioV, canvas.height);
+    ctx.lineTo(midx+150*ratioV, canvas.height);
+    ctx.lineTo(midx+150*ratioV, 0);
+    ctx.lineTo(midx-150*ratioV, 0);
+    ctx.stroke();
+
+    CanvasfStageHeight = fStageHeight*((canvas.height-50)/140-0.07)
+    CanvasfStageWidth = fStageDiameter*((canvas.height-50)/140-0.07)
+    CanvasBHeight = bHeight*((canvas.height-50)/140-0.07)
+    CanvasBWidth = bDiameter*((canvas.height-50)/140-0.07)
+
+    //Drawing of the central engine
+    ctx.fillStyle = '#000000'
+    ctx.beginPath();
+    ctx.moveTo(midx, (basisX - 0.07*CanvasfStageHeight));
+    ctx.lineTo(midx - 0.35*CanvasfStageWidth, basisX);
+    ctx.lineTo(midx + 0.35*CanvasfStageWidth, basisX);
+    ctx.closePath()
+    ctx.fill();
+
+    //Drawing of the first stage
+    ctx.fillStyle = '#CCE6FF'
+    baseXfStage = basisX - 0.07*CanvasfStageHeight
+    ctx.fillRect(midx-CanvasfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight, CanvasfStageWidth, 0.8*CanvasfStageHeight)
+    ctx.beginPath()
+    ctx.moveTo(midx-CanvasfStageWidth/3, baseXfStage - CanvasfStageHeight)
+    ctx.lineTo(midx-CanvasfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight)
+    ctx.lineTo(midx+CanvasfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight)
+    ctx.lineTo(midx+CanvasfStageWidth/3, baseXfStage - CanvasfStageHeight)
+    ctx.lineTo(midx-CanvasfStageWidth/3, baseXfStage - CanvasfStageHeight)
+    ctx.closePath()
+    ctx.fill()
+
+    baseXfairing = baseXfStage - CanvasfStageHeight
+
+    //Drawing of the left booster
+    lBmidx = midx-CanvasfStageWidth/2 - CanvasBWidth/2
+    ctx.fillStyle = '#000000'
+    ctx.beginPath();
+    ctx.moveTo(lBmidx, (basisX - 0.07*CanvasBHeight));
+    ctx.lineTo(lBmidx - 0.35*CanvasBWidth, basisX);
+    ctx.lineTo(lBmidx + 0.35*CanvasBWidth, basisX);
+    ctx.closePath()
+    ctx.fill();
+
+    baseXBooster = basisX - 0.07*CanvasBHeight
+
+    ctx.fillStyle = '#CCE6FF'
+    ctx.fillRect(lBmidx-CanvasBWidth/2-1, baseXBooster-0.8*CanvasBHeight, CanvasBWidth, 0.8*CanvasBHeight);
+    ctx.beginPath()
+    ctx.moveTo(lBmidx+CanvasBWidth/2-1, baseXBooster-CanvasBHeight)
+    ctx.lineTo(lBmidx+CanvasBWidth/2-1, baseXBooster-0.8*CanvasBHeight)
+    ctx.lineTo(lBmidx-CanvasBWidth/2-1, baseXBooster-0.8*CanvasBHeight)
+    ctx.bezierCurveTo(lBmidx-CanvasBWidth/2-1, baseXBooster-0.85*CanvasBHeight, lBmidx-CanvasBWidth/2-1, baseXBooster-CanvasBHeight*0.95, lBmidx+CanvasBWidth/2-1, baseXBooster-CanvasBHeight)
+    ctx.closePath();
+    ctx.fill()
+
+    ctx.beginPath()
+    ctx.moveTo(lBmidx+CanvasBWidth/2, baseXfStage)
+    ctx.lineTo(lBmidx+CanvasBWidth/2, baseXBooster-CanvasBHeight)
+    ctx.closePath()
+    ctx.stroke()
+    
+    //Drawing of the right booster
+    lBmidx = midx + CanvasfStageWidth/2 + CanvasBWidth/2
+    ctx.fillStyle = '#000000'
+    ctx.beginPath();
+    ctx.moveTo(lBmidx, (basisX - 0.07*CanvasBHeight));
+    ctx.lineTo(lBmidx - 0.35*CanvasBWidth, basisX);
+    ctx.lineTo(lBmidx + 0.35*CanvasBWidth, basisX);
+    ctx.closePath()
+    ctx.fill();
+
+    baseXBooster = basisX - 0.07*CanvasBHeight
+
+    ctx.fillStyle = '#CCE6FF'
+    ctx.fillRect(lBmidx-CanvasBWidth/2+1, baseXBooster-0.8*CanvasBHeight, CanvasBWidth, 0.8*CanvasBHeight);
+    ctx.beginPath()
+    ctx.moveTo(lBmidx-CanvasBWidth/2+1, baseXBooster-CanvasBHeight)
+    ctx.lineTo(lBmidx-CanvasBWidth/2+1, baseXBooster-0.8*CanvasBHeight)
+    ctx.lineTo(lBmidx+CanvasBWidth/2+1, baseXBooster-0.8*CanvasBHeight)
+    ctx.bezierCurveTo(lBmidx+CanvasBWidth/2+1, baseXBooster-0.85*CanvasBHeight, lBmidx+CanvasBWidth/2+1, baseXBooster-CanvasBHeight*0.95, lBmidx-CanvasBWidth/2+1, baseXBooster-CanvasBHeight)
+    ctx.closePath();
+    ctx.fill()
+
+    ctx.beginPath()
+    ctx.moveTo(lBmidx-CanvasBWidth/2, baseXfStage)
+    ctx.lineTo(lBmidx-CanvasBWidth/2, baseXBooster-CanvasBHeight)
+    ctx.closePath()
+    ctx.stroke()
+
+    //Drawing of the fairing
+    ctx.fillStyle = '#CCE6FF'
+    ctx.beginPath();
+    ctx.moveTo(midx-CanvasfStageWidth/3, baseXfairing);
+    ctx.quadraticCurveTo(midx, +baseXfairing-150, midx+CanvasfStageWidth/3, baseXfairing);
+    ctx.fill();
+        //separator
+    ctx.beginPath()
+    ctx.moveTo(midx-CanvasfStageWidth/3, baseXfairing)
+    ctx.lineTo(midx+CanvasfStageWidth/3, baseXfairing)
+    ctx.closePath()
+    ctx.stroke()
+}
 
 function draw1() {
     //Drawing of the rocket with one stage without boosters
