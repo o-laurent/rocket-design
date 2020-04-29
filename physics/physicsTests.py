@@ -89,12 +89,13 @@ def gen_commandList(commands, times):
         for i in range(len(commands)-1):
             cList = cList_next
             cList_next = ctypes.pointer(commandList())
-            cList.content.t = ctypes.c_longdouble(times[i])
-            cList.content.c = ctypes.c_longdouble(commands[i])
-            cList.next = cList_next
+            cList.contents.t = ctypes.c_longdouble(times[i])
+            cList.contents.c = ctypes.c_longdouble(commands[i])
+            cList.contents.next = cList_next
+        i += 1 
         cList = cList_next
-        cList.content.t = ctypes.c_longdouble(times[i])
-        cList.content.c = ctypes.c_longdouble(commands[i])
+        cList.contents.t = ctypes.c_longdouble(times[i])
+        cList.contents.c = ctypes.c_longdouble(commands[i])
         cList.next = ctypes.c_void_p(None)
     return cFirst
 
@@ -307,24 +308,25 @@ class Test_RK4(unittest.TestCase):
 class Test_Verlet(unittest.TestCase):
     -1
 
-cList = commandList(0, 0, None) 
+cBivector = bivector(ctypes.c_longdouble(0), ctypes.c_longdouble(6371000),ctypes.c_longdouble(-1700/3.6),ctypes.c_longdouble(0))
+cList = gen_commandList([np.pi/2, 5*np.pi/8, np.pi], [110, 200, 10000])
 ArianeD = rocket_data(
-    2,
-    1,
-    318.857/1000, #fO
-    334.4,
-    15.31338/1000,
-    446,
-    2569.7729/1000, #bO
-    274.5,
-    125, #T1
-    375,
-    1375,
-    184.7*1000,
-    556*1000,
-    19.44*1000,
-    6*1000,
-    ctypes.pointer(cList)
+    ctypes.c_int(2),
+    ctypes.c_int(1), #boosters
+    ctypes.c_longdouble(318.857), #fO
+    ctypes.c_longdouble(450.4), #fISP
+    ctypes.c_longdouble(15.31338), #s0
+    ctypes.c_longdouble(446), #sISP
+    ctypes.c_longdouble(3792), #bO
+    ctypes.c_longdouble(300), #bISP
+    ctypes.c_longdouble(497), #T1
+    ctypes.c_longdouble(1375), #T2
+    ctypes.c_longdouble(125), #TB
+    ctypes.c_longdouble(184.7*1000), #fM
+    ctypes.c_longdouble(19.44*1000), #sM
+    ctypes.c_longdouble(556*1000), #bM
+    ctypes.c_longdouble(6*1000), #pM
+    cList
 )
 if __name__ == '__main__':
     unittest.main()

@@ -3,6 +3,9 @@
 #include <math.h>
 #include "forces.h"
 
+#ifndef M_PI
+ #define M_PI 3.141592653589793238462643383279
+#endif 
 //Computes the norm2 of a vector
 long double norm (long double x, long double y) {
     long double norm_value = sqrtl(x*x+y*y);
@@ -12,8 +15,13 @@ long double norm (long double x, long double y) {
 //Computes the angle of the rocket 
 long double command(long double t, commandList* cList) {
     commandList* tmpList = malloc(sizeof(commandList)+1);
-    tmpList = cList;
-    long double c = 0;
+    tmpList->c = cList->c;
+    tmpList->t = cList->t;
+    tmpList->next = cList->next;
+    long double c = cList->c;
+    /*printf("t : %Lf, tmpt : %Lf\n", t, tmpList->t);
+    printf("c : %Lf, tmpc : %Lf\n", c, tmpList->c);*/
+    //printf("p : %p", tmpList->next);
     while (tmpList->next != NULL && tmpList->t < t) {
         tmpList = tmpList->next;
         c = tmpList->c;
@@ -55,7 +63,7 @@ vector* thrust (long double c, long double t, rocket_data* rocketD) {
     long double g0 = 9.81; //g0 = 9.81
     T->x = g0*d_isp(t, rocketD)*cos(c);
     T->y = g0*d_isp(t, rocketD)*sin(c);
-    return linVector(1000, T);
+    return T;
 }
 
 //Computes the mass (in kg) at a certain time
@@ -80,13 +88,19 @@ long double mass(long double t, rocket_data* rocketD) {
 bivector* forces (long double t, bivector* X, rocket_data* rocketD) {
     vector* r = malloc(sizeof(vector)+1);
     long double c = command(t, rocketD->cList);
+    //printf("command %Lf\n", c);
     r->x = X->x;
     r->y = X->y;
     bivector* force = malloc(sizeof(bivector)+1); //is the variation of (X.x, X.y, X.dx, D.dy)
     force->x = X->dx;
     force->y = X->dy;
     vector* acceleration = malloc(sizeof(vector)+1);
-    acceleration = weight(r);//linVector2(1, weight(r), 1/mass(t, rocketD), thrust(c, t, rocketD));
+    acceleration = linVector2(1, weight(r), 1/mass(t, rocketD), thrust(c, t, rocketD));
+    //printf("weight.dy = %Lf\n", weight(r)->x);
+    printf("mass = %Lf\n", mass(t, rocketD));
+    //printf("thrust.dx = %Lf\n", linVector(1/mass(t, rocketD), thrust(c, t, rocketD))->x);
+    //printf("r.y = %Lf\n", r->y);
+    //printf("acceleration.dy = %Lf\n", acceleration->y);*/
     force->dx = acceleration->x;
     force->dy = acceleration->y;
     return force;
