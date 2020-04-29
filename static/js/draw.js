@@ -1,14 +1,17 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
-
-draw1Adapt(80, 8)
+clearCanvas()
+draw1Adapt(80, 8, 140)
 document.getElementById("stageNumber").value = '1'
 document.getElementById("boosterSelect").value = '0'
 
-function draw1Adapt(fStageHeight, fStageDiameter) {
+function canvasSize() {
     canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
     canvas.height = document.getElementById('sidebar').getBoundingClientRect().height
+}
+
+function draw1Adapt(fStageHeight, fStageDiameter, zoom) {
     midy = canvas.height/2
     midx = canvas.width/2
     ratioV = canvas.height/410
@@ -23,13 +26,13 @@ function draw1Adapt(fStageHeight, fStageDiameter) {
     ctx.lineTo(midx-150*ratioV, 0);
     ctx.stroke();
 
-    CanvasfStageHeight = fStageHeight*((canvas.height-50)/140-0.07)
-    CanvasfStageWidth = fStageDiameter*((canvas.height-50)/140-0.07)
+    CanvasfStageHeight = fStageHeight*((canvas.height-50)/zoom-0.07)
+    CanvasfStageWidth = fStageDiameter*((canvas.height-50)/zoom-0.07)
 
     //Drawing of the central engine
     ctx.fillStyle = '#000000'
     ctx.beginPath();
-    ctx.moveTo(midx, (basisX - 0.07*CanvasfStageHeight));
+    ctx.moveTo(midx, (basisX - 0.7*CanvasfStageWidth));
     ctx.lineTo(midx - 0.35*CanvasfStageWidth, basisX);
     ctx.lineTo(midx + 0.35*CanvasfStageWidth, basisX);
     ctx.closePath()
@@ -63,9 +66,7 @@ function draw1Adapt(fStageHeight, fStageDiameter) {
     ctx.stroke()
 }
 
-function draw1BAdapt(fStageHeight, fStageDiameter, bHeight, bDiameter) {
-    canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
-    canvas.height = document.getElementById('sidebar').getBoundingClientRect().height
+function draw1BAdapt(fStageHeight, fStageDiameter, bHeight, bDiameter, zoom) {
     midy = canvas.height/2
     midx = canvas.width/2
     ratioV = canvas.height/410
@@ -80,15 +81,15 @@ function draw1BAdapt(fStageHeight, fStageDiameter, bHeight, bDiameter) {
     ctx.lineTo(midx-150*ratioV, 0);
     ctx.stroke();
 
-    CanvasfStageHeight = fStageHeight*((canvas.height-50)/140-0.07)
-    CanvasfStageWidth = fStageDiameter*((canvas.height-50)/140-0.07)
-    CanvasBHeight = bHeight*((canvas.height-50)/140-0.07)
-    CanvasBWidth = bDiameter*((canvas.height-50)/140-0.07)
+    CanvasfStageHeight = fStageHeight*((canvas.height-50)/zoom-0.07)
+    CanvasfStageWidth = fStageDiameter*((canvas.height-50)/zoom-0.07)
+    CanvasBHeight = bHeight*((canvas.height-50)/zoom-0.07)
+    CanvasBWidth = bDiameter*((canvas.height-50)/zoom-0.07)
 
     //Drawing of the central engine
     ctx.fillStyle = '#000000'
     ctx.beginPath();
-    ctx.moveTo(midx, (basisX - 0.07*CanvasfStageHeight));
+    ctx.moveTo(midx, (basisX - 0.7*CanvasfStageWidth));
     ctx.lineTo(midx - 0.35*CanvasfStageWidth, basisX);
     ctx.lineTo(midx + 0.35*CanvasfStageWidth, basisX);
     ctx.closePath()
@@ -181,8 +182,6 @@ function draw1BAdapt(fStageHeight, fStageDiameter, bHeight, bDiameter) {
 
 function draw1() {
     //Drawing of the rocket with one stage without boosters
-    canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
-    canvas.height = document.getElementById('sidebar').getBoundingClientRect().height
     midy = canvas.height/2
     midx = canvas.width/2
     ratioV = canvas.height/410
@@ -234,8 +233,6 @@ function draw1() {
 
 function draw1B() {
     //Drawing of the rocket with one stage and boosters
-    canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
-    canvas.height = document.getElementById('sidebar').getBoundingClientRect().height
     midy = canvas.height/2
     midx = canvas.width/2
     ratioV = canvas.height/410
@@ -338,8 +335,6 @@ function draw1B() {
 
 function draw2() {
     //Drawing of the rocket with two stages and without boosters 
-    canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
-    canvas.height = document.getElementById('sidebar').getBoundingClientRect().height
     midy = canvas.height/2
     midx = canvas.width/2
     console.log(midx, midy)
@@ -400,8 +395,6 @@ function draw2() {
 
 function draw2B() {
     //Drawing of the rocket with two stages and boosters 
-    canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
-    canvas.height = document.getElementById('sidebar').getBoundingClientRect().height
     midy = canvas.height/2
     midx = canvas.width/2
     console.log(midx, midy)
@@ -512,4 +505,12 @@ function draw2B() {
 
 function clearCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
+    canvas.height = document.getElementById('sidebar').getBoundingClientRect().height
+    midy = canvas.height/2
+    midx = canvas.width/2
+    ratioV = canvas.height/410
+    ratioH = canvas.width/150
+    ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+    ctx.fillRect(midx-150*ratioV, 0, 300*ratioV, canvas.height)
 }

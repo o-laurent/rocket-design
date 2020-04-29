@@ -104,7 +104,7 @@ function drawRocket() {
             fSdiameter = Number(fSdiameter)
         }
         clearCanvas()
-        draw1Adapt(fSheight, fSdiameter)
+        draw1Adapt(fSheight, fSdiameter, 140)
     }
     else if (stageNumber == 1){
         fSheight = document.getElementById("stage1Height").value
@@ -136,7 +136,7 @@ function drawRocket() {
             bdiameter = Number(bdiameter)
         }
         clearCanvas()
-        draw1BAdapt(fSheight, fSdiameter, bheight, bdiameter)
+        draw1BAdapt(fSheight, fSdiameter, bheight, bdiameter, 140)
     }
     else if (stageNumber==2 && booster==false) {
         clearCanvas()

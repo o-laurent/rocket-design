@@ -58,6 +58,11 @@ body {
 }
 
 #divF {
-    margin-top: 50%;
+    margin-top: 57%;
     position: fixed;
+}
+
+.vl {
+    border-left: 1px solid black;
+    height: 100vh;
 }

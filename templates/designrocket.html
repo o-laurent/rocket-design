@@ -2,20 +2,24 @@
 <html lang="fr">
     <head>
         <meta charset="utf-8">
+        <title>Design Rocket</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Rocket-Design">
         <meta name="author" content="Johnny Yammine et Olivier Laurent">
+        <link rel="icon" href="../static/src/icon.png">
         <link rel="stylesheet" href="../static/css/uikit.min.css" />
         <link rel ="stylesheet" href="../static/css/main.css">
+        <link rel ="stylesheet" href="../static/css/design_rocket.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <!--<link rel="icon" type="image/png" href="images/logo.png"/>-->
     </head>
     <header></header>
     <body>
-        <div class='uk-margin page-wrap'>
-            <div class="form">
-            <h3>Add a rocket to the database :</h3>
+        <div class='uk-margin-left page-wrap'>
+            <div class="over form">
+            <h2>Design your own rocket !</h2>
+            <hr />
             <form class="uk-form-horizontal">
                 <div class="uk-margin">
                     <label class="uk-form-label" for="rocketName">Name :</label>
@@ -57,6 +61,11 @@
                         <option value='1'> With boosters </option>           
                     </select>
                 </div>
+
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="totalHeight"> Total Height (m):</label>
+                    <input class="uk-input uk-form-width-medium" id="totalHeight" type="number" placeholder="Height"  step="0.01" name='totalHeight' autocomplete="off">
+                </div> 
 
                 <div class="uk-margin">
                     <label class="uk-form-label" for="liftOffMass">Lift-off mass (tons):</label>
@@ -189,12 +198,13 @@
             </br>
             </form>
             </div>
+            
             <div id="sidebar" class="sidebar">
                 <canvas id="myCanvas"></canvas>
                 <div id='dName'></div>
                 <div id='dYear'></div>
                 
-                <div id="divF" class="uk-grid-small uk-child-width-auto uk-grid">
+                <div id="divF" class="over uk-grid-small uk-child-width-auto uk-grid">
                     <label><input class="uk-checkbox" type="checkbox" checked> Show Fairing</label>
                     <label><input class="uk-checkbox" type="checkbox"> Show fuel</label>
                 </div>
