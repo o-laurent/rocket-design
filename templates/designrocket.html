@@ -11,9 +11,7 @@
         <link rel="stylesheet" href="../static/css/uikit.min.css" />
         <link rel ="stylesheet" href="../static/css/main.css">
         <link rel ="stylesheet" href="../static/css/design_rocket.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <!--<link rel="icon" type="image/png" href="images/logo.png"/>-->
-    </head>
+        </head>
     <header></header>
     <body>
         <div class='uk-margin-left page-wrap'>
@@ -21,6 +19,8 @@
             <h2>Design your own rocket !</h2>
             <hr />
             <form class="uk-form-horizontal">
+                <button class="uk-button" type="button" onClick='chooseModel()'>Start from an existing model : </button>
+                <h4>General Information</h4>
                 <div class="uk-margin">
                     <label class="uk-form-label" for="rocketName">Name :</label>
                     <input class="uk-input uk-form-width-medium" id="rocketName" type="text" placeholder="Name" name='rocketName' autocomplete="off">
@@ -112,7 +112,7 @@
 
                     <div>
                         <label class="uk-form-label" for="stage1color">Color</label>
-                        <input class="uk-form-width-medium" type="color" id="stage1color" name="stage1color" value="#CCE6FF">
+                        <input class="uk-form-width-medium" type="color" id="stage1Color" name="stage1color" value="#CCE6FF">
                     </div>
                 </div>
                 <div id='boosterDiv' style="display: none;">
@@ -188,7 +188,7 @@
 
                     <div>
                         <label class="uk-form-label" for="stage2color">Color</label>
-                        <input class="uk-form-width-medium" type="color" id="stage2color" name="stage2color" value="#CCE6FF">
+                        <input class="uk-form-width-medium" type="color" id="stage2Color" name="stage2color" value="#CCE6FF">
                     </div>
                 </div>
                 <div class="uk-margin">
@@ -214,6 +214,7 @@
 
         <!-- Front script -->
         <script src="../static/js/newrocket.js"></script>
+        <script src="../static/js/design/main.js"></script>
         <script src="../static/js/draw.js"></script>
         <!-- UIKIT Theme -->
         <script src="../static/js/uikit.min.js"></script>

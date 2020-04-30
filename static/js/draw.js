@@ -2,16 +2,19 @@ var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
 clearCanvas()
-draw1Adapt(80, 8, 140)
+draw1Adapt(80, 8, 140, '#CCE6FF')
 document.getElementById("stageNumber").value = '1'
 document.getElementById("boosterSelect").value = '0'
+document.getElementById("stage1Color").value = '#CCE6FF'
+document.getElementById("boosterColor").value = '#CCE6FF'
+document.getElementById("stage2Color").value = '#CCE6FF'
 
 function canvasSize() {
     canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
     canvas.height = document.getElementById('sidebar').getBoundingClientRect().height
 }
 
-function draw1Adapt(fStageHeight, fStageDiameter, zoom) {
+function draw1Adapt(fStageHeight, fStageDiameter, zoom, fStageColor) {
     midy = canvas.height/2
     midx = canvas.width/2
     ratioV = canvas.height/410
@@ -32,20 +35,20 @@ function draw1Adapt(fStageHeight, fStageDiameter, zoom) {
     //Drawing of the central engine
     ctx.fillStyle = '#000000'
     ctx.beginPath();
-    ctx.moveTo(midx, (basisX - 0.7*CanvasfStageWidth));
+    ctx.moveTo(midx, (basisX - 0.9*CanvasfStageWidth));
     ctx.lineTo(midx - 0.35*CanvasfStageWidth, basisX);
     ctx.lineTo(midx + 0.35*CanvasfStageWidth, basisX);
     ctx.closePath()
     ctx.fill();
 
     //Drawing of the first stage
-    ctx.fillStyle = '#CCE6FF'
-    baseXfStage = basisX - 0.07*CanvasfStageHeight
+    ctx.fillStyle = fStageColor
+    baseXfStage = basisX - 0.7*CanvasfStageWidth
     ctx.fillRect(midx-CanvasfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight, CanvasfStageWidth, 0.8*CanvasfStageHeight)
     ctx.beginPath()
     ctx.moveTo(midx-CanvasfStageWidth/3, baseXfStage - CanvasfStageHeight)
-    ctx.lineTo(midx-CanvasfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight)
-    ctx.lineTo(midx+CanvasfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight)
+    ctx.lineTo(midx-CanvasfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight+1)
+    ctx.lineTo(midx+CanvasfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight+1)
     ctx.lineTo(midx+CanvasfStageWidth/3, baseXfStage - CanvasfStageHeight)
     ctx.lineTo(midx-CanvasfStageWidth/3, baseXfStage - CanvasfStageHeight)
     ctx.closePath()
@@ -56,7 +59,7 @@ function draw1Adapt(fStageHeight, fStageDiameter, zoom) {
     //Drawing of the fairing
     ctx.beginPath();
     ctx.moveTo(midx-CanvasfStageWidth/3, baseXfairing);
-    ctx.quadraticCurveTo(midx, +baseXfairing-150, midx+CanvasfStageWidth/3, baseXfairing);
+    ctx.quadraticCurveTo(midx, baseXfairing-150, midx+CanvasfStageWidth/3, baseXfairing);
     ctx.fill();
         //separator
     ctx.beginPath()
@@ -66,7 +69,7 @@ function draw1Adapt(fStageHeight, fStageDiameter, zoom) {
     ctx.stroke()
 }
 
-function draw1BAdapt(fStageHeight, fStageDiameter, bHeight, bDiameter, zoom) {
+function draw1BAdapt(fStageHeight, fStageDiameter, bHeight, bDiameter, zoom, fStageColor, bColor) {
     midy = canvas.height/2
     midx = canvas.width/2
     ratioV = canvas.height/410
@@ -89,20 +92,20 @@ function draw1BAdapt(fStageHeight, fStageDiameter, bHeight, bDiameter, zoom) {
     //Drawing of the central engine
     ctx.fillStyle = '#000000'
     ctx.beginPath();
-    ctx.moveTo(midx, (basisX - 0.7*CanvasfStageWidth));
+    ctx.moveTo(midx, (basisX - 0.9*CanvasfStageWidth));
     ctx.lineTo(midx - 0.35*CanvasfStageWidth, basisX);
     ctx.lineTo(midx + 0.35*CanvasfStageWidth, basisX);
     ctx.closePath()
     ctx.fill();
 
     //Drawing of the first stage
-    ctx.fillStyle = '#CCE6FF'
-    baseXfStage = basisX - 0.07*CanvasfStageHeight
+    ctx.fillStyle = fStageColor
+    baseXfStage = basisX - 0.7*CanvasfStageWidth
     ctx.fillRect(midx-CanvasfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight, CanvasfStageWidth, 0.8*CanvasfStageHeight)
     ctx.beginPath()
     ctx.moveTo(midx-CanvasfStageWidth/3, baseXfStage - CanvasfStageHeight)
-    ctx.lineTo(midx-CanvasfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight)
-    ctx.lineTo(midx+CanvasfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight)
+    ctx.lineTo(midx-CanvasfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight+1)
+    ctx.lineTo(midx+CanvasfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight+1)
     ctx.lineTo(midx+CanvasfStageWidth/3, baseXfStage - CanvasfStageHeight)
     ctx.lineTo(midx-CanvasfStageWidth/3, baseXfStage - CanvasfStageHeight)
     ctx.closePath()
@@ -114,15 +117,15 @@ function draw1BAdapt(fStageHeight, fStageDiameter, bHeight, bDiameter, zoom) {
     lBmidx = midx-CanvasfStageWidth/2 - CanvasBWidth/2
     ctx.fillStyle = '#000000'
     ctx.beginPath();
-    ctx.moveTo(lBmidx, (basisX - 0.07*CanvasBHeight));
+    ctx.moveTo(lBmidx, (basisX - 0.9*CanvasBWidth));
     ctx.lineTo(lBmidx - 0.35*CanvasBWidth, basisX);
     ctx.lineTo(lBmidx + 0.35*CanvasBWidth, basisX);
     ctx.closePath()
     ctx.fill();
 
-    baseXBooster = basisX - 0.07*CanvasBHeight
+    baseXBooster = basisX - 0.7*CanvasBWidth
 
-    ctx.fillStyle = '#CCE6FF'
+    ctx.fillStyle = bColor
     ctx.fillRect(lBmidx-CanvasBWidth/2-1, baseXBooster-0.8*CanvasBHeight, CanvasBWidth, 0.8*CanvasBHeight);
     ctx.beginPath()
     ctx.moveTo(lBmidx+CanvasBWidth/2-1, baseXBooster-CanvasBHeight)
@@ -142,15 +145,13 @@ function draw1BAdapt(fStageHeight, fStageDiameter, bHeight, bDiameter, zoom) {
     lBmidx = midx + CanvasfStageWidth/2 + CanvasBWidth/2
     ctx.fillStyle = '#000000'
     ctx.beginPath();
-    ctx.moveTo(lBmidx, (basisX - 0.07*CanvasBHeight));
+    ctx.moveTo(lBmidx, (basisX - 0.9*CanvasBWidth));
     ctx.lineTo(lBmidx - 0.35*CanvasBWidth, basisX);
     ctx.lineTo(lBmidx + 0.35*CanvasBWidth, basisX);
     ctx.closePath()
     ctx.fill();
 
-    baseXBooster = basisX - 0.07*CanvasBHeight
-
-    ctx.fillStyle = '#CCE6FF'
+    ctx.fillStyle = bColor
     ctx.fillRect(lBmidx-CanvasBWidth/2+1, baseXBooster-0.8*CanvasBHeight, CanvasBWidth, 0.8*CanvasBHeight);
     ctx.beginPath()
     ctx.moveTo(lBmidx-CanvasBWidth/2+1, baseXBooster-CanvasBHeight)
@@ -167,7 +168,7 @@ function draw1BAdapt(fStageHeight, fStageDiameter, bHeight, bDiameter, zoom) {
     ctx.stroke()
 
     //Drawing of the fairing
-    ctx.fillStyle = '#CCE6FF'
+    ctx.fillStyle = fStageColor
     ctx.beginPath();
     ctx.moveTo(midx-CanvasfStageWidth/3, baseXfairing);
     ctx.quadraticCurveTo(midx, +baseXfairing-150, midx+CanvasfStageWidth/3, baseXfairing);
@@ -249,7 +250,7 @@ function draw1B() {
 
 
     //Drawing of the fairing
-    ctx.fillStyle = '#cce6ff'
+    ctx.fillStyle = '#CCE6FF'
     ctx.beginPath();
     ctx.moveTo(midx-15*ratioV, 150*ratioV+10);
     ctx.quadraticCurveTo(midx, +50*ratioV+10, midx+15*ratioV, 150*ratioV+10);
@@ -412,7 +413,7 @@ function draw2B() {
 
 
     //Drawing of the fairing
-    ctx.fillStyle = '#cce6ff'
+    ctx.fillStyle = '#CCE6FF'
     ctx.beginPath();
     ctx.moveTo(midx-20*ratioV, 50*ratioV+10);
     ctx.quadraticCurveTo(midx, -50*ratioV+10, midx+20*ratioV, 50*ratioV+10);

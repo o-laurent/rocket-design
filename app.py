@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
+import pandas as pd
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
+# Defining the API
 @app.route("/")
 @app.route("/index")
-
 def start():
+    load_db()
     return render_template("index.html")
 
 @app.route('/designrocket.html')
@@ -14,15 +16,13 @@ def start():
 def designrocket():
     return render_template("designrocket.html")
 
-@app.route('/compare-rockets.html')
-@app.route('/compare-rockets')
+
 @app.route('/comparerockets.html')
 @app.route('/comparerockets')
-def comp_rocket():
+def comprocket():
     return render_template("compare_rocket.html")
 
 @app.route('/trajectory.html')
-@app.route('/traj')
 def trajectory():
     return render_template("trajectory.html")
 
@@ -33,5 +33,17 @@ def api_newrocket():
     print(content)
     return 'JSON posted'
 
-#if __name__ == "__main__":
-#    app.run()
+@app.route('/api/rocket/names', methods = ['GET'])
+def api_rocket_names():
+    print('inside')
+    return {
+        "names": get_rocket_names(),
+    }, 200
+
+#Utility functions
+def load_db():
+    global rocket_db
+    rocket_db = pd.read_csv('rocket_database.csv')
+
+def get_rocket_names():
+    return list(rocket_db['Name'])

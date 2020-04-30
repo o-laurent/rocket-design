@@ -1,10 +1,9 @@
 /*Need to verify a lot of data*/ 
 
-//Check that the heights, the masses are good
-//Check that the times are good : boosters will leave before the 1 stage
-//If not, maybe reduce the size of the boosters
-//Think how to input thz different masses 
-//width/height of engine depending on width
+// Check that the times are good : boosters will leave before the 1 stage
+// If not, maybe reduce the size of the boosters
+// Function to empty the form
+// Check that the name hasn't been given already
 
 document.getElementById("stageNumber").addEventListener("change", function (e){
     if (document.getElementById('stageNumber').value=='2') {
@@ -33,57 +32,6 @@ document.getElementById("rocketYear").addEventListener("keyup", function (e){
 })
 
 
-/*Choose the right model*/
-document.getElementById("stageNumber").addEventListener("click", function (e){
-    stageNumber = Number(document.getElementById("stageNumber").value)
-    booster =  Number(document.getElementById("boosterSelect").value)
-    if (stageNumber==1 && booster==0) {
-        clearCanvas()
-        draw1Adapt(80, 8)
-    }
-    else if (stageNumber == 1) {
-        clearCanvas()
-        draw1BAdapt(80, 8, 50, 4)
-    }
-    else if (stageNumber==2 && booster==0) {
-        clearCanvas()
-        draw2()
-    }
-    else {
-        clearCanvas()
-        draw2B()
-    }
-})
-
-document.getElementById("boosterSelect").addEventListener("click", function (e){
-    stageNumber = Number(document.getElementById("stageNumber").value)
-    booster = Number(document.getElementById("boosterSelect").value)
-    if (stageNumber==1 && booster==0) {
-        clearCanvas()
-        draw1Adapt(80, 8)
-    }
-    else if (stageNumber == 1){
-        clearCanvas()
-        draw1BAdapt(80, 8, 50, 4)
-    }
-    else if (stageNumber==2 && booster==0) {
-        clearCanvas()
-        draw2()
-    }
-    else {
-        clearCanvas()
-        draw2B()
-    }
-})
-
-
-//Changing size listeners
-document.getElementById("stage1Height").addEventListener("keyup", drawRocket)
-document.getElementById("stage1Diameter").addEventListener("keyup", drawRocket)
-document.getElementById("boosterHeight").addEventListener("keyup", drawRocket)
-document.getElementById("boosterDiameter").addEventListener("keyup", drawRocket)
-
-
 //Utility functions
 function drawRocket() {
     stageNumber = Number(document.getElementById("stageNumber").value)
@@ -103,8 +51,9 @@ function drawRocket() {
         else {
             fSdiameter = Number(fSdiameter)
         }
+        fScolor = document.getElementById("stage1Color").value
         clearCanvas()
-        draw1Adapt(fSheight, fSdiameter, 140)
+        draw1Adapt(fSheight, fSdiameter, 140, fScolor)
     }
     else if (stageNumber == 1){
         fSheight = document.getElementById("stage1Height").value
@@ -112,13 +61,13 @@ function drawRocket() {
         bheight = document.getElementById("boosterHeight").value
         bdiameter = document.getElementById("boosterDiameter").value
         if (fSheight=="") {
-            fSheight = 50
+            fSheight = 80
         }
         else {
             fSheight = Number(fSheight)
         }
         if (fSdiameter=="") {
-            fSdiameter = 5
+            fSdiameter = 8
         }
         else {
             fSdiameter = Number(fSdiameter)
@@ -135,8 +84,10 @@ function drawRocket() {
         else {
             bdiameter = Number(bdiameter)
         }
+        fScolor = document.getElementById("stage1Color").value
+        bcolor = document.getElementById("boosterColor").value
         clearCanvas()
-        draw1BAdapt(fSheight, fSdiameter, bheight, bdiameter, 140)
+        draw1BAdapt(fSheight, fSdiameter, bheight, bdiameter, 140, fScolor, bcolor)
     }
     else if (stageNumber==2 && booster==false) {
         clearCanvas()
@@ -147,3 +98,14 @@ function drawRocket() {
         draw2B()
     }
 }
+
+//Updating Listeners
+document.getElementById("stage1Height").addEventListener("keyup", drawRocket)
+document.getElementById("stage1Diameter").addEventListener("keyup", drawRocket)
+document.getElementById("boosterHeight").addEventListener("keyup", drawRocket)
+document.getElementById("boosterDiameter").addEventListener("keyup", drawRocket)
+document.getElementById("stageNumber").addEventListener("click", drawRocket())
+document.getElementById("boosterSelect").addEventListener("click", drawRocket())
+document.getElementById("stage1Color").addEventListener("input", drawRocket)
+document.getElementById("boosterColor").addEventListener("input", drawRocket)
+document.getElementById("stage2Color").addEventListener("input", drawRocket)
