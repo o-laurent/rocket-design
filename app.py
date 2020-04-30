@@ -17,10 +17,10 @@ def designrocket():
     return render_template("designrocket.html")
 
 
-@app.route('/comparerockets.html')
-@app.route('/comparerockets')
+@app.route('/compare_rockets.html')
+@app.route('/compare_rockets')
 def comprocket():
-    return render_template("compare_rocket.html")
+    return render_template("compare_rockets.html")
 
 @app.route('/trajectory.html')
 def trajectory():
@@ -33,12 +33,19 @@ def api_newrocket():
     print(content)
     return 'JSON posted'
 
-@app.route('/api/rocket/names', methods = ['GET'])
+@app.route('/api/rockets/names', methods = ['GET'])
 def api_rocket_names():
     print('inside')
     return {
         "names": get_rocket_names(),
     }, 200
+
+@app.route('/api/rockets/all', methods = ['GET'])
+def api_rocket_all():
+    print('inside')
+    json = rocket_db.to_json()
+    print(json)
+    return json, 200
 
 #Utility functions
 def load_db():

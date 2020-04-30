@@ -1,12 +1,12 @@
-var names 
-updateNames()
+var rockets 
+updateRockets()
 
-async function updateNames() {
-    names = await getNames()
+async function updateRockets() {
+    rockets = await getRockets()
 }
 
 
-async function getNames() {
+async function getRockets() {
     const param = {
         method : 'GET',
         mode: 'cors',
@@ -15,7 +15,7 @@ async function getNames() {
         }
     }
     // On appelle le serveur
-    return fetch ('/api/rockets/names',param)
+    return fetch ('/api/rockets/all',param)
     .then(response =>{
         if (response.status != 200) {
             console.log("Erreur")
@@ -28,6 +28,3 @@ async function getNames() {
     })
     .catch(console.error)
 }
-
-//Fonction de chargement d'une fusée en particulier 
-//Fonction d'envoi de fusée
