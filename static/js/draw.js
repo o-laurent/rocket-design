@@ -334,6 +334,79 @@ function draw1B() {
 }
 
 
+function draw2Adapt(fStageHeight,fStageDiameter,sStageHeight,sStageDiameter,zoom,fStageColor,sStageColor) {
+    midy = canvas.height/2
+    midx = canvas.width/2
+    ratioV = canvas.height/410
+    ratioH = canvas.width/150
+    basisX = canvas.height - 50
+
+    ctx.beginPath();
+    ctx.moveTo(midx-150*ratioV, 0);
+    ctx.lineTo(midx-150*ratioV, canvas.height);
+    ctx.lineTo(midx+150*ratioV, canvas.height);
+    ctx.lineTo(midx+150*ratioV, 0);
+    ctx.lineTo(midx-150*ratioV, 0);
+    ctx.stroke();
+
+    CanvassStageHeight = sStageHeight*((canvas.height-50)/zoom-0.07)
+    CanvassStageWidth = sStageDiameter*((canvas.height-50)/zoom-0.07)
+    CanvasfStageHeight = fStageHeight*((canvas.height-50)/zoom-0.07)
+    CanvasfStageWidth = fStageDiameter*((canvas.height-50)/zoom-0.07)
+
+    //Drawing of the central engine
+    ctx.fillStyle = '#000000'
+    ctx.beginPath();
+    ctx.moveTo(midx, (basisX - 0.9*CanvassStageWidth));
+    ctx.lineTo(midx - 0.35*CanvassStageWidth, basisX);
+    ctx.lineTo(midx + 0.35*CanvassStageWidth, basisX);
+    ctx.closePath()
+    ctx.fill();
+
+     //Drawing of the second stage
+     ctx.fillStyle = sStageColor
+     baseXsStage = basisX - CanvassStageWidth
+     ctx.fillRect(midx-CanvassStageWidth/2, baseXsStage - 0.8*CanvassStageHeight, CanvassStageWidth, 0.8*CanvassStageHeight);
+     ctx.beginPath()
+     ctx.moveTo(midx-CanvassStageWidth/2, baseXsStage - 0.8*CanvassStageHeight)
+     ctx.lineTo(midx+CanvassStageWidth/2, baseXsStage - 0.8*CanvassStageHeight)
+     ctx.closePath()
+     ctx.stroke()
+     
+     ctx.beginPath()
+     ctx.moveTo(midx-CanvassStageWidth/2, 0.8*CanvassStageHeight)
+     ctx.lineTo(midx+CanvassStageWidth/2, 0.8*CanvassStageHeight)
+     ctx.closePath()
+     ctx.stroke()
+
+    //Drawing of the first stage
+    ctx.fillStyle = fStageColor
+    baseXfStage = basisX-baseXsStage
+    ctx.fillRect(midx-CanvasfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight, CanvasfStageWidth, 0.8*CanvasfStageHeight)
+    ctx.beginPath()
+    ctx.moveTo(midx-CanvasfStageWidth/3, baseXfStage - CanvasfStageHeight)
+    ctx.lineTo(midx-CanvasfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight+1)
+    ctx.lineTo(midx+CanvasfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight+1)
+    ctx.lineTo(midx+CanvasfStageWidth/3, baseXfStage - CanvasfStageHeight)
+    ctx.lineTo(midx-CanvasfStageWidth/3, baseXfStage - CanvasfStageHeight)
+    ctx.closePath()
+    ctx.fill()
+
+    baseXfairing = baseXfStage - CanvasfStageHeight
+
+    //Drawing of the fairing
+    ctx.beginPath();
+    ctx.moveTo(midx-CanvasfStageWidth/3, baseXfairing);
+    ctx.quadraticCurveTo(midx, baseXfairing-150, midx+CanvasfStageWidth/3, baseXfairing);
+    ctx.fill();
+        //separator
+    ctx.beginPath()
+    ctx.moveTo(midx-CanvasfStageWidth/3, baseXfairing)
+    ctx.lineTo(midx+CanvasfStageWidth/3, baseXfairing)
+    ctx.closePath()
+    ctx.stroke()
+}
+
 function draw2() {
     //Drawing of the rocket with two stages and without boosters 
     midy = canvas.height/2

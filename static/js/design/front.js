@@ -90,8 +90,39 @@ function drawRocket() {
         draw1BAdapt(fSheight, fSdiameter, bheight, bdiameter, 140, fScolor, bcolor)
     }
     else if (stageNumber==2 && booster==false) {
+        fSheight = document.getElementById("stage1Height").value
+        fSdiameter = document.getElementById("stage1Diameter").value
+        f2Sheight = document.getElementById("stage2Height").value
+        f2Sdiameter = document.getElementById("stage2Diameter").value
+        if (fSheight=="") {
+            fSheight = 40
+        }
+        else {
+            fSheight = Number(fSheight)
+        }
+        if (fSdiameter=="") {
+            fSdiameter = 4
+        }
+        else {
+            fSdiameter = Number(fSdiameter)
+        }
+        if (f2Sheight=="") {
+            f2Sheight = 80
+        }
+        else {
+            f2Sheight = Number(f2Sheight)
+        }
+        if (f2Sdiameter=="") {
+            f2Sdiameter = 8
+        }
+        else {
+            f2Sdiameter = Number(f2Sdiameter)
+        }
+        fScolor = document.getElementById("stage1Color").value
+        fS2color = document.getElementById("stage2Color").value
         clearCanvas()
-        draw2()
+        draw2Adapt(fSheight, fSdiameter, f2Sheight, f2Sdiameter, 140, fScolor, fS2color)
+    
     }
     else {
         clearCanvas()
