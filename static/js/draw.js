@@ -381,7 +381,7 @@ function draw2Adapt(fStageHeight,fStageDiameter,sStageHeight,sStageDiameter,zoom
 
     //Drawing of the first stage
     ctx.fillStyle = fStageColor
-    baseXfStage = basisX-baseXsStage
+    baseXfStage = basisX-baseXsStage+100
     ctx.fillRect(midx-CanvasfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight, CanvasfStageWidth, 0.8*CanvasfStageHeight)
     ctx.beginPath()
     ctx.moveTo(midx-CanvasfStageWidth/3, baseXfStage - CanvasfStageHeight)
