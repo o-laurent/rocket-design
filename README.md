@@ -11,7 +11,7 @@ python3 -m venv .python-env
 
 export FLASK_APP=app.py
 
-./.python-env/bin/activate 
+source ./.python-env/bin/activate 
 
 cd physics
 
