@@ -334,21 +334,21 @@ function cleanForm() {
     document.getElementById("stage1Height").value = ''
     document.getElementById("stage1Diameter").value = ''
     document.getElementById("stage1Thrust").value = ''
-    document.getElementById("stage1ISP").value = ''
+    document.getElementById("stage1Isp").value = ''
     document.getElementById("stage1M0").value = ''
     document.getElementById("stage1Mp").value = ''
 
     document.getElementById("stage2Height").value = ''
     document.getElementById("stage2Diameter").value = ''
     document.getElementById("stage2Thrust").value = ''
-    document.getElementById("stage2ISP").value = ''
+    document.getElementById("stage2Isp").value = ''
     document.getElementById("stage2M0").value = ''
     document.getElementById("stage2Mp").value = ''
 
     document.getElementById("boosterHeight").value = ''
     document.getElementById("boosterDiameter").value = ''
     document.getElementById("boosterThrust").value = ''
-    document.getElementById("boosterISP").value = ''
+    document.getElementById("boosterIsp").value = ''
     document.getElementById("boosterM0").value = ''
     document.getElementById("boosterMp").value = ''
 }
@@ -366,7 +366,7 @@ document.getElementById("stage1ISP").addEventListener("keyup", all_info)
 document.getElementById("stage1M0").addEventListener("keyup", all_info)
 document.getElementById("stage1Mp").addEventListener("keyup", all_info)
 document.getElementById("stage2Thrust").addEventListener("keyup", all_info)
-document.getElementById("stage2ISP").addEventListener("keyup", all_info)
+document.getElementById("stage2Isp").addEventListener("keyup", all_info)
 document.getElementById("stage2M0").addEventListener("keyup", all_info)
 document.getElementById("stage2Mp").addEventListener("keyup", all_info)
 document.getElementById("boosterThrust").addEventListener("keyup", all_info)
