@@ -19,7 +19,9 @@
             <h2>Design your own rocket !</h2>
             <hr />
             <form class="uk-form-horizontal">
-                <button class="uk-button" type="button" onClick='chooseModel()'>Start from an existing model : </button>
+                <div class='uk-margin uk-margin-left'>  
+                    <button id="popUpButton" class='uk-button uk-button-default' uk-toggle="target: #load-toggle"  type='button'> Start from an existing model :  </button>
+                </div>
                 <h4>General Information</h4>
                 <div class="uk-margin">
                     <label class="uk-form-label" for="rocketName">Name :</label>
@@ -211,7 +213,15 @@
             </div>
         </div>
             
-
+        <!-- Ceci est le pop-up-->
+        <div id="load-toggle" uk-modal>
+            <div class="uk-modal-dialog uk-modal-body"> 
+                Select the rocket to load :
+                <select id='rocketSelector' class="uk-select uk-form-width-small">                     
+                </select>
+                <button id="selectButton" class='uk-button uk-button-default uk-button-primary'  type='button'> Load </button>
+            </div>
+        </div>
         <!-- Front script -->
         <script src="../static/js/design/main.js"></script>
         <script src="../static/js/design/front.js"></script>
