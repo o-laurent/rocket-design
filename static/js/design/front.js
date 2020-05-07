@@ -33,6 +33,91 @@ document.getElementById("rocketYear").addEventListener("keyup", function (e){
 
 
 //Utility functions
+function all_info() {
+    stageNumber = Number(document.getElementById("stageNumber").value)
+    booster = Boolean(Number(document.getElementById("boosterSelect").value))
+    boolean = false
+    if (stageNumber==1 && booster==false) {
+        fSheight = document.getElementById("stage1Height").value
+        fSdiameter = document.getElementById("stage1Diameter").value
+        fSthrust = document.getElementById("stage1Thrust").value
+        fSisp = document.getElementById("stage1ISP").value
+        fSm0 = document.getElementById("stage1M0").value
+        fSmp = document.getElementById("stage1Mp").value
+        boolean=fSheight!='' &&fSdiameter!='' &&fSthrust!='' &&fSisp!='' &&fSm0!='' &&fSmp!=''
+    }
+    else if (stageNumber == 1){
+        fSheight = document.getElementById("stage1Height").value
+        fSdiameter = document.getElementById("stage1Diameter").value
+        fSthrust = document.getElementById("stage1Thrust").value
+        fSisp = document.getElementById("stage1ISP").value
+        fSm0 = document.getElementById("stage1M0").value
+        fSmp = document.getElementById("stage1Mp").value
+
+        bheight = document.getElementById("boosterHeight").value
+        bdiameter = document.getElementById("boosterDiameter").value
+        bthrust = document.getElementById("boosterThrust").value
+        bisp = document.getElementById("boosterISP").value
+        bm0 = document.getElementById("boosterM0").value
+        bmp = document.getElementById("boosterMp").value
+
+        fboolean=fSheight!='' &&fSdiameter!='' &&fSthrust!='' &&fSisp!='' &&fSm0!='' &&fSmp!=''
+        bboolean=bheight!='' &&bdiameter!='' &&bthrust!='' &&bisp!='' &&bm0!='' &&bmp!=''
+        boolean = fboolean&&bboolean
+    }
+    else if (stageNumber==2 && booster==false) {
+        fSheight = document.getElementById("stage1Height").value
+        fSdiameter = document.getElementById("stage1Diameter").value
+        fSthrust = document.getElementById("stage1Thrust").value
+        fSisp = document.getElementById("stage1ISP").value
+        fSm0 = document.getElementById("stage1M0").value
+        fSmp = document.getElementById("stage1Mp").value
+
+        sSheight = document.getElementById("stage2Height").value
+        sSdiameter = document.getElementById("stage2Diameter").value
+        sSthrust = document.getElementById("stage2Thrust").value
+        sSisp = document.getElementById("stage2ISP").value
+        sSm0 = document.getElementById("stage2M0").value
+        sSmp = document.getElementById("stage2Mp").value
+
+        fboolean=fSheight!='' &&fSdiameter!='' &&fSthrust!='' &&fSisp!='' &&fSm0!='' &&fSmp!=''
+        sboolean=sSheight!='' &&sdiameter!='' &&sSthrust!='' &&sSisp!='' &&sSm0!='' &&sSmp!=''
+        boolean = fboolean&&sboolean
+    }
+    else {
+        fSheight = document.getElementById("stage1Height").value
+        fSdiameter = document.getElementById("stage1Diameter").value
+        fSthrust = document.getElementById("stage1Thrust").value
+        fSisp = document.getElementById("stage1ISP").value
+        fSm0 = document.getElementById("stage1M0").value
+        fSmp = document.getElementById("stage1Mp").value
+
+        sSheight = document.getElementById("stage2Height").value
+        sSdiameter = document.getElementById("stage2Diameter").value
+        sSthrust = document.getElementById("stage2Thrust").value
+        sSisp = document.getElementById("stage2ISP").value
+        sSm0 = document.getElementById("stage2M0").value
+        sSmp = document.getElementById("stage2Mp").value
+
+        bheight = document.getElementById("boosterHeight").value
+        bdiameter = document.getElementById("boosterDiameter").value
+        bthrust = document.getElementById("boosterThrust").value
+        bisp = document.getElementById("boosterISP").value
+        bm0 = document.getElementById("boosterM0").value
+        bmp = document.getElementById("boosterMp").value
+
+        fboolean=fSheight!='' &&fSdiameter!='' &&fSthrust!='' &&fSisp!='' &&fSm0!='' &&fSmp!=''
+        sboolean=sSheight!='' &&sdiameter!='' &&sSthrust!='' &&sSisp!='' &&sSm0!='' &&sSmp!=''
+        bboolean=bheight!='' &&bdiameter!='' &&bthrust!='' &&bisp!='' &&bm0!='' &&bmp!=''
+
+        boolean = fboolean&&bboolean&&sboolean
+    }
+    if (boolean) {
+        document.getElementById("addBaseButton").disabled = false
+    } 
+}
+
+
 function drawRocket() {
     stageNumber = Number(document.getElementById("stageNumber").value)
     booster = Boolean(Number(document.getElementById("boosterSelect").value))
@@ -128,15 +213,31 @@ function drawRocket() {
         clearCanvas()
         draw2B()
     }
+    all_info()
 }
+
 
 //Updating Listeners
 document.getElementById("stage1Height").addEventListener("keyup", drawRocket)
 document.getElementById("stage1Diameter").addEventListener("keyup", drawRocket)
 document.getElementById("boosterHeight").addEventListener("keyup", drawRocket)
 document.getElementById("boosterDiameter").addEventListener("keyup", drawRocket)
-document.getElementById("stageNumber").addEventListener("click", drawRocket())
-document.getElementById("boosterSelect").addEventListener("click", drawRocket())
+document.getElementById("stageNumber").addEventListener("click", drawRocket)
+document.getElementById("boosterSelect").addEventListener("click", drawRocket)
+
+document.getElementById("stage1Thrust").addEventListener("keyup", all_info)
+document.getElementById("stage1ISP").addEventListener("keyup", all_info)
+document.getElementById("stage1M0").addEventListener("keyup", all_info)
+document.getElementById("stage1Mp").addEventListener("keyup", all_info)
+document.getElementById("stage2Thrust").addEventListener("keyup", all_info)
+document.getElementById("stage2ISP").addEventListener("keyup", all_info)
+document.getElementById("stage2M0").addEventListener("keyup", all_info)
+document.getElementById("stage2Mp").addEventListener("keyup", all_info)
+document.getElementById("boosterThrust").addEventListener("keyup", all_info)
+document.getElementById("boosterISP").addEventListener("keyup", all_info)
+document.getElementById("boosterM0").addEventListener("keyup", all_info)
+document.getElementById("boosterMp").addEventListener("keyup", all_info)
+
 document.getElementById("stage1Color").addEventListener("input", drawRocket)
 document.getElementById("boosterColor").addEventListener("input", drawRocket)
 document.getElementById("stage2Color").addEventListener("input", drawRocket)
