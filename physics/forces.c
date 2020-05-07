@@ -106,6 +106,45 @@ bivector* forces (long double t, bivector* X, rocket_data* rocketD) {
     return force;
 }
 
+long double function_k (bivector* X) {
+    long double mu = (long double)398600.0*1000*1000*1000;
+    long double norm_v = norm(X->dx, X->dy);
+    long double k = norm_v*norm_v/2-mu/norm(X->x, X->y);
+    return k;
+}
+
+long double function_p (bivector* X) {
+    long double mu = (long double)398600.0*1000*1000*1000;
+    long double pp = (X->x*X->dy - X->y*X->dx);
+    long double p = pp*pp/mu;
+    return p;
+}
+
+long double excentricity (bivector* X) {
+    //Computes the excentricity axis from a position and speed
+    long double mu = (long double)398600.0*1000*1000*1000;
+    long double o = 1 + (2*function_p(X)*function_k(X))/mu;
+    long double e = sqrtl(o);
+    return e;
+}
+
+long double semi_major_axis (bivector* X) {
+    //Computes the semi major axis from a position and speed
+    long double mu = (long double)398600.0*1000*1000*1000;
+    long double norm_v = norm(X->dx, X->dy); 
+    long double a = 2/norm(X->x, X->y) - norm_v*norm_v/mu;
+    return a;
+}
+
+long double J_GTO (bivector* X) {
+    //computes least squares between (a_o, e_o) and (a_GTO, e_GTO)
+    long double agto = (long double)24535135.0;
+    long double egto = (long double)0.7185206032;
+    long double semi_major = semi_major_axis(X)-agto;
+    long double excen = excentricity(X)-egto;
+    long double j = semi_major*semi_major/agto/agto + excen*excen/egto/egto; 
+    return j;
+}
 //Runge_Kutta function
 stockBivectors* runge_kutta4 (int step_nb, long double h, int t_0, bivector* init_state, rocket_data* rocketD) { 
     stockBivectors* stock = malloc(sizeof(stockBivectors));
