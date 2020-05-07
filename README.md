@@ -1,20 +1,22 @@
 # rocket-design
 
 
-sudo apt-get install python-pip build-essential python
+sudo apt-get install python-pip3 build-essential python
 
-(pip install --user virtualenv
+pip3 install --user virtualenv
 
-virtualenv .python-env
+python3 -m venv .python-env
 
-./.python-env/bin/)pip3 install -r requirements.txt
+./.python-env/bin/pip3 install -r requirements.txt
 
 export FLASK_APP=app.py
 
-./.python-env/bin/python flask run
+./.python-env/bin/activate 
 
 cd physics
 
 make
 
 make clean_o
+
+flask run

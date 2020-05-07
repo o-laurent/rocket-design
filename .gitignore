@@ -3,3 +3,4 @@ TD3/my_sum/__pycache__/__init__.cpython-37.pyc
 .vscode/
 physics/*.so
 physics/*.o
+.python-env

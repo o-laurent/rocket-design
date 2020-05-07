@@ -127,8 +127,8 @@ def trace_trajectory():
     stock = read_stock(pstock)
     stx = list(map(lambda x : x[0], stock))
     sty = list(map(lambda x : x[1], stock))
-    stdx = list(map(lambda x : x[2], stock))
-    stdy = list(map(lambda x : x[3], stock))
+    #stdx = list(map(lambda x : x[2], stock))
+    #stdy = list(map(lambda x : x[3], stock))
     theta = np.linspace(0, 2*np.pi, 100)
     r = 6371000
     x1 = r*np.cos(theta)
@@ -137,6 +137,6 @@ def trace_trajectory():
     ax.plot(x1, x2)
     ax.plot(stx[::-1], sty[::-1])
     ax.set_aspect(1)
-    plt.show()
+    fig.savefig("trajectory.png")
 
 trace_trajectory()
