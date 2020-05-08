@@ -4,6 +4,8 @@ import os
 import numpy as np
 import math as m 
 import matplotlib.pyplot as plt
+
+
 #2D vector corresponding to 2D-data
 class vector(ctypes.Structure):
     _fields_ = [("x", ctypes.c_longdouble),

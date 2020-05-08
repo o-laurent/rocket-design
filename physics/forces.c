@@ -216,7 +216,7 @@ void free_sB (stockBivectors* stock) {
 }
 long double runge_kutta_J_GTO (int step_nb, long double h, int t_0, bivector* init_state, rocket_data* rocketD) {
     //Computes trajectory and returns J_GTO
-    stockBivectors* stock = runge_kutta4 (step_nb, h, t_0, init_state, rocketD);
+    stockBivectors* stock = runge_kutta4(step_nb, h, t_0, init_state, rocketD);
     long double j = J_GTO(stock->state);
     free_sB(stock);
     return j;

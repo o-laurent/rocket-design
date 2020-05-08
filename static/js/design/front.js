@@ -6,6 +6,7 @@
 // Check that the name hasn't been given already
 var names 
 updateNames()
+document.getElementById("zoomInput").value = 140
 
 async function updateNames() {
     //Gets the name of all the rockets in the database
@@ -16,7 +17,6 @@ async function updateNames() {
 async function loadNFill() {
     name = document.getElementById('rocketSelector').value
     rocket = await getRocketbyName(name)
-    console.log(rocket)
     i = Object.keys(rocket["Stage number"])[0]
     stageNumber = rocket["Stage number"][i]
     booster = rocket["B Isp [s]"][i] != null
@@ -441,6 +441,7 @@ function getRocketInfo() {
 function drawRocket() {
     stageNumber = Number(document.getElementById("stageNumber").value)
     booster = Boolean(Number(document.getElementById("boosterSelect").value))
+    zoom = document.getElementById("zoomInput").value
     if (stageNumber==1 && booster==false) {
         fSheight = document.getElementById("stage1Height").value
         fSdiameter = document.getElementById("stage1Diameter").value
@@ -458,9 +459,9 @@ function drawRocket() {
         }
         fScolor = document.getElementById("stage1Color").value
         clearCanvas()
-        draw1Adapt(fSheight, fSdiameter, 140, fScolor)
+        draw1Adapt(fSheight, fSdiameter, zoom, fScolor)
     }
-    else if (stageNumber == 1){
+    else if (stageNumber == 1) {
         fSheight = document.getElementById("stage1Height").value
         fSdiameter = document.getElementById("stage1Diameter").value
         bheight = document.getElementById("boosterHeight").value
@@ -492,13 +493,13 @@ function drawRocket() {
         fScolor = document.getElementById("stage1Color").value
         bcolor = document.getElementById("boosterColor").value
         clearCanvas()
-        draw1BAdapt(fSheight, fSdiameter, bheight, bdiameter, 140, fScolor, bcolor)
+        draw1BAdapt(fSheight, fSdiameter, bheight, bdiameter, zoom, fScolor, bcolor)
     }
     else if (stageNumber==2 && booster==false) {
         fSheight = document.getElementById("stage1Height").value
         fSdiameter = document.getElementById("stage1Diameter").value
-        f2Sheight = document.getElementById("stage2Height").value
-        f2Sdiameter = document.getElementById("stage2Diameter").value
+        sSheight = document.getElementById("stage2Height").value
+        sSdiameter = document.getElementById("stage2Diameter").value
         if (fSheight=="") {
             fSheight = 60
         }
@@ -511,29 +512,29 @@ function drawRocket() {
         else {
             fSdiameter = Number(fSdiameter)
         }
-        if (f2Sheight=="") {
-            f2Sheight = 40
+        if (sSheight=="") {
+            sSheight = 40
         }
         else {
-            f2Sheight = Number(f2Sheight)
+            sSheight = Number(sSheight)
         }
-        if (f2Sdiameter=="") {
-            f2Sdiameter = 6
+        if (sSdiameter=="") {
+            sSdiameter = 6
         }
         else {
-            f2Sdiameter = Number(f2Sdiameter)
+            sSdiameter = Number(sSdiameter)
         }
         fScolor = document.getElementById("stage1Color").value
-        fS2color = document.getElementById("stage2Color").value
+        sScolor = document.getElementById("stage2Color").value
         clearCanvas()
-        draw2Adapt(fSheight, fSdiameter, f2Sheight, f2Sdiameter, 140, fScolor, fS2color)
+        draw2Adapt(fSheight, fSdiameter, sSheight, sSdiameter, zoom, fScolor, sScolor)
     
     }
     else {
         fSheight = document.getElementById("stage1Height").value
         fSdiameter = document.getElementById("stage1Diameter").value
-        f2Sheight = document.getElementById("stage2Height").value
-        f2Sdiameter = document.getElementById("stage2Diameter").value
+        sSheight = document.getElementById("stage2Height").value
+        sSdiameter = document.getElementById("stage2Diameter").value
         bheight = document.getElementById("boosterHeight").value
         bdiameter = document.getElementById("boosterDiameter").value
         if (fSheight=="") {
@@ -548,17 +549,17 @@ function drawRocket() {
         else {
             fSdiameter = Number(fSdiameter)
         }
-        if (f2Sheight=="") {
-            f2Sheight = 40
+        if (sSheight=="") {
+            sSheight = 40
         }
         else {
-            f2Sheight = Number(f2Sheight)
+            sSheight = Number(sSheight)
         }
-        if (f2Sdiameter=="") {
-            f2Sdiameter = 6
+        if (sSdiameter=="") {
+            sSdiameter = 6
         }
         else {
-            f2Sdiameter = Number(f2Sdiameter)
+            sSdiameter = Number(sSdiameter)
         }
         if (bheight=="") {
             bheight = 40
@@ -573,10 +574,10 @@ function drawRocket() {
             bdiameter = Number(bdiameter)
         }
         fScolor = document.getElementById("stage1Color").value
-        fS2color = document.getElementById("stage2Color").value
+        sScolor = document.getElementById("stage2Color").value
         bcolor = document.getElementById("boosterColor").value
         clearCanvas()
-        draw2BAdapt(fSheight, fSdiameter, f2Sheight, f2Sdiameter, bheight, bdiameter, 140, fScolor, fS2color, bcolor)
+        draw2BAdapt(fSheight, fSdiameter, sSheight, sSdiameter, bheight, bdiameter, zoom, fScolor, sScolor, bcolor)
     
     }
     all_info()
@@ -617,6 +618,8 @@ function cleanForm() {
 }
 
 //Updating Listeners
+document.getElementById("zoomInput").addEventListener("keyup", drawRocket)
+
 document.getElementById("stage1Height").addEventListener("keyup", drawRocket)
 document.getElementById("stage1Diameter").addEventListener("keyup", drawRocket)
 document.getElementById("boosterHeight").addEventListener("keyup", drawRocket)

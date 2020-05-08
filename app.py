@@ -25,10 +25,10 @@ def comprocket():
     load_db()
     return render_template("compare_rockets.html")
 
-@app.route('/trajectory.html')
+@app.route('/optimizer.html')
 def trajectory():
     load_db()
-    return render_template("trajectory.html")
+    return render_template("optimizer.html")
 
 @app.route('/api/newrocket', methods = ['POST'])
 def api_newrocket():
@@ -53,7 +53,6 @@ def api_rocket_all():
 
 @app.route('/api/rockets/byname', methods = ['POST'])
 def api_rocket_byname():
-    print('inside')
     print(request.get_json())
     json = pd.DataFrame(get_rocket_byname(request.get_json()['name'])).to_json()
     print(json)
