@@ -5,13 +5,15 @@ sudo apt-get install python-pip build-essential python
 
 pip3 install --user virtualenv
 
+dsudo apt-get install python3-venv
+
 python3 -m venv .python-env
 
 ./.python-env/bin/pip3 install -r requirements.txt
 
-export FLASK_APP=app.py
-
 source ./.python-env/bin/activate 
+
+export FLASK_APP=app.py
 
 cd physics
 
