@@ -88,7 +88,15 @@ def gen_commandList(commands, times):
 def random_cList(N=6):
     times = np.linspace(0, 1375, N+1, endpoint=False).astype(int)[1::]
     commands = np.random.rand(1, N)*2*np.pi - np.pi
-    return gen_commandList(list(commands)[0], list(times))
+    return gen_commandList(list(commands)[0], list(times)), list(commands)[0], list(times)
+
+def print_cList(cList):
+    cList2 = ctypes.POINTER(commandList)
+    cList2 = cList
+    print(cList2.contents.t, cList2.contents.c)
+    while ctypes.cast(cList2.contents.next, ctypes.c_void_p).value != None:
+        cList2 = cList2.contents.next
+        print(cList2.contents.t, cList2.contents.c)
 
 def read_stock(pstock):
     stock_list = []
@@ -129,7 +137,7 @@ ArianeD = rocket_data(
     cList
 )
 
-def random_optimizer(N=100):
+def random_optimizer(N=100000):
     #Initial condition
     cBivector = bivector(ctypes.c_longdouble(0), ctypes.c_longdouble(6371000), ctypes.c_longdouble(-1700/3.6), ctypes.c_longdouble(0))
     stock_Lists = []
@@ -137,15 +145,14 @@ def random_optimizer(N=100):
     for step in range(N):
         if step%100==0:
             print(step)
-        ArianeD.cList = random_cList(3)
-        J = forces.runge_kutta_J_GTO(ctypes.c_int(50), ctypes.c_longdouble(0.1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(ArianeD))
-        stock_Lists.append(ArianeD.cList)
+        ArianeD.cList, commands, times = random_cList(3)
+        J = forces.runge_kutta_J_GTO(ctypes.c_int(300), ctypes.c_longdouble(5), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(ArianeD))
+        stock_Lists.append([commands, times])
         stock_J.append(J)
     print(min(stock_J))
     i = np.argmin(stock_J)
-    cList = stock_Lists[i]
-    ArianeD.cList = cList
-    pstock = forces.runge_kutta4(ctypes.c_int(50), ctypes.c_longdouble(0.1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(ArianeD))
+    ArianeD.cList = gen_commandList(stock_Lists[i][0], stock_Lists[i][1])
+    pstock = forces.runge_kutta4(ctypes.c_int(10*300), ctypes.c_longdouble(5), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(ArianeD))
     stock = read_stock(pstock)
     stx = list(map(lambda x : x[0], stock))
     sty = list(map(lambda x : x[1], stock))

@@ -15,17 +15,14 @@ long double norm (long double x, long double y) {
 //Computes the angle of the rocket 
 long double command(long double t, commandList* cList) {
     commandList* tmpList = cList;
-    tmpList->c = cList->c;
-    tmpList->t = cList->t;
-    tmpList->next = cList->next;
-    long double c = cList->c;
+    long double c = tmpList->c;
     //printf("t : %Lf, tmpt : %Lf\n", t, tmpList->t);
-    //printf("c : %Lf, tmpc : %Lf\n", c, tmpList->c);
     //printf("p : %p", tmpList->next);
     while (tmpList->next != NULL && tmpList->t < t) {
         tmpList = tmpList->next;
         c = tmpList->c;
     }
+    //printf("c : %Lf, tmpt : %Lf\n", c, tmpList->t);
     return c;
 }
 
@@ -98,11 +95,14 @@ bivector* forces (long double t, bivector* X, rocket_data* rocketD) {
     vector* W = weight(r);
     vector* acceleration = linVector2(1, W, 1/mass(t, rocketD), T);
     free(r);
+    /*printf("thrust.x = %Lf\n", linVector(1/mass(t, rocketD), T)->x);
+    printf("thrust.y = %Lf\n", linVector(1/mass(t, rocketD), T)->y);*/
     free(T);
+    /*printf("weight.x = %Lf\n", W->x);
+    printf("weight.y = %Lf\n", W->y);*/
     free(W);
-    printf("weight.dy = %Lf\n", weight(r)->x);
     //printf("mass = %Lf\n", mass(t, rocketD));
-    //printf("thrust.dx = %Lf\n", linVector(1/mass(t, rocketD), thrust(c, t, rocketD))->x);
+    
     //printf("r.y = %Lf\n", r->y);
     //printf("acceleration.dy = %Lf\n", acceleration->y);*/
     force->dx = acceleration->x;
@@ -138,7 +138,7 @@ long double semi_major_axis (bivector* X) {
     long double mu = (long double)398600.0*1000*1000*1000;
     long double norm_v = norm(X->dx, X->dy); 
     long double a = 2/norm(X->x, X->y) - norm_v*norm_v/mu;
-    return a;
+    return 1/a;
 }
 
 long double J_GTO (bivector* X) {
@@ -165,11 +165,11 @@ stockBivectors* runge_kutta4 (int step_nb, long double h, int t_0, bivector* ini
         state->dx = init_state->dx;
         state->dy = init_state->dy;
         //printf("state.x %Lf\nstate.y %Lf\nstate.dx %Lf\nstate.dy %Lf\n", state->x, state->y, state->dx, state->dy);
-        stock->state = state;
-        bivector* k1 = malloc(sizeof(bivector)+1);
-        bivector* k2 = malloc(sizeof(bivector)+1);
-        bivector* k3 = malloc(sizeof(bivector)+1);
-        bivector* k4 = malloc(sizeof(bivector)+1);
+        stock->state = init_state;
+        bivector* k1;
+        bivector* k2;
+        bivector* k3;
+        bivector* k4;
         for (step=0; step<step_nb; step++) {
             k1 = forces(t, state, rocketD);
             //printf("k1.x %Lf k1.y %Lf k1.dx %Lf k1.dy %Lf\n", k1->x, k1->y, k1->dx, k1->dy);
@@ -187,10 +187,8 @@ stockBivectors* runge_kutta4 (int step_nb, long double h, int t_0, bivector* ini
             free(linvector);
             //printf("k4.x %Lf k4.y %Lf k4.dx %Lf k4.dy %Lf\n", k4->x, k4->y, k4->dx, k4->dy);     
             bivector* nstate = linBivector5(1, state, h/6, k1, h/3, k2, h/3, k3, h/6, k4);
-            free(state);
-            state = nstate;
             //printf("state.x %Lf\nstate.y %Lf\nstate.dx %Lf\nstate.dy %Lf\n\n", state->x, state->y, state->dx, state->dy);
-            stock = consSTOCK(state, stock);
+            stock = consSTOCK(nstate, stock);
             state->x = stock->state->x;
             state->y = stock->state->y;
             state->dx = stock->state->dx;
@@ -211,7 +209,7 @@ stockBivectors* runge_kutta4 (int step_nb, long double h, int t_0, bivector* ini
 void free_sB (stockBivectors* stock) {
     while (stock->previous != NULL) {
         stockBivectors* tmpstock = stock->previous;
-        //free(stock->state);
+        free(stock->state);
         free(stock);
         stock = tmpstock;
     }
@@ -220,6 +218,6 @@ long double runge_kutta_J_GTO (int step_nb, long double h, int t_0, bivector* in
     //Computes trajectory and returns J_GTO
     stockBivectors* stock = runge_kutta4 (step_nb, h, t_0, init_state, rocketD);
     long double j = J_GTO(stock->state);
-    //free_sB(stock);
+    free_sB(stock);
     return j;
 }
