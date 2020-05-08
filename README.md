@@ -1,7 +1,7 @@
 # rocket-design
 
 
-sudo apt-get install python-pip3 build-essential python
+sudo apt-get install python-pip build-essential python
 
 pip3 install --user virtualenv
 
