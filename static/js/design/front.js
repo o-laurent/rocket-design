@@ -201,14 +201,14 @@ function getRocketInfo() {
         fSheight = document.getElementById("stage1Height").value
         fSdiameter = document.getElementById("stage1Diameter").value
         fSthrust = document.getElementById("stage1Thrust").value
-        fSisp = document.getElementById("stage1ISP").value
+        fSisp = document.getElementById("stage1Isp").value
         fSm0 = document.getElementById("stage1M0").value
         fSmp = document.getElementById("stage1Mp").value
 
         sSheight = document.getElementById("stage2Height").value
         sSdiameter = document.getElementById("stage2Diameter").value
         sSthrust = document.getElementById("stage2Thrust").value
-        sSisp = document.getElementById("stage2ISP").value
+        sSisp = document.getElementById("stage2Isp").value
         sSm0 = document.getElementById("stage2M0").value
         sSmp = document.getElementById("stage2Mp").value
 
@@ -370,7 +370,7 @@ document.getElementById("stage2Isp").addEventListener("keyup", all_info)
 document.getElementById("stage2M0").addEventListener("keyup", all_info)
 document.getElementById("stage2Mp").addEventListener("keyup", all_info)
 document.getElementById("boosterThrust").addEventListener("keyup", all_info)
-document.getElementById("boosterISP").addEventListener("keyup", all_info)
+document.getElementById("boosterIsp").addEventListener("keyup", all_info)
 document.getElementById("boosterM0").addEventListener("keyup", all_info)
 document.getElementById("boosterMp").addEventListener("keyup", all_info)
 
