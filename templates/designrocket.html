@@ -99,7 +99,7 @@
 
                     <div class="uk-margin">
                         <label class="uk-form-label" for="stage1ISP">ISP (s):</label>
-                        <input class="uk-input uk-form-width-medium" id="stage1ISP" type="number" placeholder="ISP"  step="0.01" name='stage1ISP' autocomplete="off">
+                        <input class="uk-input uk-form-width-medium" id="stage1Isp" type="number" placeholder="ISP"  step="0.01" name='stage1ISP' autocomplete="off">
                     </div> 
 
                     <div class="uk-margin">
@@ -131,7 +131,7 @@
                     </div> 
 
                     <div class="uk-margin">
-                        <label class="uk-form-label" for="boosterThrust">Thrust (kN):</label>
+                        <label class="uk-form-label" for="boosterThrust">Total Thrust (kN):</label>
                         <input class="uk-input uk-form-width-medium" id="boosterThrust" type="number" placeholder="Thrust"  step="0.01" name='boosterThrust' autocomplete="off">
                     </div> 
 
@@ -141,12 +141,12 @@
                     </div> 
 
                     <div class="uk-margin">
-                        <label class="uk-form-label" for="boosterM0">Initial mass (tons):</label>
+                        <label class="uk-form-label" for="boosterM0">Total Initial mass (tons):</label>
                         <input class="uk-input uk-form-width-medium" id="boosterM0" type="number" placeholder="Initial mass"  step="0.01" name='boosterM0' autocomplete="off">
                     </div> 
 
                     <div class="uk-margin">
-                        <label class="uk-form-label" for="boosterMp">Final mass (tons):</label>
+                        <label class="uk-form-label" for="boosterMp">Total Final mass (tons):</label>
                         <input class="uk-input uk-form-width-medium" id="boosterMp" type="number" placeholder="Final mass"  step="0.01" name='boosterMp' autocomplete="off">
                     </div> 
 
@@ -194,7 +194,7 @@
                     </div>
                 </div>
                 <div class="uk-margin">
-                    <button id="AddBaseButton" class="uk-button uk-button-primary" type="button" onClick='addRocket()' disabled="">Add to the DataBase</button>
+                    <button id="addBaseButton" class="uk-button uk-button-primary" type="button" onClick='addRocket()' disabled="">Add to the DataBase</button>
                 </div>
                 
             </br>
@@ -219,7 +219,7 @@
                 Select the rocket to load :
                 <select id='rocketSelector' class="uk-select uk-form-width-medium">                     
                 </select>
-                <button id="selectButton" class='uk-button uk-button-default uk-button-primary'  type='button'> Load </button>
+                <button id="selectButton" class='uk-button uk-button-default uk-button-primary'  type='button' onclick='loadNFill()'> Load </button>
             </div>
         </div>
         <!-- Front script -->

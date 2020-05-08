@@ -35,8 +35,7 @@ def api_newrocket():
     print(request.is_json)
     rocket = request.get_json()
     add_rocket_db(rocket)
-    print(content)
-    return None,200
+    return None, 200
 
 @app.route('/api/rockets/names', methods = ['GET'])
 def api_rocket_names():
