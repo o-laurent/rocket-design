@@ -1,14 +1,3 @@
-var canvas = document.getElementById("myCanvas");
-var ctx = canvas.getContext("2d");
-
-clearCanvas()
-draw1Adapt(80, 8, 140, '#CCE6FF')
-document.getElementById("stageNumber").value = '1'
-document.getElementById("boosterSelect").value = '0'
-document.getElementById("stage1Color").value = '#CCE6FF'
-document.getElementById("boosterColor").value = '#CCE6FF'
-document.getElementById("stage2Color").value = '#CCE6FF'
-
 function canvasSize() {
     canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
     canvas.height = document.getElementById('sidebar').getBoundingClientRect().height

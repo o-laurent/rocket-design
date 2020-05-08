@@ -14,6 +14,17 @@ async function updateNames() {
     fillRocketSelector('rocketSelector')
 }
 
+clearCanvas()
+draw1Adapt(80, 8, 140, '#CCE6FF')
+document.getElementById("stageNumber").value = '1'
+document.getElementById("boosterSelect").value = '0'
+document.getElementById("stage1Color").value = '#CCE6FF'
+document.getElementById("boosterColor").value = '#CCE6FF'
+document.getElementById("stage2Color").value = '#CCE6FF'
+
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+
 async function loadNFill() {
     name = document.getElementById('rocketSelector').value
     rocket = await getRocketbyName(name)
