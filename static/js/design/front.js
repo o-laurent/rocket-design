@@ -4,8 +4,24 @@
 // If not, maybe reduce the size of the boosters
 // Function to empty the form
 // Check that the name hasn't been given already
+var names 
+updateNames()
+
+async function updateNames() {
+    //Gets the name of all the rockets in the database
+    names = await getNames()
+    fillRocketSelector('rocketSelector')
+}
+
+async function loadNFill() {
+    name = document.getElementById('rocketSelector').value
+    rocket = await getRocketbyName(name)
+    
+}
+
 
 document.getElementById("stageNumber").addEventListener("change", function (e){
+    //Displays or not the second stage information form
     if (document.getElementById('stageNumber').value=='2') {
         document.getElementById('secondStageDiv').style.display = 'block';
     }
@@ -15,6 +31,7 @@ document.getElementById("stageNumber").addEventListener("change", function (e){
 })
 
 document.getElementById("boosterSelect").addEventListener("change", function (e){
+    //Displays or not the booster information form
     if (document.getElementById('boosterSelect').value=='1') {
         document.getElementById('boosterDiv').style.display = 'block';
     }
@@ -34,6 +51,7 @@ document.getElementById("rocketYear").addEventListener("keyup", function (e){
 
 //Utility functions
 function all_info() {
+    //Checks that all informations have been given prior to send to backend
     stageNumber = Number(document.getElementById("stageNumber").value)
     booster = Boolean(Number(document.getElementById("boosterSelect").value))
     boolean = false
@@ -118,6 +136,7 @@ function all_info() {
 }
 
 function getRocketInfo() {
+    //Gets all the info in an object
     name = document.getElementById("rocketName").value
     year = document.getElementById("rocketYear").value
     country = document.getElementById("rocketCountry").value
@@ -135,6 +154,7 @@ function getRocketInfo() {
         fSm0 = document.getElementById("stage1M0").value
         fSmp = document.getElementById("stage1Mp").value
         fColor = document.getElementById("stage1Color").value
+
         rocket = {
             Name:name,
             Year: year,
@@ -144,36 +164,37 @@ function getRocketInfo() {
             Height: height,
             Lift_off_mass: lift_mass,
             Payload_mass: payload_mass,
-            fSHeight: fSheight,
+            fSheight: fSheight,
             fSdiameter: fSdiameter,
-            fSThrust: fSthrust,
-            fSISP: fSisp,
-            fSM0: fSM0,
-            fSMp: fSMp,
-            bHeight: '',
+            fSthrust: fSthrust,
+            fSisp: fSisp,
+            fSm0: fSM0,
+            fSmp: fSMp,
+            bheight: '',
             bdiameter: '',
-            bThrust: '',
-            bISP: '',
-            bM0: '',
-            bMp: '',
-            sSHeight: '',
+            bthrust: '',
+            bisp: '',
+            bm0: '',
+            bmp: '',
+            sSheight: '',
             sSdiameter: '',
-            sSThrust: '',
-            sSISP: '',
-            sSM0: '',
-            sSMp: '',
-            fSColor: fSColor,
-            bColor: '',
-            sSColor: ''
+            sSthrust: '',
+            sSisp: '',
+            sSm0: '',
+            sSmp: '',
+            fScolor: fSColor,
+            bcolor: '',
+            scColor: ''
         }
     }
-    else if (stageNumber == 1){
+    else if (stageNumber == 1){ //If 1 Stage and boosters 
         fSheight = document.getElementById("stage1Height").value
         fSdiameter = document.getElementById("stage1Diameter").value
         fSthrust = document.getElementById("stage1Thrust").value
         fSisp = document.getElementById("stage1ISP").value
         fSm0 = document.getElementById("stage1M0").value
         fSmp = document.getElementById("stage1Mp").value
+        fColor = document.getElementById("stage1Color").value
 
         bheight = document.getElementById("boosterHeight").value
         bdiameter = document.getElementById("boosterDiameter").value
@@ -181,14 +202,48 @@ function getRocketInfo() {
         bisp = document.getElementById("boosterISP").value
         bm0 = document.getElementById("boosterM0").value
         bmp = document.getElementById("boosterMp").value
+        bColor = document.getElementById("boosterColor").value
+
+        rocket = {
+            Name:name,
+            Year: year,
+            Country: country,
+            Mission: mission,
+            Stage_number:stageNumber,
+            Height: height,
+            Lift_off_mass: lift_mass,
+            Payload_mass: payload_mass,
+            fSheight: fSheight,
+            fSdiameter: fSdiameter,
+            fSthrust: fSthrust,
+            fSisp: fSisp,
+            fSm0: fSM0,
+            fSmp: fSMp,
+            bheight: bheight,
+            bdiameter: bdiameter,
+            bthrust: bthrust,
+            bisp: bisp,
+            bm0: bm0,
+            bmp: bmp,
+            sSheight: '',
+            sSdiameter: '',
+            sSthrust: '',
+            sSisp: '',
+            sSm0: '',
+            sSmp: '',
+            fScolor: fSColor,
+            bcolor: bColor,
+            sScolor: ''
+        }
     }
-    else if (stageNumber==2 && booster==false) {
+    else if (stageNumber==2 && booster==false) { //If 2 Stages and no boosters
         fSheight = document.getElementById("stage1Height").value
         fSdiameter = document.getElementById("stage1Diameter").value
         fSthrust = document.getElementById("stage1Thrust").value
         fSisp = document.getElementById("stage1ISP").value
         fSm0 = document.getElementById("stage1M0").value
         fSmp = document.getElementById("stage1Mp").value
+        fSColor = document.getElementById("stage1Color").value
 
         sSheight = document.getElementById("stage2Height").value
         sSdiameter = document.getElementById("stage2Diameter").value
@@ -196,21 +251,56 @@ function getRocketInfo() {
         sSisp = document.getElementById("stage2ISP").value
         sSm0 = document.getElementById("stage2M0").value
         sSmp = document.getElementById("stage2Mp").value
+        sSColor = document.getElementById("stage2Color").value
+        
+        rocket = {
+            Name:name,
+            Year: year,
+            Country: country,
+            Mission: mission,
+            Stage_number:stageNumber,
+            Height: height,
+            Lift_off_mass: lift_mass,
+            Payload_mass: payload_mass,
+            fSheight: fSheight,
+            fSdiameter: fSdiameter,
+            fSthrust: fSthrust,
+            fSisp: fSisp,
+            fSm0: fSM0,
+            fSmp: fSMp,
+            bheight: '',
+            bdiameter: '',
+            bthrust: '',
+            bisp: '',
+            bm0: '',
+            bmp: '',
+            sSheight: sSheight,
+            sSdiameter: sSdiameter,
+            sSthrust: sSthrust,
+            sSisp: sSisp,
+            sSm0: sSm0,
+            sSmp: sSmp,
+            fScolor: fSColor,
+            bcolor: '',
+            sSColor: sSColor
+        }
     }
-    else {
+    else { //If 2 Stages and boosters
         fSheight = document.getElementById("stage1Height").value
         fSdiameter = document.getElementById("stage1Diameter").value
         fSthrust = document.getElementById("stage1Thrust").value
-        fSisp = document.getElementById("stage1ISP").value
+        fSisp = document.getElementById("stage1Isp").value
         fSm0 = document.getElementById("stage1M0").value
         fSmp = document.getElementById("stage1Mp").value
+        fColor = document.getElementById("stage1Color").value
 
         sSheight = document.getElementById("stage2Height").value
         sSdiameter = document.getElementById("stage2Diameter").value
         sSthrust = document.getElementById("stage2Thrust").value
-        sSisp = document.getElementById("stage2ISP").value
+        sSisp = document.getElementById("stage2Isp").value
         sSm0 = document.getElementById("stage2M0").value
         sSmp = document.getElementById("stage2Mp").value
+        sSColor = document.getElementById("stage2Color").value
 
         bheight = document.getElementById("boosterHeight").value
         bdiameter = document.getElementById("boosterDiameter").value
@@ -218,9 +308,44 @@ function getRocketInfo() {
         bisp = document.getElementById("boosterISP").value
         bm0 = document.getElementById("boosterM0").value
         bmp = document.getElementById("boosterMp").value
+        bColor = document.getElementById("boosterColor").value
+
+        rocket = {
+            Name:name,
+            Year: year,
+            Country: country,
+            Mission: mission,
+            Stage_number:stageNumber,
+            Height: height,
+            Lift_off_mass: lift_mass,
+            Payload_mass: payload_mass,
+            fSheight: fSheight,
+            fSdiameter: fSdiameter,
+            fSthrust: fSthrust,
+            fSisp: fSisp,
+            fSm0: fSM0,
+            fSmp: fSMp,
+            bheight: bheight,
+            bdiameter: bdiameter,
+            bthrust: bthrust,
+            bisp: bisp,
+            bm0: bm0,
+            bmp: bmp,
+            sSheight: sSheight,
+            sSdiameter: sSdiameter,
+            sSthrust: sSthrust,
+            sSisp: sSisp,
+            sSm0: sSm0,
+            sSmp: sSmp,
+            fScolor: fSColor,
+            bcolor: bcolor,
+            sScolor: sScolor
+        }
     }
     return rocket
 }
+
+
 function drawRocket() {
     stageNumber = Number(document.getElementById("stageNumber").value)
     booster = Boolean(Number(document.getElementById("boosterSelect").value))
@@ -416,7 +541,7 @@ document.getElementById("stage2Isp").addEventListener("keyup", all_info)
 document.getElementById("stage2M0").addEventListener("keyup", all_info)
 document.getElementById("stage2Mp").addEventListener("keyup", all_info)
 document.getElementById("boosterThrust").addEventListener("keyup", all_info)
-document.getElementById("boosterISP").addEventListener("keyup", all_info)
+document.getElementById("boosterIsp").addEventListener("keyup", all_info)
 document.getElementById("boosterM0").addEventListener("keyup", all_info)
 document.getElementById("boosterMp").addEventListener("keyup", all_info)
 
