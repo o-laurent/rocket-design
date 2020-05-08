@@ -14,7 +14,9 @@ async function updateNames() {
 }
 
 async function loadNFill() {
-
+    name = document.getElementById('rocketSelector').value
+    rocket = await getRocketbyName(name)
+    
 }
 
 
