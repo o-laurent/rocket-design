@@ -11,19 +11,113 @@
     <link rel="stylesheet" href="../static/css/uikit.min.css" />
     <link rel ="stylesheet" href="../static/css/main.css">
     <link rel ="stylesheet" href="../static/css/design_rocket.css">
+    <link rel ="stylesheet" href="../static/css/compare_rockets.css">
 </head>
 <body>
-    <div class="uk-form"> 
-        <div class="uk-margin">
-            <label class="uk-form-label" for="stage2Height">Nombre de fusées à comparer:</label>
-            <input class="uk-input uk-form-width-medium" id="stage2Height" type="number" placeholder="Height"  step="0.01" name='stage2Height' autocomplete="off">
-        </div> 
+    <div class='horizontal_halved'>
+        <div class='vertical'>
+            <button id="popUpButtonL" class='uk-button uk-button-default overbutton uk-width-3-4 ' uk-toggle="target: #load-toggleL"  type='button'>Load a rocket </button>
+            <div class='horizontal overn'>
+                <div class='params'>
+                    <ul id="accordionL" uk-accordion>
+                        <li class="uk-open">
+                            <a class="uk-accordion-title" href="#">General Specifications</a>
+                            <div class="uk-accordion-content">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <a class="uk-accordion-title" href="#"> First Stage Specifications</a>
+                            <div class="uk-accordion-content">
+                                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor reprehenderit.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <a class="uk-accordion-title" href="#"> Booster Specifications</a>
+                            <div class="uk-accordion-content">
+                                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat proident.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <a class="uk-accordion-title" href="#"> Second Stage Specifications</a>
+                            <div class="uk-accordion-content">
+                                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat proident.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class='canvasDiv'>
+                    <div class='nameDiv'>
+                    </div>
+                    <canvas id='canvasL'></canvas>
+                </div>
+            </div>
+        </div>
+        <div class='vertical'>
+            <button id="popUpButtonR" class='uk-button uk-button-default overbutton uk-width-3-4 ' uk-toggle="target: #load-toggleR"  type='button'>Load a rocket  </button>
+            <div class='horizontal overn'>
+                <div class='params'>
+                    <ul id="accordionL" uk-accordion>
+                        <li class="uk-open">
+                            <a class="uk-accordion-title" href="#">General Specifications</a>
+                            <div class="uk-accordion-content">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <a class="uk-accordion-title" href="#"> 1<sup>st</sup> Stage Specifications</a>
+                            <div class="uk-accordion-content">
+                                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor reprehenderit.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <a class="uk-accordion-title" href="#"> Boosters Specifications</a>
+                            <div class="uk-accordion-content">
+                                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat proident.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <a class="uk-accordion-title" href="#"> 2<sup>nd</sup> Stage Specifications</a>
+                            <div class="uk-accordion-content">
+                                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat proident.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class='canvasDiv'>
+                    <div class='nameDiv'>
+                    </div>
+                    <canvas id='canvasR'></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pop-up -->
+    <div id="load-toggleL" uk-modal>
+        <div class="uk-modal-dialog uk-modal-body"> 
+            Select the rocket to load :
+            <select id='rocketSelectorL' class="uk-select uk-form-width-medium">                     
+            </select>
+            <button id="selectButtonL" class='uk-button uk-button-default uk-button-primary'  type='button'> Load </button>
+        </div>
+    </div>
+
+    <div id="load-toggleR" uk-modal>
+        <div class="uk-modal-dialog uk-modal-body"> 
+            Select the rocket to load :
+            <select id='rocketSelectorR' class="uk-select uk-form-width-medium">                     
+            </select>
+            <button id="selectButtonR" class='uk-button uk-button-default uk-button-primary'  type='button'> Load </button>
+        </div>
     </div>
 
     <!-- Front script -->
+    <script src="../static/js/design/main.js"></script>
     <script src="../static/js/compare/main.js"></script>
     <script src="../static/js/compare/front.js"></script>
     <script src="../static/js/draw.js"></script>
+
     <!-- UIKIT Theme -->
     <script src="../static/js/uikit.min.js"></script>
     <script src="../static/js/uikit-icons.min.js"></script>

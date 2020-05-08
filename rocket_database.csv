@@ -1,5 +1,5 @@
-Name,Year,Country,Mission,Stage number,Height [m],Lift-off mass [tons],Payload mass [kg],S1 height [m],S1 diameter [m],S1 thrust [kN],S1 Isp [s],S1 m0 [tons],S1 mp [tons],B height [m],B diameter [m],B thrust [kN],B Isp [s],B m0 [tons],B mp [tons],S2 height [m],S2 diameter [m],S2 thrust [kN],S2 Isp [s],S2 m0 [tons],S2 mp [tons], S1 color, Booster color, S2 color
-Sputnik,1957,USSR,LEO orbit,2,30.0,280.0,83.6,19.6,3.0,3890,250,168.0,39.6,,,,,,,"6,4","2,95",970,240,99,92,#D4E1E7,#D4E1E7,#D4E1E7
+Name,Year,Country,Mission,Stage number,Height [m],Lift-off mass [tons],Payload mass [kg],S1 height [m],S1 diameter [m],S1 thrust [kN],S1 Isp [s],S1 m0 [tons],S1 mp [tons],B height [m],B diameter [m],B thrust [kN],B Isp [s],B m0 [tons],B mp [tons],S2 height [m],S2 diameter [m],S2 thrust [kN],S2 Isp [s],S2 m0 [tons],S2 mp [tons],S1 color,Booster color,S2 color
+R-7 Semiorka,1957,USSR,LEO orbit,2,30.0,280.0,83.6,19.6,3.0,3890,250,168.0,39.6,,,,,,,"6,4","2,95",970,240,99,92,#D4E1E7,#D4E1E7,#D4E1E7
 Soyuz,1966,USSR,LEO orbit,2,45.6,308.0,7300.0,19.6,2.68,3252,245,178.0,156.8,,,,,,,24,"2,95",779,264,105.4,95.4,#D4E1E7,#D4E1E7,#D4E1E7
 Saturn V,1969,US,Apollo 11,2,110.6,2970.0,48600.0,42.0,10.5,34000,263,2300.0,2169.0,,,,,,,25,10,4900,421,480,444,#D4E1E7,#D4E1E7,#D4E1E7
 Ariane 4,1988,France,GTO orbit,2,58.72,3.8,

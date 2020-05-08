@@ -4,6 +4,14 @@
 // If not, maybe reduce the size of the boosters
 // Function to empty the form
 // Check that the name hasn't been given already
+var names 
+updateNames()
+
+async function updateNames() {
+    names = await getNames()
+    fillRocketSelector('rocketSelector')
+}
+
 
 document.getElementById("stageNumber").addEventListener("change", function (e){
     if (document.getElementById('stageNumber').value=='2') {

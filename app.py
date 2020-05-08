@@ -14,16 +14,19 @@ def start():
 @app.route('/designrocket.html')
 @app.route('/addrodesignrocketcket')
 def designrocket():
+    load_db()
     return render_template("designrocket.html")
 
 
 @app.route('/compare_rockets.html')
 @app.route('/compare_rockets')
 def comprocket():
+    load_db()
     return render_template("compare_rockets.html")
 
 @app.route('/trajectory.html')
 def trajectory():
+    load_db()
     return render_template("trajectory.html")
 
 @app.route('/api/newrocket', methods = ['POST'])
@@ -47,6 +50,14 @@ def api_rocket_all():
     print(json)
     return json, 200
 
+@app.route('/api/rockets/byname', methods = ['POST'])
+def api_rocket_byname():
+    print('inside')
+    print(request.get_json())
+    json = pd.DataFrame(get_rocket_byname(request.get_json()['name'])).to_json()
+    print(json)
+    return json, 200
+
 #Utility functions
 def load_db():
     global rocket_db
@@ -54,3 +65,6 @@ def load_db():
 
 def get_rocket_names():
     return list(rocket_db['Name'])
+
+def get_rocket_byname(name: str)->list:
+    return rocket_db.loc[rocket_db['Name'] == name]

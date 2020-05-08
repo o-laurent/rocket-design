@@ -1,11 +1,3 @@
-var names 
-updateNames()
-
-async function updateNames() {
-    names = await getNames()
-    fillRocketSelector()
-}
-
 async function getNames() {
     const param = {
         method : 'GET',
@@ -31,17 +23,17 @@ async function getNames() {
 
 async function getRocketbyName(name) {
     const param = {
-        method : 'GET',
+        method : 'POST',
         mode: 'cors',
         headers : {
             'Content-Type': 'application/json'
         },
-        body : {
+        body : JSON.stringify({
             name: name
-        }
+        })
     }
     // On appelle le serveur
-    return fetch ('/api/rockets/byname',param)
+    return fetch ('/api/rockets/byname', param)
     .then(response =>{
         if (response.status != 200) {
             console.log("Erreur")
@@ -80,14 +72,14 @@ async function addRocket() {
     .catch(console.error)
 }
 
-async function fillRocketSelector() {
+async function fillRocketSelector(rocketS) {
     // Affiche les options d'un select avec toutes les catégories possibles et en value les _id des catégories
         for(name of names.names)
         {
             var option = document.createElement('option')
             option.innerHTML = name
             option.value = name // ou _id pour enregisrter les id
-            document.getElementById('rocketSelector').appendChild(option);
+            document.getElementById(rocketS).appendChild(option);
         }
 }
 //Fonction de chargement d'une fusée en particulier 
