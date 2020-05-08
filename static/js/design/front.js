@@ -283,25 +283,25 @@ function drawRocket() {
         f2Sheight = document.getElementById("stage2Height").value
         f2Sdiameter = document.getElementById("stage2Diameter").value
         if (fSheight=="") {
-            fSheight = 40
+            fSheight = 60
         }
         else {
             fSheight = Number(fSheight)
         }
         if (fSdiameter=="") {
-            fSdiameter = 4
+            fSdiameter = 25
         }
         else {
             fSdiameter = Number(fSdiameter)
         }
         if (f2Sheight=="") {
-            f2Sheight = 80
+            f2Sheight = 40
         }
         else {
             f2Sheight = Number(f2Sheight)
         }
         if (f2Sdiameter=="") {
-            f2Sdiameter = 8
+            f2Sdiameter = 17
         }
         else {
             f2Sdiameter = Number(f2Sdiameter)
@@ -313,8 +313,54 @@ function drawRocket() {
     
     }
     else {
+        fSheight = document.getElementById("stage1Height").value
+        fSdiameter = document.getElementById("stage1Diameter").value
+        f2Sheight = document.getElementById("stage2Height").value
+        f2Sdiameter = document.getElementById("stage2Diameter").value
+        bheight = document.getElementById("boosterHeight").value
+        bdiameter = document.getElementById("boosterDiameter").value
+        if (fSheight=="") {
+            fSheight = 60
+        }
+        else {
+            fSheight = Number(fSheight)
+        }
+        if (fSdiameter=="") {
+            fSdiameter = 25
+        }
+        else {
+            fSdiameter = Number(fSdiameter)
+        }
+        if (f2Sheight=="") {
+            f2Sheight = 40
+        }
+        else {
+            f2Sheight = Number(f2Sheight)
+        }
+        if (f2Sdiameter=="") {
+            f2Sdiameter = 17
+        }
+        else {
+            f2Sdiameter = Number(f2Sdiameter)
+        }
+        if (bheight=="") {
+            bheight = 40
+        }
+        else {
+            bheight = Number(bheight)
+        }
+        if (bdiameter=="") {
+            bdiameter = 8
+        }
+        else {
+            bdiameter = Number(bdiameter)
+        }
+        fScolor = document.getElementById("stage1Color").value
+        fS2color = document.getElementById("stage2Color").value
+        bcolor = document.getElementById("boosterColor").value
         clearCanvas()
-        draw2B()
+        draw2BAdapt(fSheight, fSdiameter, f2Sheight, f2Sdiameter,bheight,bdiameter, 140, fScolor, fS2color,bcolor)
+    
     }
     all_info()
 }
