@@ -7,6 +7,7 @@ struct vector {
     long double y;
 };
 
+
 //4D vector corresponding to 2D-data and its derivatives
 typedef struct bivector bivector;
 struct bivector {
@@ -16,6 +17,7 @@ struct bivector {
     long double dy;
 };
 
+
 //1D linear transformation of vectors
 vector* linVector(long double l1, vector* vA) {
     vector* v = malloc(sizeof(vector)+1);
@@ -23,6 +25,7 @@ vector* linVector(long double l1, vector* vA) {
     v->y = vA->y*l1;
     return v;
 }
+
 
 //2D linear transformation of vectors
 vector* linVector2(long double l1, vector* vA,
@@ -62,6 +65,7 @@ bivector* linBivector5(long double l1, bivector* vA,
     return r; 
 }
 
+
 //Struct containing the heading
 typedef struct commandList commandList;
 struct commandList {
@@ -69,6 +73,12 @@ struct commandList {
     long double c; //current angle
     commandList* next; 
 };
+
+
+commandList* lin_cList (long double l1, commandList* cList1, long double l2, commandList* cList2, unsigned int dimension) { 
+    //Faire la combinaison linéaire des 2 listes
+}
+
 
 //Structure containing all useful information concerning the rocket 
 typedef struct rocket_data rocket_data;
@@ -91,11 +101,13 @@ struct rocket_data {
     commandList* cList; //List of the commands
 };
 
+
 typedef struct stockBivectors stockBivectors;
 struct stockBivectors {
     bivector* state;
     stockBivectors* previous;
 };
+
 
 stockBivectors* consSTOCK(bivector* state, stockBivectors* stock) {
     //Add a vector on the top of the list
