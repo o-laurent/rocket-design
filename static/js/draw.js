@@ -1,9 +1,10 @@
-function canvasSize() {
+function canvasSize(canvas) {
     canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
     canvas.height = document.getElementById('sidebar').getBoundingClientRect().height
 }
 
-function draw1Adapt(fStageHeight, fStageDiameter, zoom, fStageColor) {
+function draw1Adapt(canvas, fStageHeight, fStageDiameter, zoom, fStageColor) {
+    var ctx = canvas.getContext("2d"); 
     midy = canvas.height/2
     midx = canvas.width/2
     ratioV = canvas.height/410
@@ -59,7 +60,8 @@ function draw1Adapt(fStageHeight, fStageDiameter, zoom, fStageColor) {
 }
 
 
-function draw1BAdapt(fStageHeight, fStageDiameter, bHeight, bDiameter, zoom, fStageColor, bColor) {
+function draw1BAdapt(canvas, fStageHeight, fStageDiameter, bHeight, bDiameter, zoom, fStageColor, bColor) {
+    var ctx = canvas.getContext("2d"); 
     midy = canvas.height/2
     midx = canvas.width/2
     ratioV = canvas.height/410
@@ -172,7 +174,8 @@ function draw1BAdapt(fStageHeight, fStageDiameter, bHeight, bDiameter, zoom, fSt
 }
 
 
-function draw2Adapt(fStageHeight,fStageDiameter,sStageHeight,sStageDiameter,zoom,fStageColor,sStageColor) {
+function draw2Adapt(canvas, fStageHeight, fStageDiameter, sStageHeight, sStageDiameter, zoom, fStageColor, sStageColor) {
+    var ctx = canvas.getContext("2d"); 
     midy = canvas.height/2
     midx = canvas.width/2
     ratioV = canvas.height/410
@@ -246,7 +249,8 @@ function draw2Adapt(fStageHeight,fStageDiameter,sStageHeight,sStageDiameter,zoom
 }
 
 
-function draw2BAdapt(fStageHeight,fStageDiameter,sStageHeight,sStageDiameter,bHeight, bDiameter,zoom,fStageColor,sStageColor,bColor) {
+function draw2BAdapt(canvas, fStageHeight, fStageDiameter, sStageHeight, sStageDiameter, bHeight, bDiameter, zoom, fStageColor, sStageColor, bColor) {
+    var ctx = canvas.getContext("2d"); 
     midy = canvas.height/2
     midx = canvas.width/2
     ratioV = canvas.height/410
@@ -376,7 +380,8 @@ function draw2BAdapt(fStageHeight,fStageDiameter,sStageHeight,sStageDiameter,bHe
 }
 
 
-function clearCanvas() {
+function clearCanvas(canvas) {
+    var ctx = canvas.getContext("2d"); 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
     canvas.height = document.getElementById('sidebar').getBoundingClientRect().height
@@ -384,6 +389,6 @@ function clearCanvas() {
     midx = canvas.width/2
     ratioV = canvas.height/410
     ratioH = canvas.width/150
-    ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+    ctx.fillStyle = "rgba(255, 255, 255, 0.8)"; //Making the canvas opaque
     ctx.fillRect(midx-150*ratioV, 0, 300*ratioV, canvas.height)
 }

@@ -23,30 +23,139 @@
                         <li class="uk-open">
                             <a class="uk-accordion-title" href="#">General Specifications</a>
                             <div class="uk-accordion-content">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                Name:
+                                <br>
+                                <span id="rocketNameL"> </span>
+                                <br>
+                                Year of first launch:
+                                <br>
+                                <span id="rocketYearL"> </span>
+                                <br>
+                                Country:
+                                <br>
+                                <span id="rocketCountryL"> </span>
+                                <br>
+                                Mission:
+                                <br>
+                                <span id="missionL"> </span>
+                                <br>
+                                Number of stages:
+                                <br>
+                                <span id="stageNumberL"> </span>
+                                <br>
+                                Boosters:
+                                <br>
+                                <span id="boostersL"> </span>
+                                <br>
+                                Total Height (m):
+                                <br>
+                                <span id="totalHeightL"> </span>
+                                <br>
+                                Lift-off Mass (tons):
+                                <br>
+                                <span id="liftOffMassL"> </span>
+                                <br>
+                                Payload Mass (kg):
+                                <br>
+                                <span id="payloadMassL"> </span>
                             </div>
                         </li>
                         <li>
                             <a class="uk-accordion-title" href="#"> First Stage Specifications</a>
                             <div class="uk-accordion-content">
-                                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor reprehenderit.</p>
+                                Height (m):
+                                <br>
+                                <span id="stage1HeightL"> </span>
+                                <br>
+                                Diameter (m):
+                                <br>
+                                <span id="stage1DiameterL"> </span>
+                                <br>
+                                Thrust (kN):
+                                <br>
+                                <span id="stage1ThrustL"> </span>
+                                <br>
+                                Isp (s):
+                                <br>
+                                <span id="stage1IspL"> </span>
+                                <br>
+                                Initial Mass (tons):
+                                <br>
+                                <span id="stage1M0L"> </span>
+                                <br>
+                                Propellant Mass (tons):
+                                <br>
+                                <span id="stage1MpL"> </span>
+                                Color:
+                                <br>
+                                <span id="stage1ColorL"> </span>
                             </div>
                         </li>
                         <li>
                             <a class="uk-accordion-title" href="#"> Booster Specifications</a>
                             <div class="uk-accordion-content">
-                                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat proident.</p>
+                                Height (m):
+                                <br>
+                                <span id="boosterHeightL"> </span>
+                                <br>
+                                Diameter (m):
+                                <br>
+                                <span id="boosterDiameterL"> </span>
+                                <br>
+                                Thrust (kN):
+                                <br>
+                                <span id="boosterThrustL"> </span>
+                                <br>
+                                Isp (s):
+                                <br>
+                                <span id="boosterIspL"> </span>
+                                <br>
+                                Initial Mass (tons):
+                                <br>
+                                <span id="boosterM0L"> </span>
+                                <br>
+                                Propellant Mass (tons):
+                                <br>
+                                <span id="boosterMpL"> </span>
+                                Color:
+                                <br>
+                                <span id="boosterColorL"> </span>
                             </div>
                         </li>
                         <li>
                             <a class="uk-accordion-title" href="#"> Second Stage Specifications</a>
                             <div class="uk-accordion-content">
-                                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat proident.</p>
+                                Height (m):
+                                <br>
+                                <span id="stage2HeightL"> </span>
+                                <br>
+                                Diameter (m):
+                                <br>
+                                <span id="stage2DiameterL"> </span>
+                                <br>
+                                Thrust (kN):
+                                <br>
+                                <span id="stage2ThrustL"> </span>
+                                <br>
+                                Isp (s):
+                                <br>
+                                <span id="stage2IspL"> </span>
+                                <br>
+                                Initial Mass (tons):
+                                <br>
+                                <span id="stage2M0L"> </span>
+                                <br>
+                                Propellant Mass (tons):
+                                <br>
+                                <span id="stage2MpL"> </span>
+                                Color:
+                                <br>
+                                <span id="stage2ColorL"> </span>
                             </div>
                         </li>
                     </ul>
                 </div>
-                <div class='canvasDiv'>
+                <div id="sidebar" class='sidebar'>
                     <div class='nameDiv'>
                     </div>
                     <canvas id='canvasL'></canvas>
@@ -99,7 +208,7 @@
             Select the rocket to load :
             <select id='rocketSelectorL' class="uk-select uk-form-width-medium">                     
             </select>
-            <button id="selectButtonL" class='uk-button uk-button-default uk-button-primary'  type='button'> Load </button>
+            <button id="selectButtonL" class='uk-button uk-button-default uk-button-primary'  type='button' onClick=loadNFill_L()> Load </button>
         </div>
     </div>
 

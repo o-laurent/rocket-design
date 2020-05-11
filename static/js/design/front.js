@@ -13,7 +13,8 @@ async function updateNames() {
     names = await getNames()
     fillRocketSelector('rocketSelector')
 }
-
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
 clearCanvas()
 draw1Adapt(80, 8, 140, '#CCE6FF')
 document.getElementById("stageNumber").value = '1'
@@ -21,9 +22,6 @@ document.getElementById("boosterSelect").value = '0'
 document.getElementById("stage1Color").value = '#CCE6FF'
 document.getElementById("boosterColor").value = '#CCE6FF'
 document.getElementById("stage2Color").value = '#CCE6FF'
-
-var canvas = document.getElementById("myCanvas");
-var ctx = canvas.getContext("2d");
 
 async function loadNFill() {
     name = document.getElementById('rocketSelector').value
@@ -469,8 +467,8 @@ function drawRocket() {
             fSdiameter = Number(fSdiameter)
         }
         fScolor = document.getElementById("stage1Color").value
-        clearCanvas()
-        draw1Adapt(fSheight, fSdiameter, zoom, fScolor)
+        clearCanvas(ctx)
+        draw1Adapt(ctx, fSheight, fSdiameter, zoom, fScolor)
     }
     else if (stageNumber == 1) {
         fSheight = document.getElementById("stage1Height").value
@@ -503,8 +501,8 @@ function drawRocket() {
         }
         fScolor = document.getElementById("stage1Color").value
         bcolor = document.getElementById("boosterColor").value
-        clearCanvas()
-        draw1BAdapt(fSheight, fSdiameter, bheight, bdiameter, zoom, fScolor, bcolor)
+        clearCanvas(ctx)
+        draw1BAdapt(ctx, fSheight, fSdiameter, bheight, bdiameter, zoom, fScolor, bcolor)
     }
     else if (stageNumber==2 && booster==false) {
         fSheight = document.getElementById("stage1Height").value
@@ -537,8 +535,8 @@ function drawRocket() {
         }
         fScolor = document.getElementById("stage1Color").value
         sScolor = document.getElementById("stage2Color").value
-        clearCanvas()
-        draw2Adapt(fSheight, fSdiameter, sSheight, sSdiameter, zoom, fScolor, sScolor)
+        clearCanvas(ctx)
+        draw2Adapt(ctx,fSheight, fSdiameter, sSheight, sSdiameter, zoom, fScolor, sScolor)
     
     }
     else {
@@ -587,8 +585,8 @@ function drawRocket() {
         fScolor = document.getElementById("stage1Color").value
         sScolor = document.getElementById("stage2Color").value
         bcolor = document.getElementById("boosterColor").value
-        clearCanvas()
-        draw2BAdapt(fSheight, fSdiameter, sSheight, sSdiameter, bheight, bdiameter, zoom, fScolor, sScolor, bcolor)
+        clearCanvas(ctx)
+        draw2BAdapt(ctx, fSheight, fSdiameter, sSheight, sSdiameter, bheight, bdiameter, zoom, fScolor, sScolor, bcolor)
     
     }
     all_info()

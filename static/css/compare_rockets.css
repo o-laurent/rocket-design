@@ -28,8 +28,9 @@
     width: 20%;
 }
 
-.canvasDiv {
+.sidebar {
     width: 78%;
+    height: 100%;
 }
 
 .myCanvas {
