@@ -56,7 +56,7 @@ try :
 except :
     forces = ctypes.CDLL(os.path.abspath('./physics.so'))
     
-
+#Setting the right response types
 forces.norm.restype = ctypes.c_longdouble
 forces.command.restype = ctypes.c_longdouble
 forces.weight.restype = ctypes.POINTER(vector)
@@ -100,6 +100,7 @@ def print_cList(cList):
         cList2 = cList2.contents.next
         print(cList2.contents.t, cList2.contents.c)
 
+#Utility to read the stock
 def read_stock(pstock):
     stock_list = []
     test = True
@@ -159,13 +160,98 @@ def random_optimizer(N=100000):
     stx = list(map(lambda x : x[0], stock))
     sty = list(map(lambda x : x[1], stock))
     theta = np.linspace(0, 2*np.pi, 100)
-    r = 6371000
+    """r = 6371000
     x1 = r*np.cos(theta)
     x2 = r*np.sin(theta)
     fig, ax = plt.subplots(1)
     ax.plot(x1, x2)
     ax.plot(stx[::-1], sty[::-1])
     ax.set_aspect(1)
-    fig.savefig("trajectory_optimized.png")
+    fig.savefig("trajectory_optimized.png")"""
 
-random_optimizer()
+
+def genetic_optimizer(POP_SIZE, DIM, MAX_ITER, RATE, dt=1):
+    STOCKQ = []
+    #Condition initiale
+    cBivector = bivector(ctypes.c_longdouble(0), ctypes.c_longdouble(6371000), ctypes.c_longdouble(-1700/3.6), ctypes.c_longdouble(0))
+    Tf = ArianeD.T2
+    times = np.linspace(0, Tf+1, DIM+1, endpoint=False).astype(int)[1::]
+    i = 0
+    Mat_X = np.pi*(np.random.rand(POP_SIZE*4, DIM)*2- 1)
+    parent_M = np.zeros((POP_SIZE*4, DIM))
+    v_j = np.zeros(POP_SIZE*4)
+
+    for i in range(POP_SIZE*4):
+        commands = Mat_X[i]
+        parent_M[i] = commands 
+        cList = gen_commandList(commands, times)
+        ArianeD.cList = cList
+        v_j[i] = forces.runge_kutta_J_GTO(ctypes.c_int(1375), ctypes.c_longdouble(5), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(ArianeD))
+    
+    new_parent_j = np.zeros(POP_SIZE)
+    new_parent_M = np.zeros((POP_SIZE, DIM))
+    STOCK = np.zeros((MAX_ITER+1, POP_SIZE, DIM))
+    STOCK_J = np.zeros((MAX_ITER+1, POP_SIZE))
+
+    for epoch in range(MAX_ITER):
+        comp = np.partition(v_j.flatten(), POP_SIZE)[POP_SIZE]
+        i = 0
+        for j in range(POP_SIZE*4):
+            if i<=74 and v_j[j]<=comp: #If the cost is lower than the first quartile
+                new_parent_j[i] = v_j[j] #Remembering the cost
+                new_parent_M[i] = parent_M[j] #and the associated commands
+                i += 1
+
+        STOCK[epoch] = new_parent_M
+        STOCK_J[epoch] = new_parent_j
+        
+        #Exchanging the genes
+        children_M = np.zeros((POP_SIZE*4, DIM)) #Will contain the future children
+
+        choice_M = np.random.randint(1, POP_SIZE*4+1, POP_SIZE*8)
+        doubles = 0
+        i = 0
+        while i<(POP_SIZE*8+doubles):
+            choice_1 = choice_M[i]
+            choice_2 = choice_M[i+1]
+            father = new_parent_M[choice_1]
+            mother = new_parent_M[choice_2]
+            if choice_1 != choice_2:
+                gene_choice = np.random.randint(0, 2, DIM)
+                child = np.zeros(DIM)
+                for j in range(DIM):
+                    if gene_choice[j] == 1 and np.random.rand()<0.5:
+                        child[j] = father[j] + np.random.rand()/10 -0.05
+                    else:
+                        child[j] = mother[j]
+                children_M[(i-doubles+1)/2] = child
+            else:
+                doubles = doubles +2
+                np.append(choice_M, np.random.randint(1, POP_SIZE*4+1, 2))
+            i += 2
+
+        length = len(children_M)
+        new_parent_M = []
+        new_parent_j = []
+        true_children_M = np.zeros((length,DIM))
+        j_M = np.zeros(length)
+        """for k in range(length):
+            child = children_M[k]
+            vrai_enfant, q = gradient_descent(enfant, 10)
+            M_vrai_enfant(1:6, k) = transpose(vrai_enfant)
+            M_q(k) = q
+        """
+        parent_M = true_children_M
+        v_j = j_M
+    
+    #On garde le meilleur quart que l'on am�liore au maximum
+    comp = max(mink(v_j, POP_SIZE))
+    final_parents_j = np.zeros(POP_SIZE)
+    final_parents_M = np.zeros((POP_SIZE, DIM))
+    i = 0
+    for j in range(POP_SIZE*4):
+        """if v_j[j] <= comp:
+            M_parent_final(:,i), v_parent_final(i) = gradient_descent(M_parent(:,j), 100);
+            i = i+1"""
+    STOCK[epoch+1] = final_parents_M
+    STOCKQ[epoch+1] = final_parents_j
