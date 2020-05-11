@@ -15,8 +15,8 @@ async function updateNames() {
 }
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
-clearCanvas()
-draw1Adapt(80, 8, 140, '#CCE6FF')
+clearCanvas(canvas)
+draw1Adapt(canvas, 80, 8, 140, '#CCE6FF')
 document.getElementById("stageNumber").value = '1'
 document.getElementById("boosterSelect").value = '0'
 document.getElementById("stage1Color").value = '#CCE6FF'
@@ -467,8 +467,8 @@ function drawRocket() {
             fSdiameter = Number(fSdiameter)
         }
         fScolor = document.getElementById("stage1Color").value
-        clearCanvas(ctx)
-        draw1Adapt(ctx, fSheight, fSdiameter, zoom, fScolor)
+        clearCanvas(canvas)
+        draw1Adapt(canvas, fSheight, fSdiameter, zoom, fScolor)
     }
     else if (stageNumber == 1) {
         fSheight = document.getElementById("stage1Height").value
@@ -501,8 +501,8 @@ function drawRocket() {
         }
         fScolor = document.getElementById("stage1Color").value
         bcolor = document.getElementById("boosterColor").value
-        clearCanvas(ctx)
-        draw1BAdapt(ctx, fSheight, fSdiameter, bheight, bdiameter, zoom, fScolor, bcolor)
+        clearCanvas(canvas)
+        draw1BAdapt(canvas, fSheight, fSdiameter, bheight, bdiameter, zoom, fScolor, bcolor)
     }
     else if (stageNumber==2 && booster==false) {
         fSheight = document.getElementById("stage1Height").value
@@ -535,8 +535,8 @@ function drawRocket() {
         }
         fScolor = document.getElementById("stage1Color").value
         sScolor = document.getElementById("stage2Color").value
-        clearCanvas(ctx)
-        draw2Adapt(ctx,fSheight, fSdiameter, sSheight, sSdiameter, zoom, fScolor, sScolor)
+        clearCanvas(canvas)
+        draw2Adapt(canvas,fSheight, fSdiameter, sSheight, sSdiameter, zoom, fScolor, sScolor)
     
     }
     else {
@@ -585,8 +585,8 @@ function drawRocket() {
         fScolor = document.getElementById("stage1Color").value
         sScolor = document.getElementById("stage2Color").value
         bcolor = document.getElementById("boosterColor").value
-        clearCanvas(ctx)
-        draw2BAdapt(ctx, fSheight, fSdiameter, sSheight, sSdiameter, bheight, bdiameter, zoom, fScolor, sScolor, bcolor)
+        clearCanvas(canvas)
+        draw2BAdapt(canvas, fSheight, fSdiameter, sSheight, sSdiameter, bheight, bdiameter, zoom, fScolor, sScolor, bcolor)
     
     }
     all_info()
@@ -627,7 +627,7 @@ function cleanForm() {
 }
 
 //Updating Listeners
-document.getElementById("zoomInput").addEventListener("keyup", drawRocket)
+document.getElementById("zoomInput").addEventListener("input", drawRocket)
 
 document.getElementById("stage1Height").addEventListener("keyup", drawRocket)
 document.getElementById("stage1Diameter").addEventListener("keyup", drawRocket)
