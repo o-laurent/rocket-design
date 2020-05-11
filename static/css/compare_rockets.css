@@ -38,3 +38,14 @@
     margin-bottom: 0;
     position: fixed;
 }
+
+.down {
+    width: 40%;
+    display: flex;
+    justify-content: space-evenly;
+    align-content: center;
+}
+
+body {
+    align-items: center;
+}
