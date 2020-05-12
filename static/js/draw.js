@@ -3,7 +3,7 @@ function canvasSize(canvas) {
     canvas.height = document.getElementById('sidebar').getBoundingClientRect().height
 }
 
-function draw1Adapt(canvas, fStageHeight, fStageDiameter, zoom, fStageColor) {
+function draw1Adapt(canvas, fStageHeight, fStageDiameter, zoom, fStageColor, M0=0, Mp=0, showMass=false) {
     var ctx = canvas.getContext("2d"); 
     midy = canvas.height/2
     midx = canvas.width/2
@@ -43,9 +43,23 @@ function draw1Adapt(canvas, fStageHeight, fStageDiameter, zoom, fStageColor) {
     ctx.lineTo(midx-CanvasfStageWidth/3, baseXfStage - CanvasfStageHeight)
     ctx.closePath()
     ctx.fill()
+    
+    if (showMass) { //Draw the propellant mass
+        CanvaspMassfStageWidth = CanvasfStageWidth*Mp/M0
+        ctx.fillStyle = '#6D5FB3'
+        ctx.fillRect(midx-CanvaspMassfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight, CanvaspMassfStageWidth, 0.8*CanvasfStageHeight)
+        ctx.beginPath()
+        ctx.moveTo(midx-CanvaspMassfStageWidth/3, baseXfStage - CanvasfStageHeight)
+        ctx.lineTo(midx-CanvaspMassfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight+1)
+        ctx.lineTo(midx+CanvaspMassfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight+1)
+        ctx.lineTo(midx+CanvaspMassfStageWidth/3, baseXfStage - CanvasfStageHeight)
+        ctx.lineTo(midx-CanvaspMassfStageWidth/3, baseXfStage - CanvasfStageHeight)
+        ctx.closePath()
+        ctx.fill()
+    }
 
     baseXfairing = baseXfStage - CanvasfStageHeight
-
+    ctx.fillStyle = fStageColor
     //Drawing of the fairing
     ctx.beginPath();
     ctx.moveTo(midx-CanvasfStageWidth/3, baseXfairing);
@@ -60,7 +74,7 @@ function draw1Adapt(canvas, fStageHeight, fStageDiameter, zoom, fStageColor) {
 }
 
 
-function draw1BAdapt(canvas, fStageHeight, fStageDiameter, bHeight, bDiameter, zoom, fStageColor, bColor) {
+function draw1BAdapt(canvas, fStageHeight, fStageDiameter, bHeight, bDiameter, zoom, fStageColor, bColor, fSM0=0, fSMp=0, bM0=0, bMp=0, showMass=false) {
     var ctx = canvas.getContext("2d"); 
     midy = canvas.height/2
     midx = canvas.width/2
@@ -102,6 +116,21 @@ function draw1BAdapt(canvas, fStageHeight, fStageDiameter, bHeight, bDiameter, z
     ctx.lineTo(midx-CanvasfStageWidth/3, baseXfStage - CanvasfStageHeight)
     ctx.closePath()
     ctx.fill()
+
+    if (showMass) { //Draws the propellant mass
+        console.log('in')
+        CanvaspMassfStageWidth = CanvasfStageWidth*fSMp/fSM0 //(Linear approximation)
+        ctx.fillStyle = '#6D5FB3' //violet
+        ctx.fillRect(midx-CanvaspMassfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight, CanvaspMassfStageWidth, 0.8*CanvasfStageHeight)
+        ctx.beginPath()
+        ctx.moveTo(midx-CanvaspMassfStageWidth/3, baseXfStage - CanvasfStageHeight)
+        ctx.lineTo(midx-CanvaspMassfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight+1)
+        ctx.lineTo(midx+CanvaspMassfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight+1)
+        ctx.lineTo(midx+CanvaspMassfStageWidth/3, baseXfStage - CanvasfStageHeight)
+        ctx.lineTo(midx-CanvaspMassfStageWidth/3, baseXfStage - CanvasfStageHeight)
+        ctx.closePath()
+        ctx.fill()
+    }
 
     baseXfairing = baseXfStage - CanvasfStageHeight
 
@@ -133,6 +162,14 @@ function draw1BAdapt(canvas, fStageHeight, fStageDiameter, bHeight, bDiameter, z
     ctx.closePath()
     ctx.stroke()
     
+    if (showMass) { //Draws the propellant mass of the left booster
+        console.log('in booster')
+        CanvaspMassBWidth = CanvasBWidth*bMp/bM0 //(Linear approximation)
+        console.log(CanvaspMassBWidth)
+        ctx.fillStyle = '#7B7887' //grey
+        ctx.fillRect(lBmidx-CanvaspMassBWidth/2-1, baseXBooster-0.8*CanvasBHeight, CanvaspMassBWidth, 0.8*CanvasBHeight);
+    }
+
     //Drawing of the right booster
     lBmidx = midx + CanvasfStageWidth/2 + CanvasBWidth/2
     ctx.fillStyle = '#000000'
@@ -159,6 +196,14 @@ function draw1BAdapt(canvas, fStageHeight, fStageDiameter, bHeight, bDiameter, z
     ctx.closePath()
     ctx.stroke()
 
+    if (showMass) { //Draws the propellant mass of the right booster
+        console.log('in booster')
+        CanvaspMassBWidth = CanvasBWidth*bMp/bM0 //(Linear approximation)
+        console.log(CanvaspMassBWidth)
+        ctx.fillStyle = '#7B7887' //grey
+        ctx.fillRect(lBmidx-CanvaspMassBWidth/2+1, baseXBooster-0.8*CanvasBHeight, CanvaspMassBWidth, 0.8*CanvasBHeight);
+    }
+
     //Drawing of the fairing
     ctx.fillStyle = fStageColor
     ctx.beginPath();
@@ -174,7 +219,7 @@ function draw1BAdapt(canvas, fStageHeight, fStageDiameter, bHeight, bDiameter, z
 }
 
 
-function draw2Adapt(canvas, fStageHeight, fStageDiameter, sStageHeight, sStageDiameter, zoom, fStageColor, sStageColor) {
+function draw2Adapt(canvas, fStageHeight, fStageDiameter, sStageHeight, sStageDiameter, zoom, fStageColor, sStageColor, fSM0=0, fSMp=0, sSM0=0, sSMp=0, showMass=false) {
     var ctx = canvas.getContext("2d"); 
     midy = canvas.height/2
     midx = canvas.width/2
@@ -217,6 +262,20 @@ function draw2Adapt(canvas, fStageHeight, fStageDiameter, sStageHeight, sStageDi
     ctx.closePath()
     ctx.fill()
 
+    if (showMass) { //Draws the propellant mass
+        CanvaspMassfStageWidth = CanvasfStageWidth*fSMp/fSM0 //(Linear approximation)
+        ctx.fillStyle = '#6D5FB3' //violet
+        ctx.fillRect(midx-CanvaspMassfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight, CanvaspMassfStageWidth, 0.8*CanvasfStageHeight)
+        ctx.beginPath()
+        ctx.moveTo(midx-CanvaspMassfStageWidth/3, baseXfStage - CanvasfStageHeight)
+        ctx.lineTo(midx-CanvaspMassfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight+1)
+        ctx.lineTo(midx+CanvaspMassfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight+1)
+        ctx.lineTo(midx+CanvaspMassfStageWidth/3, baseXfStage - CanvasfStageHeight)
+        ctx.lineTo(midx-CanvaspMassfStageWidth/3, baseXfStage - CanvasfStageHeight)
+        ctx.closePath()
+        ctx.fill()
+    }
+
     baseXsStage = baseXfStage - CanvasfStageHeight
     
     //Drawing of the second stage
@@ -233,8 +292,15 @@ function draw2Adapt(canvas, fStageHeight, fStageDiameter, sStageHeight, sStageDi
     ctx.lineTo(midx-CanvassStageWidth/2+CanvassStageWidth, baseXsStage-0.8*CanvassStageHeight)
     ctx.closePath()
     ctx.stroke()
-    
+
+    if (showMass) { //Draws the propellant mass of the second stage
+        CanvaspMasssStageWidth = CanvassStageWidth*sSMp/sSM0 //(Linear approximation)
+        ctx.fillStyle = '#6D5FB3' //violet
+        ctx.fillRect(midx-CanvaspMasssStageWidth/2, baseXsStage-0.8*CanvassStageHeight, CanvaspMasssStageWidth, 0.8*CanvassStageHeight);
+    }
+
     //Drawing of the fairing
+    ctx.fillStyle = sStageColor
     baseXfairing= baseXsStage-0.8*CanvassStageHeight
     ctx.beginPath();
     ctx.moveTo(midx-CanvassStageWidth/2, baseXfairing);
@@ -249,7 +315,7 @@ function draw2Adapt(canvas, fStageHeight, fStageDiameter, sStageHeight, sStageDi
 }
 
 
-function draw2BAdapt(canvas, fStageHeight, fStageDiameter, sStageHeight, sStageDiameter, bHeight, bDiameter, zoom, fStageColor, sStageColor, bColor) {
+function draw2BAdapt(canvas, fStageHeight, fStageDiameter, sStageHeight, sStageDiameter, bHeight, bDiameter, zoom, fStageColor, sStageColor, bColor, fSM0=0, fSMp=0, sSM0=0, sSMp=0, bM0=0, bMp=0, showMass=false) {
     var ctx = canvas.getContext("2d"); 
     midy = canvas.height/2
     midx = canvas.width/2
@@ -294,59 +360,84 @@ function draw2BAdapt(canvas, fStageHeight, fStageDiameter, sStageHeight, sStageD
     ctx.closePath()
     ctx.fill()
     
+    if (showMass) { //Draws the propellant mass
+        CanvaspMassfStageWidth = CanvasfStageWidth*fSMp/fSM0 //(Linear approximation)
+        ctx.fillStyle = '#6D5FB3' //violet
+        ctx.fillRect(midx-CanvaspMassfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight, CanvaspMassfStageWidth, 0.8*CanvasfStageHeight)
+        ctx.beginPath()
+        ctx.moveTo(midx-CanvaspMassfStageWidth/3, baseXfStage - CanvasfStageHeight)
+        ctx.lineTo(midx-CanvaspMassfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight+1)
+        ctx.lineTo(midx+CanvaspMassfStageWidth/2, baseXfStage - 0.8*CanvasfStageHeight+1)
+        ctx.lineTo(midx+CanvaspMassfStageWidth/3, baseXfStage - CanvasfStageHeight)
+        ctx.lineTo(midx-CanvaspMassfStageWidth/3, baseXfStage - CanvasfStageHeight)
+        ctx.closePath()
+        ctx.fill()
+    }
      //Drawing of the left booster
-     lBmidx = midx-CanvasfStageWidth/2 - CanvasBWidth/2
-     ctx.fillStyle = '#000000'
-     ctx.beginPath();
-     ctx.moveTo(lBmidx, (basisX - 0.9*CanvasBWidth));
-     ctx.lineTo(lBmidx - 0.35*CanvasBWidth, basisX);
-     ctx.lineTo(lBmidx + 0.35*CanvasBWidth, basisX);
-     ctx.closePath()
-     ctx.fill();
+    lBmidx = midx-CanvasfStageWidth/2 - CanvasBWidth/2
+    ctx.fillStyle = '#000000'
+    ctx.beginPath();
+    ctx.moveTo(lBmidx, (basisX - 0.9*CanvasBWidth));
+    ctx.lineTo(lBmidx - 0.35*CanvasBWidth, basisX);
+    ctx.lineTo(lBmidx + 0.35*CanvasBWidth, basisX);
+    ctx.closePath()
+    ctx.fill();
  
-     baseXBooster = basisX - 0.7*CanvasBWidth
+    baseXBooster = basisX - 0.7*CanvasBWidth
  
-     ctx.fillStyle = bColor
-     ctx.fillRect(lBmidx-CanvasBWidth/2-1, baseXBooster-0.8*CanvasBHeight, CanvasBWidth, 0.8*CanvasBHeight);
-     ctx.beginPath()
-     ctx.moveTo(lBmidx+CanvasBWidth/2-1, baseXBooster-CanvasBHeight)
-     ctx.lineTo(lBmidx+CanvasBWidth/2-1, baseXBooster-0.8*CanvasBHeight)
-     ctx.lineTo(lBmidx-CanvasBWidth/2-1, baseXBooster-0.8*CanvasBHeight)
-     ctx.bezierCurveTo(lBmidx-CanvasBWidth/2-1, baseXBooster-0.85*CanvasBHeight, lBmidx-CanvasBWidth/2-1, baseXBooster-CanvasBHeight*0.95, lBmidx+CanvasBWidth/2-1, baseXBooster-CanvasBHeight)
-     ctx.closePath();
-     ctx.fill()
+    ctx.fillStyle = bColor
+    ctx.fillRect(lBmidx-CanvasBWidth/2-1, baseXBooster-0.8*CanvasBHeight, CanvasBWidth, 0.8*CanvasBHeight);
+    ctx.beginPath()
+    ctx.moveTo(lBmidx+CanvasBWidth/2-1, baseXBooster-CanvasBHeight)
+    ctx.lineTo(lBmidx+CanvasBWidth/2-1, baseXBooster-0.8*CanvasBHeight)
+    ctx.lineTo(lBmidx-CanvasBWidth/2-1, baseXBooster-0.8*CanvasBHeight)
+    ctx.bezierCurveTo(lBmidx-CanvasBWidth/2-1, baseXBooster-0.85*CanvasBHeight, lBmidx-CanvasBWidth/2-1, baseXBooster-CanvasBHeight*0.95, lBmidx+CanvasBWidth/2-1, baseXBooster-CanvasBHeight)
+    ctx.closePath();
+    ctx.fill()
  
-     ctx.beginPath()
-     ctx.moveTo(lBmidx+CanvasBWidth/2, baseXfStage)
-     ctx.lineTo(lBmidx+CanvasBWidth/2, baseXBooster-CanvasBHeight)
-     ctx.closePath()
-     ctx.stroke()
-     
-     //Drawing of the right booster
-     lBmidx = midx + CanvasfStageWidth/2 + CanvasBWidth/2
-     ctx.fillStyle = '#000000'
-     ctx.beginPath();
-     ctx.moveTo(lBmidx, (basisX - 0.9*CanvasBWidth));
-     ctx.lineTo(lBmidx - 0.35*CanvasBWidth, basisX);
-     ctx.lineTo(lBmidx + 0.35*CanvasBWidth, basisX);
-     ctx.closePath()
-     ctx.fill();
- 
-     ctx.fillStyle = bColor
-     ctx.fillRect(lBmidx-CanvasBWidth/2+1, baseXBooster-0.8*CanvasBHeight, CanvasBWidth, 0.8*CanvasBHeight);
-     ctx.beginPath()
-     ctx.moveTo(lBmidx-CanvasBWidth/2+1, baseXBooster-CanvasBHeight)
-     ctx.lineTo(lBmidx-CanvasBWidth/2+1, baseXBooster-0.8*CanvasBHeight)
-     ctx.lineTo(lBmidx+CanvasBWidth/2+1, baseXBooster-0.8*CanvasBHeight)
-     ctx.bezierCurveTo(lBmidx+CanvasBWidth/2+1, baseXBooster-0.85*CanvasBHeight, lBmidx+CanvasBWidth/2+1, baseXBooster-CanvasBHeight*0.95, lBmidx-CanvasBWidth/2+1, baseXBooster-CanvasBHeight)
-     ctx.closePath();
-     ctx.fill()
- 
-     ctx.beginPath()
-     ctx.moveTo(lBmidx-CanvasBWidth/2, baseXfStage)
-     ctx.lineTo(lBmidx-CanvasBWidth/2, baseXBooster-CanvasBHeight)
-     ctx.closePath()
-     ctx.stroke()
+    ctx.beginPath()
+    ctx.moveTo(lBmidx+CanvasBWidth/2, baseXfStage)
+    ctx.lineTo(lBmidx+CanvasBWidth/2, baseXBooster-CanvasBHeight)
+    ctx.closePath()
+    ctx.stroke()
+
+    if (showMass) { //Draws the propellant mass of the left booster
+        CanvaspMassBWidth = CanvasBWidth*bMp/bM0 //(Linear approximation)
+        ctx.fillStyle = '#7B7887' //grey
+        ctx.fillRect(lBmidx-CanvaspMassBWidth/2-1, baseXBooster-0.8*CanvasBHeight, CanvaspMassBWidth, 0.8*CanvasBHeight);
+    }
+
+    //Drawing of the right booster
+    lBmidx = midx + CanvasfStageWidth/2 + CanvasBWidth/2
+    ctx.fillStyle = '#000000'
+    ctx.beginPath();
+    ctx.moveTo(lBmidx, (basisX - 0.9*CanvasBWidth));
+    ctx.lineTo(lBmidx - 0.35*CanvasBWidth, basisX);
+    ctx.lineTo(lBmidx + 0.35*CanvasBWidth, basisX);
+    ctx.closePath()
+    ctx.fill();
+
+    ctx.fillStyle = bColor
+    ctx.fillRect(lBmidx-CanvasBWidth/2+1, baseXBooster-0.8*CanvasBHeight, CanvasBWidth, 0.8*CanvasBHeight);
+    ctx.beginPath()
+    ctx.moveTo(lBmidx-CanvasBWidth/2+1, baseXBooster-CanvasBHeight)
+    ctx.lineTo(lBmidx-CanvasBWidth/2+1, baseXBooster-0.8*CanvasBHeight)
+    ctx.lineTo(lBmidx+CanvasBWidth/2+1, baseXBooster-0.8*CanvasBHeight)
+    ctx.bezierCurveTo(lBmidx+CanvasBWidth/2+1, baseXBooster-0.85*CanvasBHeight, lBmidx+CanvasBWidth/2+1, baseXBooster-CanvasBHeight*0.95, lBmidx-CanvasBWidth/2+1, baseXBooster-CanvasBHeight)
+    ctx.closePath();
+    ctx.fill()
+
+    ctx.beginPath()
+    ctx.moveTo(lBmidx-CanvasBWidth/2, baseXfStage)
+    ctx.lineTo(lBmidx-CanvasBWidth/2, baseXBooster-CanvasBHeight)
+    ctx.closePath()
+    ctx.stroke()
+
+    if (showMass) { //Draws the propellant mass of the right booster
+        CanvaspMassBWidth = CanvasBWidth*bMp/bM0 //(Linear approximation)
+        ctx.fillStyle = '#7B7887' //grey
+        ctx.fillRect(lBmidx-CanvaspMassBWidth/2+1, baseXBooster-0.8*CanvasBHeight, CanvaspMassBWidth, 0.8*CanvasBHeight);
+    }
 
     baseXsStage = baseXfStage - CanvasfStageHeight
     
@@ -364,8 +455,16 @@ function draw2BAdapt(canvas, fStageHeight, fStageDiameter, sStageHeight, sStageD
     ctx.lineTo(midx-CanvassStageWidth/2+CanvassStageWidth, baseXsStage-0.8*CanvassStageHeight)
     ctx.closePath()
     ctx.stroke()
-    
+
+    if (showMass) { //Draws the propellant mass of the second stage
+        CanvaspMasssStageWidth = CanvassStageWidth*sSMp/sSM0 //(Linear approximation)
+        console.log(CanvaspMasssStageWidth)
+        ctx.fillStyle = '#6D5FB3' //violet
+        ctx.fillRect(midx-CanvaspMasssStageWidth/2, baseXsStage-0.8*CanvassStageHeight, CanvaspMasssStageWidth, 0.8*CanvassStageHeight);
+    }
+
     //Drawing of the fairing
+    ctx.fillStyle = sStageColor
     baseXfairing= baseXsStage-0.8*CanvassStageHeight
     ctx.beginPath();
     ctx.moveTo(midx-CanvassStageWidth/2, baseXfairing);

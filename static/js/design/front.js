@@ -451,9 +451,12 @@ function drawRocket() {
     stageNumber = Number(document.getElementById("stageNumber").value)
     booster = Boolean(Number(document.getElementById("boosterSelect").value))
     zoom = document.getElementById("zoomInput").value
+    showMass = document.getElementById('fuelCheckbox').checked
     if (stageNumber==1 && booster==false) {
         fSheight = document.getElementById("stage1Height").value
         fSdiameter = document.getElementById("stage1Diameter").value
+        fSM0 = document.getElementById("stage1M0").value
+        fSMp = document.getElementById("stage1Mp").value
         if (fSheight=="") {
             fSheight = 80
         }
@@ -466,15 +469,31 @@ function drawRocket() {
         else {
             fSdiameter = Number(fSdiameter)
         }
+        if (fSM0=="") {
+            fSM0 = 1000
+        }
+        else {
+            fSM0 = Number(fSM0)
+        }
+        if (fSMp=="") {
+            fSMp = 0
+        }
+        else {
+            fSMp = Number(fSMp)
+        }
         fScolor = document.getElementById("stage1Color").value
         clearCanvas(canvas)
-        draw1Adapt(canvas, fSheight, fSdiameter, zoom, fScolor)
+        draw1Adapt(canvas, fSheight, fSdiameter, zoom, fScolor, fSM0, fSMp, showMass)
     }
     else if (stageNumber == 1) {
         fSheight = document.getElementById("stage1Height").value
         fSdiameter = document.getElementById("stage1Diameter").value
         bheight = document.getElementById("boosterHeight").value
         bdiameter = document.getElementById("boosterDiameter").value
+        fSM0 = document.getElementById("stage1M0").value
+        fSMp = document.getElementById("stage1Mp").value
+        bM0  = document.getElementById("boosterM0").value
+        bMp  = document.getElementById("boosterMp").value
         if (fSheight=="") {
             fSheight = 80
         }
@@ -499,16 +518,44 @@ function drawRocket() {
         else {
             bdiameter = Number(bdiameter)
         }
+        if (fSM0=="") {
+            fSM0 = 1000
+        }
+        else {
+            fSM0 = Number(fSM0)
+        }
+        if (fSMp=="") {
+            fSMp = 0
+        }
+        else {
+            fSMp = Number(fSMp)
+        }
+        if (bM0=="") {
+            bM0 = 1000
+        }
+        else {
+            bM0 = Number(bM0)
+        }
+        if (bMp=="") {
+            bMp = 0
+        }
+        else {
+            bMp = Number(bMp)
+        }
         fScolor = document.getElementById("stage1Color").value
         bcolor = document.getElementById("boosterColor").value
         clearCanvas(canvas)
-        draw1BAdapt(canvas, fSheight, fSdiameter, bheight, bdiameter, zoom, fScolor, bcolor)
+        draw1BAdapt(canvas, fSheight, fSdiameter, bheight, bdiameter, zoom, fScolor, bcolor, fSM0, fSMp, bM0, bMp, showMass)
     }
     else if (stageNumber==2 && booster==false) {
         fSheight = document.getElementById("stage1Height").value
         fSdiameter = document.getElementById("stage1Diameter").value
         sSheight = document.getElementById("stage2Height").value
         sSdiameter = document.getElementById("stage2Diameter").value
+        fSM0 = document.getElementById("stage1M0").value
+        fSMp = document.getElementById("stage1Mp").value
+        sSM0 = document.getElementById("stage2M0").value
+        sSMp = document.getElementById("stage2Mp").value
         if (fSheight=="") {
             fSheight = 60
         }
@@ -533,10 +580,34 @@ function drawRocket() {
         else {
             sSdiameter = Number(sSdiameter)
         }
+        if (fSM0=="") {
+            fSM0 = 1000
+        }
+        else {
+            fSM0 = Number(fSM0)
+        }
+        if (fSMp=="") {
+            fSMp = 0
+        }
+        else {
+            fSMp = Number(fSMp)
+        }
+        if (sSM0=="") {
+            sSM0 = 1000
+        }
+        else {
+            sSM0 = Number(sSM0)
+        }
+        if (sSMp=="") {
+            sSMp = 0
+        }
+        else {
+            sSMp = Number(sSMp)
+        }
         fScolor = document.getElementById("stage1Color").value
         sScolor = document.getElementById("stage2Color").value
         clearCanvas(canvas)
-        draw2Adapt(canvas,fSheight, fSdiameter, sSheight, sSdiameter, zoom, fScolor, sScolor)
+        draw2Adapt(canvas,fSheight, fSdiameter, sSheight, sSdiameter, zoom, fScolor, sScolor, fSM0, fSMp, sSM0, sSMp, showMass)
     
     }
     else {
@@ -546,6 +617,12 @@ function drawRocket() {
         sSdiameter = document.getElementById("stage2Diameter").value
         bheight = document.getElementById("boosterHeight").value
         bdiameter = document.getElementById("boosterDiameter").value
+        fSM0 = document.getElementById("stage1M0").value
+        fSMp = document.getElementById("stage1Mp").value
+        bM0  = document.getElementById("boosterM0").value
+        bMp  = document.getElementById("boosterMp").value
+        sSM0 = document.getElementById("stage2M0").value
+        sSMp = document.getElementById("stage2Mp").value
         if (fSheight=="") {
             fSheight = 60
         }
@@ -582,11 +659,47 @@ function drawRocket() {
         else {
             bdiameter = Number(bdiameter)
         }
+        if (fSM0=="") {
+            fSM0 = 1000
+        }
+        else {
+            fSM0 = Number(fSM0)
+        }
+        if (fSMp=="") {
+            fSMp = 0
+        }
+        else {
+            fSMp = Number(fSMp)
+        }
+        if (bM0=="") {
+            bM0 = 1000
+        }
+        else {
+            bM0 = Number(bM0)
+        }
+        if (bMp=="") {
+            bMp = 0
+        }
+        else {
+            bMp = Number(bMp)
+        }
+        if (sSM0=="") {
+            sSM0 = 1000
+        }
+        else {
+            sSM0 = Number(sSM0)
+        }
+        if (sSMp=="") {
+            sSMp = 0
+        }
+        else {
+            sSMp = Number(sSMp)
+        }
         fScolor = document.getElementById("stage1Color").value
         sScolor = document.getElementById("stage2Color").value
         bcolor = document.getElementById("boosterColor").value
         clearCanvas(canvas)
-        draw2BAdapt(canvas, fSheight, fSdiameter, sSheight, sSdiameter, bheight, bdiameter, zoom, fScolor, sScolor, bcolor)
+        draw2BAdapt(canvas, fSheight, fSdiameter, sSheight, sSdiameter, bheight, bdiameter, zoom, fScolor, sScolor, bcolor, fSM0, fSMp, sSM0, sSMp, bM0, bMp, showMass)
     
     }
     all_info()
@@ -624,10 +737,12 @@ function cleanForm() {
     document.getElementById("boosterIsp").value = ''
     document.getElementById("boosterM0").value = ''
     document.getElementById("boosterMp").value = ''
+    document.getElementById('fuelCheckbox').checked = false
 }
 
 //Updating Listeners
 document.getElementById("zoomInput").addEventListener("input", drawRocket)
+document.getElementById("fuelCheckbox").addEventListener("change", drawRocket)
 
 document.getElementById("stage1Height").addEventListener("keyup", drawRocket)
 document.getElementById("stage1Diameter").addEventListener("keyup", drawRocket)
