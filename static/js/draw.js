@@ -1,8 +1,9 @@
+//Functions to draw the rocket according to the data entered on the html page
 function canvasSize(canvas) {
     canvas.width = document.getElementById('sidebar').getBoundingClientRect().width
     canvas.height = document.getElementById('sidebar').getBoundingClientRect().height
 }
-
+//Draw the rocket with one stage without boosters
 function draw1Adapt(canvas, fStageHeight, fStageDiameter, zoom, fStageColor, M0=0, Mp=0, showMass=false) {
     var ctx = canvas.getContext("2d"); 
     midy = canvas.height/2
@@ -73,7 +74,7 @@ function draw1Adapt(canvas, fStageHeight, fStageDiameter, zoom, fStageColor, M0=
     ctx.stroke()
 }
 
-
+//Draw the rocket with one stage and boosters
 function draw1BAdapt(canvas, fStageHeight, fStageDiameter, bHeight, bDiameter, zoom, fStageColor, bColor, fSM0=0, fSMp=0, bM0=0, bMp=0, showMass=false) {
     var ctx = canvas.getContext("2d"); 
     midy = canvas.height/2
@@ -218,7 +219,7 @@ function draw1BAdapt(canvas, fStageHeight, fStageDiameter, bHeight, bDiameter, z
     ctx.stroke()
 }
 
-
+//Draw the rocket with two stages without boosters
 function draw2Adapt(canvas, fStageHeight, fStageDiameter, sStageHeight, sStageDiameter, zoom, fStageColor, sStageColor, fSM0=0, fSMp=0, sSM0=0, sSMp=0, showMass=false) {
     var ctx = canvas.getContext("2d"); 
     midy = canvas.height/2
@@ -314,7 +315,7 @@ function draw2Adapt(canvas, fStageHeight, fStageDiameter, sStageHeight, sStageDi
     ctx.stroke()
 }
 
-
+//Draw the rocket with two stages and boosters
 function draw2BAdapt(canvas, fStageHeight, fStageDiameter, sStageHeight, sStageDiameter, bHeight, bDiameter, zoom, fStageColor, sStageColor, bColor, fSM0=0, fSMp=0, sSM0=0, sSMp=0, bM0=0, bMp=0, showMass=false) {
     var ctx = canvas.getContext("2d"); 
     midy = canvas.height/2
