@@ -235,14 +235,66 @@ long double runge_kutta_J_GTO (int step_nb, long double h, int t_0, bivector* in
 }
 
 
+//Fonction à vérifier permet de faire varier de h une commande 
+commandList* var_cList (commandList* cList, unsigned int n, unsigned int dimension, long double h) {
+    commandList* tmpList = malloc(sizeof(commandList));
+    commandList* ftmpList = tmpList;
+    commandList* tmpListC = cList;
+    int j2=0;
+    for (int j; j<n; j++) {
+        tmpList->c = tmpListC->c;
+        tmpList->t = tmpListC->t;
+        commandList* tmpList2 = malloc(sizeof(commandList));
+        tmpList->next = tmpList2;
+        tmpList = tmpList2;
+        tmpListC = cList->next;
+        j2 = j;
+    }
+    tmpList->c = cList->c + h;
+    tmpList->t = cList->t;
+    for (int j=j2; j<dimension; j++) {
+        commandList* tmpList2 = malloc(sizeof(commandList));
+        tmpList->next = tmpList2;
+        tmpList = tmpList2;
+        tmpListC = cList->next;
+        tmpList->c = tmpListC->c;
+        tmpList->t = tmpListC->t;
+    }
+    return ftmpList;
+}
+
+
+
+commandList* hgradient_computation (unsigned int dimension, long double* resh, long double j) {
+    commandList* hgrad = malloc(sizeof(commandList));
+    commandList* hgrad1 = hgrad;
+    for (int i=0; i<dimension; i++) {
+        hgrad->c = resh[i] - j;
+        commandList* hgrad_tmp = malloc(sizeof(commandList));
+        hgrad->next = hgrad_tmp;
+        hgrad = hgrad_tmp;
+    }
+    return hgrad1;
+} 
+
+
+
+void cList_modPi (unsigned int dimension, commandList* X) {
+    for (int i=0; i<dimension; i++) {
+        X->c = fmodl(X->c, M_PI);
+        X = X->next;
+    }
+}
+
+
 commandList* gradient_descent (commandList* cList0, unsigned int dimension, unsigned int gd_step_nb, 
-                                                    long double threshold, int rk_step_nb, long double h, int t_0, 
+                                                    long double threshold, int rk_step_nb, long double h0, int t_0, 
                                                                         bivector* init_state, rocket_data* rocketD) {
-    //Initialization
+    //Initializations
     commandList* X = cList0; 
     rocketD->cList = X;
     commandList* ccList;
-    long double h = 1/10;
+    long double h = 1/100;
     commandList* hgradient = malloc(sizeof(commandList));
     long double pre_j = 1;
     long double j = runge_kutta_J_GTO(rk_step_nb, h, t_0, init_state, rocketD);
@@ -259,18 +311,19 @@ commandList* gradient_descent (commandList* cList0, unsigned int dimension, unsi
                     resh[k] = runge_kutta_J_GTO(rk_step_nb, h, t_0, init_state, rocketD);
                 }
 
-                //Cacluler hgradient
+                commandList* hgradient = hgradient_computation(dimension, resh, j);
                 X = lin_cList(1, X, -1, hgradient, dimension);
                 rocketD->cList = X;
                 j = runge_kutta_J_GTO(rk_step_nb, h, t_0, init_state, rocketD);
                 i++;
             }
+            //We've been too far
             j = pre_j;
             X = lin_cList(1, X, 1, hgradient, dimension);
             h /= 2;
             i--;
         }
-        cList_modPi(X);
+        cList_modPi(dimension, X);
         j = runge_kutta_J_GTO(rk_step_nb, h, t_0, init_state, rocketD);
     }
     else {
@@ -279,32 +332,6 @@ commandList* gradient_descent (commandList* cList0, unsigned int dimension, unsi
     return X;
 }
 
-//Fonction à vérifier permet de faire varier de h une commande 
-commandList* var_cList (commandList* cList, unsigned int n, unsigned int dimension, long double h) {
-    commandList* tmpList = malloc(sizeof(commandList));
-    commandList* ftmpList = tmpList;
-    commandList* tmpListC = cList;
-    unsigned int j=0;
-    for (j; j<n; j++) {
-        tmpList->c = tmpListC->c;
-        tmpList->t = tmpListC->t;
-        commandList* tmpList2 = malloc(sizeof(commandList));
-        tmpList->next = tmpList2;
-        tmpList = tmpList2;
-        tmpListC = cList->next;
-    }
-    tmpList->c = cList->c + h;
-    tmpList->t = cList->t;
-    for (j; j<dimension; j++) {
-        commandList* tmpList2 = malloc(sizeof(commandList));
-        tmpList->next = tmpList2;
-        tmpList = tmpList2;
-        tmpListC = cList->next;
-        tmpList->c = tmpListC->c;
-        tmpList->t = tmpListC->t;
-    }
-    return ftmpList;
-}
 /*global T3 r0
     X = X0;
     h = 10^(-1);

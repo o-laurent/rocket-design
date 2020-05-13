@@ -226,7 +226,7 @@ def genetic_optimizer(POP_SIZE, DIM, MAX_ITER, RATE, dt=1):
                         child[j] = mother[j]
                 children_M[(i-doubles+1)/2] = child
             else:
-                doubles = doubles +2
+                doubles += 2
                 np.append(choice_M, np.random.randint(1, POP_SIZE*4+1, 2))
             i += 2
 
@@ -245,7 +245,7 @@ def genetic_optimizer(POP_SIZE, DIM, MAX_ITER, RATE, dt=1):
         v_j = j_M
     
     #On garde le meilleur quart que l'on am�liore au maximum
-    comp = max(mink(v_j, POP_SIZE))
+    comp = np.partition(v_j.flatten(), POP_SIZE)[POP_SIZE]
     final_parents_j = np.zeros(POP_SIZE)
     final_parents_M = np.zeros((POP_SIZE, DIM))
     i = 0
