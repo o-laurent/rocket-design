@@ -1,5 +1,6 @@
 var names 
 updateNames()
+document.getElementById("zoomInput").value = 140
 
 async function updateNames() {
     names = await getNames()
@@ -7,23 +8,28 @@ async function updateNames() {
     fillRocketSelector('rocketSelectorR')
 }
 
+
 function loadNFill_L() {
     //triggers LoadNFill with 'L' as argument
-    loadNFill_A('L')
+    canvas = document.getElementById("canvasL")
+    loadNFill_A('L', canvas)
 }
+
 
 function loadNFill_R() {
     //triggers loadNFill with 'R' as argument
-    loadNFill_A('R')
+    canvas = document.getElementById("canvasR")
+    loadNFill_A('R', canvas)
 }
-async function loadNFill_A(add) {
+
+
+async function loadNFill_A(add, canvas) {
     //Loading a rocket by name and filling its information
     cleanFields(add)
     name = document.getElementById('rocketSelector'+add).value
     rocket = await getRocketbyName(name)
     i = Object.keys(rocket["Stage number"])[0]
     stageNumber = rocket["Stage number"][i]
-    console.log(rocket)
     booster = rocket["B Isp [s]"][i] != null
     document.getElementById("stageNumber"+add).textContent = stageNumber
     document.getElementById("boosters"+add).textContent = booster
@@ -101,30 +107,19 @@ async function loadNFill_A(add) {
     }
     popup_container = document.getElementById("load-toggle"+add)
     popup_container.style = "display: hidden;"
-    /*if (document.getElementById('stageNumber'+add).value=='2') {
-        document.getElementById('secondStageDiv'+add).style.display = 'block';
-    }
-    else {
-        document.getElementById('secondStageDiv'+add).style.display = 'none';
-    }
-    if (document.getElementById('boosterSelect'+add).value=='1') {
-        document.getElementById('boosterDiv'+add).style.display = 'block';
-    }
-    else {
-        document.getElementById('boosterDiv'+add).style.display = 'none';
-    }*/
-    drawRocket_A(add)
+    drawRocket_A(add, canvas)
 }
 
-function drawRocket_A(add) {
-    var canvas = document.getElementById("canvas"+add);
+function drawRocket_A(add, canvas) {
     stageNumber = Number(document.getElementById("stageNumber"+add).textContent)
-    booster = document.getElementById("boosters"+add).textContent == "true"
-    //zoom = document.getElementById("zoomInput"+add).textContent
-    zoom = 100
+    booster = document.getElementById("boosters"+add).textContent=='1'
+    zoom = document.getElementById("zoomInput").value
+    showMass = document.getElementById('fuelCheckbox').checked
     if (stageNumber==1 && booster==false) {
         fSheight = document.getElementById("stage1Height"+add).textContent
         fSdiameter = document.getElementById("stage1Diameter"+add).textContent
+        fSM0 = document.getElementById("stage1M0"+add).textContent
+        fSMp = document.getElementById("stage1Mp"+add).textContent
         if (fSheight=="") {
             fSheight = 80
         }
@@ -137,15 +132,31 @@ function drawRocket_A(add) {
         else {
             fSdiameter = Number(fSdiameter)
         }
+        if (fSM0=="") {
+            fSM0 = 1000
+        }
+        else {
+            fSM0 = Number(fSM0)
+        }
+        if (fSMp=="") {
+            fSMp = 0
+        }
+        else {
+            fSMp = Number(fSMp)
+        }
         fScolor = document.getElementById("stage1Color"+add).textContent
         clearCanvas(canvas)
-        draw1Adapt(canvas, fSheight, fSdiameter, zoom, fScolor)
+        draw1Adapt(canvas, fSheight, fSdiameter, zoom, fScolor, fSM0, fSMp, showMass)
     }
     else if (stageNumber == 1) {
         fSheight = document.getElementById("stage1Height"+add).textContent
         fSdiameter = document.getElementById("stage1Diameter"+add).textContent
         bheight = document.getElementById("boosterHeight"+add).textContent
         bdiameter = document.getElementById("boosterDiameter"+add).textContent
+        fSM0 = document.getElementById("stage1M0"+add).textContent
+        fSMp = document.getElementById("stage1Mp"+add).textContent
+        bM0  = document.getElementById("boosterM0"+add).textContent
+        bMp  = document.getElementById("boosterMp"+add).textContent
         if (fSheight=="") {
             fSheight = 80
         }
@@ -170,16 +181,44 @@ function drawRocket_A(add) {
         else {
             bdiameter = Number(bdiameter)
         }
+        if (fSM0=="") {
+            fSM0 = 1000
+        }
+        else {
+            fSM0 = Number(fSM0)
+        }
+        if (fSMp=="") {
+            fSMp = 0
+        }
+        else {
+            fSMp = Number(fSMp)
+        }
+        if (bM0=="") {
+            bM0 = 1000
+        }
+        else {
+            bM0 = Number(bM0)
+        }
+        if (bMp=="") {
+            bMp = 0
+        }
+        else {
+            bMp = Number(bMp)
+        }
         fScolor = document.getElementById("stage1Color"+add).textContent
         bcolor = document.getElementById("boosterColor"+add).textContent
         clearCanvas(canvas)
-        draw1BAdapt(canvas, fSheight, fSdiameter, bheight, bdiameter, zoom, fScolor, bcolor)
+        draw1BAdapt(canvas, fSheight, fSdiameter, bheight, bdiameter, zoom, fScolor, bcolor, fSM0, fSMp, bM0, bMp, showMass)
     }
     else if (stageNumber==2 && booster==false) {
         fSheight = document.getElementById("stage1Height"+add).textContent
         fSdiameter = document.getElementById("stage1Diameter"+add).textContent
         sSheight = document.getElementById("stage2Height"+add).textContent
         sSdiameter = document.getElementById("stage2Diameter"+add).textContent
+        fSM0 = document.getElementById("stage1M0"+add).textContent
+        fSMp = document.getElementById("stage1Mp"+add).textContent
+        sSM0 = document.getElementById("stage2M0"+add).textContent
+        sSMp = document.getElementById("stage2Mp"+add).textContent
         if (fSheight=="") {
             fSheight = 60
         }
@@ -204,14 +243,34 @@ function drawRocket_A(add) {
         else {
             sSdiameter = Number(sSdiameter)
         }
+        if (fSM0=="") {
+            fSM0 = 1000
+        }
+        else {
+            fSM0 = Number(fSM0)
+        }
+        if (fSMp=="") {
+            fSMp = 0
+        }
+        else {
+            fSMp = Number(fSMp)
+        }
+        if (sSM0=="") {
+            sSM0 = 1000
+        }
+        else {
+            sSM0 = Number(sSM0)
+        }
+        if (sSMp=="") {
+            sSMp = 0
+        }
+        else {
+            sSMp = Number(sSMp)
+        }
         fScolor = document.getElementById("stage1Color"+add).textContent
         sScolor = document.getElementById("stage2Color"+add).textContent
         clearCanvas(canvas)
-        console.log(sSheight)
-        console.log(fSdiameter)
-        console.log(sSheight)
-        console.log(sSdiameter)
-        draw2Adapt(canvas, Number(fSheight), Number(fSdiameter), Number(sSheight), Number(sSdiameter), Number(zoom), fScolor, sScolor)
+        draw2Adapt(canvas,fSheight, fSdiameter, sSheight, sSdiameter, zoom, fScolor, sScolor, fSM0, fSMp, sSM0, sSMp, showMass)
     
     }
     else {
@@ -221,6 +280,12 @@ function drawRocket_A(add) {
         sSdiameter = document.getElementById("stage2Diameter"+add).textContent
         bheight = document.getElementById("boosterHeight"+add).textContent
         bdiameter = document.getElementById("boosterDiameter"+add).textContent
+        fSM0 = document.getElementById("stage1M0"+add).textContent
+        fSMp = document.getElementById("stage1Mp"+add).textContent
+        bM0  = document.getElementById("boosterM0"+add).textContent
+        bMp  = document.getElementById("boosterMp"+add).textContent
+        sSM0 = document.getElementById("stage2M0"+add).textContent
+        sSMp = document.getElementById("stage2Mp"+add).textContent
         if (fSheight=="") {
             fSheight = 60
         }
@@ -257,11 +322,47 @@ function drawRocket_A(add) {
         else {
             bdiameter = Number(bdiameter)
         }
+        if (fSM0=="") {
+            fSM0 = 1000
+        }
+        else {
+            fSM0 = Number(fSM0)
+        }
+        if (fSMp=="") {
+            fSMp = 0
+        }
+        else {
+            fSMp = Number(fSMp)
+        }
+        if (bM0=="") {
+            bM0 = 1000
+        }
+        else {
+            bM0 = Number(bM0)
+        }
+        if (bMp=="") {
+            bMp = 0
+        }
+        else {
+            bMp = Number(bMp)
+        }
+        if (sSM0=="") {
+            sSM0 = 1000
+        }
+        else {
+            sSM0 = Number(sSM0)
+        }
+        if (sSMp=="") {
+            sSMp = 0
+        }
+        else {
+            sSMp = Number(sSMp)
+        }
         fScolor = document.getElementById("stage1Color"+add).textContent
         sScolor = document.getElementById("stage2Color"+add).textContent
         bcolor = document.getElementById("boosterColor"+add).textContent
         clearCanvas(canvas)
-        draw2BAdapt(canvas, fSheight, fSdiameter, sSheight, sSdiameter, bheight, bdiameter, zoom, fScolor, sScolor, bcolor)
+        draw2BAdapt(canvas, fSheight, fSdiameter, sSheight, sSdiameter, bheight, bdiameter, zoom, fScolor, sScolor, bcolor, fSM0, fSMp, sSM0, sSMp, bM0, bMp, showMass)
     
     }
 }
@@ -299,3 +400,8 @@ function cleanFields(add) {
     document.getElementById("boosterM0"+add).textContent = ''
     document.getElementById("boosterMp"+add).textContent = ''
 }
+
+document.getElementById("zoomInput").addEventListener("input", loadNFill_R)
+document.getElementById("fuelCheckbox").addEventListener("change", loadNFill_R)
+document.getElementById("zoomInput").addEventListener("input", loadNFill_L)
+document.getElementById("fuelCheckbox").addEventListener("change", loadNFill_L)
