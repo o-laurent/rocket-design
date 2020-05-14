@@ -49,6 +49,7 @@ async function getRocketbyName(name) {
 
 async function addRocket() {
     rocket = getRocketInfo()
+    console.log(rocket)
     const param = {
         method : 'POST',
         mode: 'cors',

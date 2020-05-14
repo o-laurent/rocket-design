@@ -2,6 +2,7 @@
 import pandas as pd
 import rocket_module as rkt_module
 from flask import Flask, render_template, request
+import csv
 
 app = Flask(__name__)
 
@@ -13,7 +14,7 @@ def start():
     return render_template("index.html")
 
 @app.route('/designrocket.html')
-@app.route('/addrodesignrocketcket')
+@app.route('/designrocket')
 def designrocket():
     load_db()
     return render_template("designrocket.html")
@@ -28,14 +29,15 @@ def comprocket():
 @app.route('/optimizer.html')
 def trajectory():
     load_db()
-    return render_template("optimizer.html")
+    return render_template("optimizing.html")
 
 @app.route('/api/newrocket', methods = ['POST'])
 def api_newrocket():
     print(request.is_json)
     rocket = request.get_json()
-    add_rocket_db(rocket)
-    return None, 200
+    print(rocket['rocket'])
+    add_rocket_db(rocket['rocket'])
+    return pd.DataFrame().to_json(), 200
 
 @app.route('/api/rockets/names', methods = ['GET'])
 def api_rocket_names():
@@ -70,30 +72,80 @@ def get_rocket_byname(name: str)->list:
     return rocket_db.loc[rocket_db['Name'] == name]
 
 def add_rocket_db(rocket):
-    name = input('Enter the name of the rocket: ')
-    year = input('Enter the launch year of the rocket: ')
-    country = input('Enter the country which builds the rocket: ')
-    mission = input('Enter the rocket mission: ') 
-    stage_number = int(input('Enter the number of stages: '))
-    height = int(input('Enter the total height of the rocket: '))
-    diameter = int(input('Enter the total diameter of the rocket: '))
-    lift_off_mass = int(input('Enter the lift-off mass of the rocket: '))
-    payload_mass = int(input('Enter the paiload mass of the rocket: '))
-    if stage_number >= 1:
-        S1length = int(input('Enter the length of the first stage: '))
-        S1diameter = int(input('Enter the diameter of the first stage: '))
-        S1thrust = int(input('Enter the thrust of the first stage: '))
-        S1isp = int(input('Enter the ISP of the first stage: '))
-        S1m_0 = int(input('Enter the initial mass of the first stage: '))
-        S1m_p = int(input('Enter the propellant mass of the first stage: '))
-    if stage_number >= 2:
-        S2length = int(input('Enter the length of the second stage: '))
-        S2diameter = int(input('Enter the diameter of the second stage: '))
-        S2thrust = int(input('Enter the thrust of the second stage: '))
-        S2isp = int(input('Enter the ISP of the second stage: '))
-        S2m_0 = int(input('Enter the initial mass of the second stage: '))
-        S2m_p = int(input('Enter the propellant mass of the second stage: '))
-        data = pd.DataFrame([[name,
+    print(rocket)
+    name = rocket["Name"]
+    year = rocket["Year"]
+    country = rocket["Country"]
+    mission = rocket["Mission"]
+    stage_number = rocket["Stage_number"]
+    boosters = rocket["Boosters"]
+    height = rocket["Height"]
+    diameter = rocket["Diameter"]
+    lift_off_mass = rocket["Lift_off_mass"]
+    payload_mass = rocket["Payload_mass"]
+    S1length = rocket["fSheight"]
+    S1diameter = rocket["fSdiameter"]
+    S1thrust = rocket["fSthrust"]
+    S1isp = rocket["fSisp"]
+    S1m_0 = rocket["fSm0"]
+    S1m_p = rocket["fSmp"]
+    fscolor = rocket["fScolor"]
+    print(S1length)
+    print(S1diameter)
+    print(S1thrust)
+    print(S1isp)
+    print(S1m_0)
+    print(S1m_p)
+    print(fscolor)
+    if boosters:
+        blength = rocket["bheight"]
+        bdiameter = rocket["bdiameter"]
+        bthrust = rocket["bthrust"]
+        bisp = rocket["bisp"]
+        bm_0 = rocket["bm0"]
+        bm_p = rocket["bmp"]
+        bcolor = rocket["bcolor"]
+        print(blength)
+        print(bdiameter)
+        print(bthrust)
+        print(bisp)
+        print(bm_0)
+        print(bm_p)
+        print(bcolor)
+    else:
+        blength = ""
+        bdiameter = ""
+        bthrust = ""
+        bisp = ""
+        bm_0 = ""
+        bm_p = ""
+        bcolor = ""
+
+    if stage_number == 2:
+        S2length = rocket["fSheight"]
+        S2diameter = rocket["fSdiameter"]
+        S2thrust = rocket["fSthrust"]
+        S2isp = rocket["fSisp"]
+        S2m_0 = rocket["fSm0"]
+        S2m_p = rocket["fSmp"]
+        sscolor = rocket["sScolor"]
+        print(S2length)
+        print(S2diameter)
+        print(S2thrust)
+        print(S2isp)
+        print(S2m_0)
+        print(S2m_p)
+        print(sscolor)
+    else:
+        S2length = ""
+        S2diameter = ""
+        S2thrust = ""
+        S2isp = ""
+        S2m_0 = ""
+        S2m_p = ""
+        sscolor = ""
+
+    data = pd.DataFrame([[name,
                             year,
                             country,
                             mission,
@@ -113,7 +165,16 @@ def add_rocket_db(rocket):
                             S2thrust,
                             S2isp,
                             S2m_0,
-                            S2m_p]], columns = ['Name',
+                            S2m_p,
+                            blength,
+                            bdiameter,
+                            bthrust,
+                            bisp,
+                            bm_0,
+                            bm_p,
+                            fscolor,
+                            bcolor,
+                            sscolor]], columns = ['Name',
                         'Year',
                         'Country',
                         'Mission',
@@ -122,16 +183,25 @@ def add_rocket_db(rocket):
                         'Diameter [m]',
                         'Lift-off mass [tons]',
                         'Payload mass [kg]',
-                        'S1 length [m]',
+                        'S1 height [m]',
                         'S1 diameter [m]',
                         'S1 thrust [kN]','S1 Isp [s]',
-                        'S1 M0 [tons]',
-                        'S1 Mp [tons]',
-                        'S2 length [m]',
+                        'S1 m0 [tons]',
+                        'S1 mp [tons]',
+                        'B height [m]',
+                        'B diameter [m]',
+                        'B thrust [kN]','B Isp [s]',
+                        'B m0 [tons]',
+                        'B mp [tons]',
+                        'S2 height [m]',
                         'S2 diameter [m]',
                         'S2 thrust [kN]',
                         'S2 Isp [s]',
-                        'S2 M0 [tons]',
-                        'S2 Mp [tons]'])
+                        'S2 m0 [tons]',
+                        'S2 mp [tons]',
+                        'S1 color',
+                        'Booster color',
+                        'S2 color'])
+    #print(data)
     new_rocket = rkt_module.rocket(data.loc[0,:])
     new_rocket.add2db()

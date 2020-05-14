@@ -1,6 +1,7 @@
 #Importing modules
 import pandas as pd
 import unittest
+import csv
 
 #Introducing new errors
 class InputError(Exception):
@@ -35,21 +36,29 @@ class rocket:
         self.mission = data['Mission']
         self.stage_number = data['Stage number']
         self.height = data['Height [m]']
-        self.diameter = data['Diameter [m]']
         self.lift_off_mass = data['Lift-off mass [tons]']
         self.payload_mass = data['Payload mass [kg]']
-        self.S1length = data['S1 length [m]']
+        self.S1length = data['S1 height [m]']
         self.S1diameter = data['S1 diameter [m]']
         self.S1thrust = data['S1 thrust [kN]']
         self.S1isp = data['S1 Isp [s]']
-        self.S1m_0 = data['S1 M0 [tons]']
-        self.S1m_p = data['S1 Mp [tons]']
-        self.S2length = data['S2 length [m]']
+        self.S1m_0 = data['S1 m0 [tons]']
+        self.S1m_p = data['S1 mp [tons]']
+        self.blength = data['B height [m]']
+        self.bdiameter = data['B diameter [m]']
+        self.bthrust = data['B thrust [kN]']
+        self.bisp = data['B Isp [s]']
+        self.bm_0 = data['B m0 [tons]']
+        self.bm_p = data['B mp [tons]']
+        self.S2length = data['S2 height [m]']
         self.S2diameter = data['S2 diameter [m]']
         self.S2thrust = data['S2 thrust [kN]']
         self.S2isp = data['S2 Isp [s]']
-        self.S2m_0 = data['S2 M0 [tons]']
-        self.S2m_p = data['S2 Mp [tons]']
+        self.S2m_0 = data['S2 m0 [tons]']
+        self.S2m_p = data['S2 mp [tons]']
+        self.S1color = data['S1 color']
+        self.Bcolor = data['Booster color']
+        self.S2color = data['S2 color']
 
     def getName(self):
         return self.name
@@ -61,13 +70,13 @@ class rocket:
         return [self.S2length, self.S2diameter] 
 
     def add2db(self):
+        print('adding')
         data = pd.DataFrame([[self.name,
                         self.year,
                         self.country,
                         self.mission,
                         self.stage_number,
                         self.height,
-                        self.diameter,
                         self.lift_off_mass,
                         self.payload_mass,
                         self.S1length,
@@ -76,32 +85,52 @@ class rocket:
                         self.S1isp,
                         self.S1m_0,
                         self.S1m_p,
+                        self.blength,
+                        self.bdiameter,
+                        self.bthrust,
+                        self.bisp,
+                        self.bm_0,
+                        self.bm_p,
                         self.S2length,
                         self.S2diameter,
                         self.S2thrust,
                         self.S2isp,
                         self.S2m_0,
-                        self.S2m_p]], columns = ['Name',
-                    'Year',
-                    'Country',
-                    'Mission',
-                    'Stage number',
-                    'Height [m]',
-                    'Diameter [m]',
-                    'Lift-off mass [tons]',
-                    'Payload mass [kg]',
-                    'S1 length [m]',
-                    'S1 diameter [m]',
-                    'S1 thrust [kN]','S1 Isp [s]',
-                    'S1 M0 [tons]',
-                    'S1 Mp [tons]',
-                    'S2 length [m]',
-                    'S2 diameter [m]',
-                    'S2 thrust [kN]',
-                    'S2 Isp [s]',
-                    'S2 M0 [tons]',
-                    'S2 Mp [tons]'])
-        data.to_csv('rocket_database.csv', header=None, mode='a', index=False)
+                        self.S2m_p,
+                        self.S1color,
+                        self.Bcolor,
+                        self.S2color]], columns = ['Name',
+                        'Year',
+                        'Country',
+                        'Mission',
+                        'Stage number',
+                        'Height [m]',
+                        'Lift-off mass [tons]',
+                        'Payload mass [kg]',
+                        'S1 height [m]',
+                        'S1 diameter [m]',
+                        'S1 thrust [kN]','S1 Isp [s]',
+                        'S1 m0 [tons]',
+                        'S1 mp [tons]',
+                        'B height [m]',
+                        'B diameter [m]',
+                        'B thrust [kN]','B Isp [s]',
+                        'B m0 [tons]',
+                        'B mp [tons]',
+                        'S2 height [m]',
+                        'S2 diameter [m]',
+                        'S2 thrust [kN]',
+                        'S2 Isp [s]',
+                        'S2 m0 [tons]',
+                        'S2 mp [tons]',
+                        'S1 color',
+                        'Booster color',
+                        'S2 color'])
+        print(data)
+
+        data1 = pd.read_csv('rocket_database.csv')
+        data = pd.concat([data1, data])
+        data.to_csv('rocket_database.csv', index=False)
 
 
 class trajectory:

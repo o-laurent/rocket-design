@@ -257,12 +257,13 @@ function getRocketInfo() {
         fColor = document.getElementById("stage1Color").value
 
         rocket = {
-            Name:name,
+            Name: name,
             Year: year,
             Country: country,
             Mission: mission,
             Stage_number:stageNumber,
             Height: height,
+            Diameter: fSdiameter,
             Lift_off_mass: lift_mass,
             Payload_mass: payload_mass,
             fSheight: fSheight,
@@ -285,7 +286,7 @@ function getRocketInfo() {
             sSmp: '',
             fScolor: fSColor,
             bcolor: '',
-            scColor: ''
+            sScolor: ''
         }
     }
     else if (stageNumber == 1){ //If 1 Stage and boosters 
@@ -306,12 +307,14 @@ function getRocketInfo() {
         bColor = document.getElementById("boosterColor").value
 
         rocket = {
-            Name:name,
+            Name: name,
             Year: year,
             Country: country,
             Mission: mission,
-            Stage_number:stageNumber,
+            Stage_number: stageNumber,
+            Boosters: booster,
             Height: height,
+            Diameter: fSdiameter,
             Lift_off_mass: lift_mass,
             Payload_mass: payload_mass,
             fSheight: fSheight,
@@ -352,7 +355,7 @@ function getRocketInfo() {
         sSisp = document.getElementById("stage2Isp").value
         sSm0 = document.getElementById("stage2M0").value
         sSmp = document.getElementById("stage2Mp").value
-        sSColor = document.getElementById("stage2Color").value
+        sScolor = document.getElementById("stage2Color").value
         
         rocket = {
             Name:name,
@@ -360,7 +363,9 @@ function getRocketInfo() {
             Country: country,
             Mission: mission,
             Stage_number:stageNumber,
+            Boosters: booster,
             Height: height,
+            Diameter: fSdiameter,
             Lift_off_mass: lift_mass,
             Payload_mass: payload_mass,
             fSheight: fSheight,
@@ -383,7 +388,7 @@ function getRocketInfo() {
             sSmp: sSmp,
             fScolor: fSColor,
             bcolor: '',
-            sSColor: sSColor
+            sScolor: sScolor
         }
     }
     else { //If 2 Stages and boosters
@@ -401,7 +406,7 @@ function getRocketInfo() {
         sSisp = document.getElementById("stage2Isp").value
         sSm0 = document.getElementById("stage2M0").value
         sSmp = document.getElementById("stage2Mp").value
-        sSColor = document.getElementById("stage2Color").value
+        sScolor = document.getElementById("stage2Color").value
 
         bheight = document.getElementById("boosterHeight").value
         bdiameter = document.getElementById("boosterDiameter").value
@@ -417,11 +422,13 @@ function getRocketInfo() {
             Country: country,
             Mission: mission,
             Stage_number:stageNumber,
+            Boosters: booster,
             Height: height,
             Lift_off_mass: lift_mass,
             Payload_mass: payload_mass,
             fSheight: fSheight,
             fSdiameter: fSdiameter,
+            Diameter: fSdiameter,
             fSthrust: fSthrust,
             fSisp: fSisp,
             fSm0: fSM0,
