@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include "verlet.h"
 #include "forces.h"
-
+//function that gives the new weight
 pointVerlet* new_m(pointVerlet* u,double M){
     u->m=M;
 }
-
+//function that gives the new position
 pointVerlet* new_position(pointVerlet* u){
     pointVerlet* v;
     v->old_x=u->x;
@@ -15,7 +15,7 @@ pointVerlet* new_position(pointVerlet* u){
     v->y= 2*u->y - u->old_y + u->ay;
     return(v);
 }
-
+//function that gives the new acceleration
 pointVerlet* new_acceleration(pointVerlet* u){
     vector* r;
     r->x=u->x;
