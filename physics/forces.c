@@ -313,7 +313,7 @@ commandList* gradient_descent (commandList* cList0, unsigned int dimension, unsi
     rocketD->cList = X;
     commandList* ccList;
     commandList* hgradient;
-    long double h = 1.0/100;
+    long double h = 1.0/10;
     long double pre_j = 1;
     long double j = runge_kutta_J_GTO(rk_step_nb, step_length, t_0, init_state, rocketD);
     /*printf("j = %Lf\n", j);
@@ -325,7 +325,8 @@ commandList* gradient_descent (commandList* cList0, unsigned int dimension, unsi
         //printf("h - thres %Lf, i %d, gd_step_nb %d", h - threshold, i, gd_step_nb);
         while (h>threshold && i<gd_step_nb) {
             //printf("in while");
-            while (j<=pre_j && j>threshold && i<gd_step_nb) {
+            while (j<=pre_j && h>threshold && i<gd_step_nb) {
+                //printf("i = %d\n",i);
                 pre_j = j;
                 for (unsigned int k = 0; k<dimension; k++) {
                     //printf("k=%d\n", k);
@@ -349,17 +350,22 @@ commandList* gradient_descent (commandList* cList0, unsigned int dimension, unsi
                 //printf("grad1\n");
             }
             //printf("grad2\n");
-            if (i<gd_step_nb) {
+            if (i<=gd_step_nb && j>pre_j && h>threshold) {
                 //printf("in if");
-                i++;
                 //We've been too far
                 j = pre_j;
                 pre_j = 1; 
                 //cList_modPi(dimension, X);
                 //printf("grad\n");
                 X = lin_cList(1, X, 1, hgradient, dimension); //Come back to the previous point
+                rocketD->cList = X;
+                j = runge_kutta_J_GTO(rk_step_nb, step_length, t_0, init_state, rocketD);
+                //printf("fonctionnelle = %Lf\n", j);
                 h = h/2; //reducing h
                 i--;
+                if (i==gd_step_nb) {
+                    i--;
+                }
             }
         }
         //printf("X1 %p\n", X);
@@ -370,50 +376,9 @@ commandList* gradient_descent (commandList* cList0, unsigned int dimension, unsi
         j = runge_kutta_J_GTO(rk_step_nb, step_length, t_0, init_state, rocketD);
     }
     else {
-        printf("Erreur; j trop grand pour une amélioration intéressante");
+        //printf("Erreur; j trop grand pour une amélioration intéressante\n");
+        -1;
     }
-    printf("j=%Lf", j);
+    //printf("j=%Lf\n", j);
     return X;
 }
-
-/*global T3 r0
-    X = X0;
-    h = 10^(-1);
-    hgradient = 1;
-    pre_q = 1;
-    res = euler(T3+1,[0;r0;0;-1700/3.6], 0, 5, X(1), X(2), X(3), X(4), X(5), X(6));
-    q = Q(res(1:2,end), res(3:4,end));
-    i = 0;
-    if q < 1
-        while  h > 10^(-50) && i < stepNb
-            while q <= pre_q && h > 10^(-50) && i < stepNb
-                i
-                pre_q = q;
-                resh1 = euler(T3+1, [0;r0;0;-1700/3.6], 0, 5, X(1)+h, X(2), X(3), X(4), X(5), X(6));
-                resh2 = euler(T3+1, [0;r0;0;-1700/3.6], 0, 5, X(1), X(2)+h, X(3), X(4), X(5), X(6));
-                resh3 = euler(T3+1, [0;r0;0;-1700/3.6], 0, 5, X(1), X(2), X(3)+h, X(4), X(5), X(6));
-                resh4 = euler(T3+1, [0;r0;0;-1700/3.6], 0, 5, X(1), X(2), X(3), X(4)+h, X(5), X(6));
-                resh5 = euler(T3+1, [0;r0;0;-1700/3.6], 0, 5, X(1), X(2), X(3), X(4), X(5)+h, X(6));
-                resh6 = euler(T3+1, [0;r0;0;-1700/3.6], 0, 5, X(1), X(2), X(3), X(4), X(5), X(6)+h);
-                hgradient = [(Q(resh1(1:2,end), resh1(3:4,end)) - Q(res(1:2,end), res(3:4,end))) (Q(resh2(1:2,end),resh2(3:4,end)) - Q(res(1:2,end),res(3:4,end))) (Q(resh3(1:2,end),resh3(3:4,end)) - Q(res(1:2,end),res(3:4,end))) (Q(resh4(1:2,end),resh4(3:4,end)) - Q(res(1:2,end),res(3:4,end))) (Q(resh5(1:2,end),resh5(3:4,end)) - Q(res(1:2,end),res(3:4,end))) (Q(resh6(1:2,end),resh6(3:4,end)) - Q(res(1:2,end),res(3:4,end)))] ;
-                X = X - hgradient';
-                res = euler(T3+1,[0;r0;0;-1700/3.6], 0, 5, X(1), X(2), X(3), X(4), X(5), X(6));
-                q = Q(res(1:2,end), res(3:4,end));
-                i = i + 1;
-            end
-            q = pre_q;
-            X = X + hgradient';
-            h = h/2;
-            i = i-1;
-        end 
-        for i = 1:6
-            if X(i)>pi | X(i)<-pi 
-                X(i) = mod(X(i), 2*pi)-pi;
-            end
-        end
-        res = euler(T3+1,[0;r0;0;-1700/3.6], 0, 5, X(1), X(2), X(3), X(4), X(5), X(6));
-        q = Q(res(1:2,end), res(3:4,end));
-    else
-        -1;
-    end
-end*/
