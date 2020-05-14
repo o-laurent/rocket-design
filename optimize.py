@@ -57,15 +57,10 @@ except :
     forces = ctypes.CDLL(os.path.abspath('./physics.so'))
     
 #Setting the right response types
-forces.norm.restype = ctypes.c_longdouble
-forces.command.restype = ctypes.c_longdouble
-forces.weight.restype = ctypes.POINTER(vector)
-forces.d_isp.restype = ctypes.c_longdouble
-forces.thrust.restype = ctypes.POINTER(vector)
-forces.mass.restype = ctypes.c_longdouble
-forces.forces.restype = ctypes.POINTER(bivector)
 forces.runge_kutta4.restype = ctypes.POINTER(stockBivectors)
 forces.runge_kutta_J_GTO.restype = ctypes.c_longdouble
+forces.gradient_descent.restype = ctypes.POINTER(commandList)
+
 
 #Utilities for linked list 
 def gen_commandList(commands, times):
@@ -146,30 +141,36 @@ def random_optimizer(N=100000):
     stock_Lists = []
     stock_J = []
     for step in range(N):
-        if step%100==0:
+        if step%1000==0:
             print(step)
         ArianeD.cList, commands, times = random_cList(3)
         J = forces.runge_kutta_J_GTO(ctypes.c_int(300), ctypes.c_longdouble(5), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(ArianeD))
         stock_Lists.append([commands, times])
         stock_J.append(J)
-    print(min(stock_J))
+    print("A minimum has been found ! Its value is ", min(stock_J))
     i = np.argmin(stock_J)
-    ArianeD.cList = gen_commandList(stock_Lists[i][0], stock_Lists[i][1])
+    cList = forces.gradient_descent(gen_commandList(stock_Lists[i][0], stock_Lists[i][1]), ctypes.c_uint(3), ctypes.c_uint(100000), ctypes.c_longdouble(10**(-10)), ctypes.c_int(300), ctypes.c_longdouble(5), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(ArianeD))
+    print_cList(gen_commandList(stock_Lists[i][0], stock_Lists[i][1]))
+    print_cList(cList)
+    ArianeD.cList = cList
+    j = forces.runge_kutta_J_GTO(ctypes.c_int(300), ctypes.c_longdouble(5), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(ArianeD))
+    print("A second minimum has been found ! Its value is ", j)
     pstock = forces.runge_kutta4(ctypes.c_int(10*300), ctypes.c_longdouble(5), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(ArianeD))
     stock = read_stock(pstock)
     stx = list(map(lambda x : x[0], stock))
     sty = list(map(lambda x : x[1], stock))
     theta = np.linspace(0, 2*np.pi, 100)
-    """r = 6371000
+    r = 6371000
     x1 = r*np.cos(theta)
     x2 = r*np.sin(theta)
     fig, ax = plt.subplots(1)
     ax.plot(x1, x2)
     ax.plot(stx[::-1], sty[::-1])
     ax.set_aspect(1)
-    fig.savefig("trajectory_optimized.png")"""
+    fig.savefig("trajectory_optimized.png")
 
-
+def gradient_descent(cList, dimension, gd_step_nb, threshold, rk_step_nb, h0, t_0, init_state, rockedD):
+    -1
 def genetic_optimizer(POP_SIZE, DIM, MAX_ITER, RATE, dt=1):
     STOCKQ = []
     #Condition initiale
@@ -255,3 +256,5 @@ def genetic_optimizer(POP_SIZE, DIM, MAX_ITER, RATE, dt=1):
             i = i+1"""
     STOCK[epoch+1] = final_parents_M
     STOCKQ[epoch+1] = final_parents_j
+
+random_optimizer(1000)

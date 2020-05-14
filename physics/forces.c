@@ -238,97 +238,141 @@ long double runge_kutta_J_GTO (int step_nb, long double h, int t_0, bivector* in
 //Fonction à vérifier permet de faire varier de h une commande 
 commandList* var_cList (commandList* cList, unsigned int n, unsigned int dimension, long double h) {
     commandList* tmpList = malloc(sizeof(commandList));
-    commandList* ftmpList = tmpList;
+    //printf("tmp2=%p\n", tmpList);
+    commandList* tmpList_top = tmpList;
     commandList* tmpListC = cList;
     int j2=0;
-    for (int j; j<n; j++) {
+    for (int j=0; j<n; j++) {
+        //printf("j=%d\n", j);
         tmpList->c = tmpListC->c;
         tmpList->t = tmpListC->t;
         commandList* tmpList2 = malloc(sizeof(commandList));
+        //printf("tmp2=%p\n", tmpList2);
         tmpList->next = tmpList2;
         tmpList = tmpList2;
-        tmpListC = cList->next;
-        j2 = j;
+        //printf("tmpC=%p\n", tmpListC->next);
+        tmpListC = tmpListC->next;
+        j2++;
     }
-    tmpList->c = cList->c + h;
-    tmpList->t = cList->t;
-    for (int j=j2; j<dimension; j++) {
+    tmpList->c = tmpListC->c + h;
+    tmpList->t = tmpListC->t;
+    for (int j=j2+1; j<dimension; j++) {
+        //printf("j=%d\n", j);
         commandList* tmpList2 = malloc(sizeof(commandList));
+        //printf("tmp2=%p\n", tmpList2);
         tmpList->next = tmpList2;
         tmpList = tmpList2;
-        tmpListC = cList->next;
+        //printf("tmpC=%p\n", tmpListC->next);
+        tmpListC = tmpListC->next;
         tmpList->c = tmpListC->c;
         tmpList->t = tmpListC->t;
     }
-    return ftmpList;
+    tmpList->next = NULL;
+    //printf("tmp2=%p\n", tmpList);
+    return tmpList_top;
 }
 
 
 
 commandList* hgradient_computation (unsigned int dimension, long double* resh, long double j) {
     commandList* hgrad = malloc(sizeof(commandList));
+    //printf("hgrad : %p\n", hgrad);
     commandList* hgrad1 = hgrad;
-    for (int i=0; i<dimension; i++) {
+    for (int i=0; i<dimension-1; i++) {
         hgrad->c = resh[i] - j;
         commandList* hgrad_tmp = malloc(sizeof(commandList));
         hgrad->next = hgrad_tmp;
         hgrad = hgrad_tmp;
+        //printf("hgrad : %p\n", hgrad);
     }
+    hgrad->c = resh[dimension-1] - j;
+    hgrad->next = NULL;
     return hgrad1;
 } 
 
 
-
+//Modifies the list to make c into ]-pi;pi]
 void cList_modPi (unsigned int dimension, commandList* X) {
+    commandList* XCrawler = X;
+    //printf("Xcrawler %p\n", XCrawler);
     for (int i=0; i<dimension; i++) {
-        X->c = fmodl(X->c, M_PI);
-        X = X->next;
+        XCrawler->c = fmodl(XCrawler->c, M_PI);
+        XCrawler = XCrawler->next;
+        //printf("Xcrawler %p\n", XCrawler);
     }
 }
 
 
 commandList* gradient_descent (commandList* cList0, unsigned int dimension, unsigned int gd_step_nb, 
-                                                    long double threshold, int rk_step_nb, long double h0, int t_0, 
+                                                    long double threshold, int rk_step_nb, long double step_length, int t_0, 
                                                                         bivector* init_state, rocket_data* rocketD) {
     //Initializations
+    //printf("inside");
     commandList* X = cList0; 
+    ////printf("X %p\n", X);
     rocketD->cList = X;
     commandList* ccList;
-    long double h = 1/100;
-    commandList* hgradient = malloc(sizeof(commandList));
+    commandList* hgradient;
+    long double h = 1.0/100;
     long double pre_j = 1;
-    long double j = runge_kutta_J_GTO(rk_step_nb, h, t_0, init_state, rocketD);
+    long double j = runge_kutta_J_GTO(rk_step_nb, step_length, t_0, init_state, rocketD);
+    /*printf("j = %Lf\n", j);
+    printf("X %p\n", X);*/
     int i = 0;
     long double* resh = malloc(dimension*sizeof(long double));
 
     if (j < 1) {
+        //printf("h - thres %Lf, i %d, gd_step_nb %d", h - threshold, i, gd_step_nb);
         while (h>threshold && i<gd_step_nb) {
-            while (j <= pre_j && j > threshold && i<gd_step_nb) {
+            //printf("in while");
+            while (j<=pre_j && j>threshold && i<gd_step_nb) {
                 pre_j = j;
                 for (unsigned int k = 0; k<dimension; k++) {
+                    //printf("k=%d\n", k);
                     ccList = var_cList(X, k, dimension, h);
+                    //cList_modPi(dimension, ccList);
                     rocketD->cList = ccList;
-                    resh[k] = runge_kutta_J_GTO(rk_step_nb, h, t_0, init_state, rocketD);
+                    resh[k] = runge_kutta_J_GTO(rk_step_nb, step_length, t_0, init_state, rocketD);
+                    //printf("resh[%d]=%Lf\n", k, resh[k]);
                 }
 
-                commandList* hgradient = hgradient_computation(dimension, resh, j);
+                hgradient = hgradient_computation(dimension, resh, j);
                 X = lin_cList(1, X, -1, hgradient, dimension);
                 rocketD->cList = X;
-                j = runge_kutta_J_GTO(rk_step_nb, h, t_0, init_state, rocketD);
+                
+                //printf("X2 %p\n", X);
+                //A sup
+                //cList_modPi(dimension, X);
+                j = runge_kutta_J_GTO(rk_step_nb, step_length, t_0, init_state, rocketD);
+                //printf("fonctionnelle = %Lf\n", j);
                 i++;
+                //printf("grad1\n");
             }
-            //We've been too far
-            j = pre_j;
-            X = lin_cList(1, X, 1, hgradient, dimension);
-            h /= 2;
-            i--;
+            //printf("grad2\n");
+            if (i<gd_step_nb) {
+                //printf("in if");
+                i++;
+                //We've been too far
+                j = pre_j;
+                pre_j = 1; 
+                //cList_modPi(dimension, X);
+                //printf("grad\n");
+                X = lin_cList(1, X, 1, hgradient, dimension); //Come back to the previous point
+                h = h/2; //reducing h
+                i--;
+            }
         }
-        cList_modPi(dimension, X);
-        j = runge_kutta_J_GTO(rk_step_nb, h, t_0, init_state, rocketD);
+        //printf("X1 %p\n", X);
+        //cList_modPi(dimension, X);
+        //printf("X %p\n", X);
+        rocketD->cList = X;
+        //printf("h %Lf, threshold %Lf, i %d, rk_step_nb %d", h, threshold, i, rk_step_nb);
+        j = runge_kutta_J_GTO(rk_step_nb, step_length, t_0, init_state, rocketD);
     }
     else {
         printf("Erreur; j trop grand pour une amélioration intéressante");
     }
+    printf("j=%Lf", j);
     return X;
 }
 

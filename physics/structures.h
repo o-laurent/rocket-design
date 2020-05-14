@@ -74,9 +74,25 @@ struct commandList {
     commandList* next; 
 };
 
-
+//Linear combination of two command lists on c (the command)
 commandList* lin_cList (long double l1, commandList* cList1, long double l2, commandList* cList2, unsigned int dimension) { 
-    //Faire la combinaison linéaire des 2 listes
+    commandList* cList = malloc(sizeof(commandList)); 
+    commandList* cList_top = cList;
+    commandList* pCrawler1 = cList1;
+    commandList* pCrawler2 = cList2; 
+    for (int i=0; i< dimension-1; i++) {
+        cList->t = pCrawler1->t;
+        cList->c = l1*pCrawler1->c + l2*pCrawler2->c;
+        commandList* newList = malloc(sizeof(commandList));
+        cList->next = newList;
+        cList = cList->next;
+        pCrawler1 = pCrawler1->next;
+        pCrawler2 = pCrawler2->next;
+    }
+    cList->t = pCrawler1->t;
+    cList->c = l1*pCrawler1->c + l2*pCrawler2->c;
+    cList->next = NULL;
+    return cList_top;
 }
 
 
