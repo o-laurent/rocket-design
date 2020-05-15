@@ -63,11 +63,24 @@ async function addRocket() {
     .then(response =>{
         if (response.status!=200) {
             console.log("Erreur")
+            UIkit.notification({
+                message: 'Error : Please contact the developpers',
+                status: 'danger',
+                pos: 'top',
+                timeout: 100000
+            })
         }
         else {
             return response.json()
         } 
     }).then(response =>{
+        cleanForm()
+        UIkit.notification({
+            message: 'Rocket saved !',
+            status: 'success',
+            pos: 'top',
+            timeout: 3000
+        })
         return response
     })
     .catch(console.error)

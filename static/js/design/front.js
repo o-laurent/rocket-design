@@ -15,6 +15,7 @@ async function updateNames() {
 }
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
+cleanForm()
 clearCanvas(canvas)
 draw1Adapt(canvas, 80, 8, 140, '#CCE6FF')
 document.getElementById("stageNumber").value = '1'
@@ -715,14 +716,14 @@ function drawRocket() {
 function cleanForm() {
     //resets the form when the rocket is sent to the backend
     document.getElementById("rocketName").value = ''
-    document.getElementById("rocketYear").value = ''
+    document.getElementById("rocketYear").value = 2000
     document.getElementById("rocketCountry").value = ''
-    document.getElementById("missionSelect").value = ''
+    document.getElementById("missionSelect").value = 'SUB'
     document.getElementById("totalHeight").value = ''
     document.getElementById("liftOffMass").value = ''
     document.getElementById("payloadMass").value = ''
-    Number(document.getElementById("stageNumber").value) = ''
-    Boolean(Number(document.getElementById("boosterSelect").value)) = ''
+    document.getElementById("stageNumber").value = 1
+    document.getElementById("boosterSelect").value = 0
 
     document.getElementById("stage1Height").value = ''
     document.getElementById("stage1Diameter").value = ''
@@ -745,6 +746,7 @@ function cleanForm() {
     document.getElementById("boosterM0").value = ''
     document.getElementById("boosterMp").value = ''
     document.getElementById('fuelCheckbox').checked = false
+    document.getElementById("zoomInput").value = 140
 }
 
 //Updating Listeners
