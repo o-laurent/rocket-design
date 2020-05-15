@@ -1,12 +1,6 @@
 var names 
-updateNames()
-document.getElementById("zoomInput").value = 140
 
-async function updateNames() {
-    names = await getNames()
-    fillRocketSelector('rocketSelectorL')
-    fillRocketSelector('rocketSelectorR')
-}
+document.getElementById("zoomInput").value = 140
 
 
 function loadNFill_L() {
@@ -25,6 +19,7 @@ function loadNFill_R() {
 
 async function loadNFill_A(add, canvas) {
     //Loading a rocket by name and filling its information
+    console.log(add)
     cleanFields(add)
     name = document.getElementById('rocketSelector'+add).value
     rocket = await getRocketbyName(name)
@@ -401,7 +396,6 @@ function cleanFields(add) {
     document.getElementById("boosterMp"+add).textContent = ''
 }
 
-document.getElementById("zoomInput").addEventListener("input", loadNFill_R)
-document.getElementById("fuelCheckbox").addEventListener("change", loadNFill_R)
+
 document.getElementById("zoomInput").addEventListener("input", loadNFill_L)
 document.getElementById("fuelCheckbox").addEventListener("change", loadNFill_L)

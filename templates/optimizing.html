@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Design Rocket</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Rocket-Design">
+    <meta name="author" content="Johnny Yammine et Olivier Laurent">
+    <link rel="icon" href="../static/src/icon.png">
+    <link rel="stylesheet" href="../static/css/uikit.min.css" />
+    <link rel ="stylesheet" href="../static/css/main.css">
+    <link rel ="stylesheet" href="../static/css/design_rocket.css">
+    <link rel ="stylesheet" href="../static/css/compare_rockets.css">
+    <link rel ="stylesheet" href="../static/css/optimize.css">
+</head>
+<body>
+    <div class='horizontal_halved'>
+        <div class='vertical'>
+            <button id="popUpButtonL" class='uk-button uk-button-default overbutton uk-width-3-4 ' uk-toggle="target: #load-toggleL"  type='button'>Choose your rocket </button>
+            <div class='horizontal overn'>
+                <div class='params'>
+                    <ul id="accordionL" uk-accordion>
+                        <li class="uk-open">
+                            <a class="uk-accordion-title" href="#">General Specifications</a>
+                            <div class="uk-accordion-content">
+                                <span id="rocketNameL"> </span>
+                                <span id="rocketYearL"> </span>
+                                <span id="rocketCountryL"> </span>
+                                <br>
+                                Mission:
+                                <br>
+                                <span id="missionL"> </span>
+                                <br>
+                                Number of stages:
+                                <br>
+                                <span id="stageNumberL"> </span>
+                                <br>
+                                Boosters:
+                                <br>
+                                <span id="boostersL"> </span>
+                                <br>
+                                Total Height (m):
+                                <br>
+                                <span id="totalHeightL"> </span>
+                                <br>
+                                Lift-off Mass (tons):
+                                <br>
+                                <span id="liftOffMassL"> </span>
+                                <br>
+                                Payload Mass (kg):
+                                <br>
+                                <span id="payloadMassL"> </span>
+                            </div>
+                        </li>
+                        <li>
+                            <a class="uk-accordion-title" href="#"> First Stage Specifications</a>
+                            <div class="uk-accordion-content">
+                                Height (m):
+                                <br>
+                                <span id="stage1HeightL"> </span>
+                                <br>
+                                Diameter (m):
+                                <br>
+                                <span id="stage1DiameterL"> </span>
+                                <br>
+                                Thrust (kN):
+                                <br>
+                                <span id="stage1ThrustL"> </span>
+                                <br>
+                                Isp (s):
+                                <br>
+                                <span id="stage1IspL"> </span>
+                                <br>
+                                Initial Mass (tons):
+                                <br>
+                                <span id="stage1M0L"> </span>
+                                <br>
+                                Propellant Mass (tons):
+                                <br>
+                                <span id="stage1MpL"> </span>
+                                <br>
+                                Color:
+                                <br>
+                                <span id="stage1ColorL"> </span>
+                            </div>
+                        </li>
+                        <li>
+                            <a class="uk-accordion-title" href="#"> Booster Specifications</a>
+                            <div class="uk-accordion-content">
+                                Height (m):
+                                <br>
+                                <span id="boosterHeightL"> </span>
+                                <br>
+                                Diameter (m):
+                                <br>
+                                <span id="boosterDiameterL"> </span>
+                                <br>
+                                Thrust (kN):
+                                <br>
+                                <span id="boosterThrustL"> </span>
+                                <br>
+                                Isp (s):
+                                <br>
+                                <span id="boosterIspL"> </span>
+                                <br>
+                                Initial Mass (tons):
+                                <br>
+                                <span id="boosterM0L"> </span>
+                                <br>
+                                Propellant Mass (tons):
+                                <br>
+                                <span id="boosterMpL"> </span>
+                                <br>
+                                Color:
+                                <br>
+                                <span id="boosterColorL"> </span>
+                            </div>
+                        </li>
+                        <li>
+                            <a class="uk-accordion-title" href="#"> Second Stage Specifications</a>
+                            <div class="uk-accordion-content">
+                                Height (m):
+                                <br>
+                                <span id="stage2HeightL"> </span>
+                                <br>
+                                Diameter (m):
+                                <br>
+                                <span id="stage2DiameterL"> </span>
+                                <br>
+                                Thrust (kN):
+                                <br>
+                                <span id="stage2ThrustL"> </span>
+                                <br>
+                                Isp (s):
+                                <br>
+                                <span id="stage2IspL"> </span>
+                                <br>
+                                Initial Mass (tons):
+                                <br>
+                                <span id="stage2M0L"> </span>
+                                <br>
+                                Propellant Mass (tons):
+                                <br>
+                                <span id="stage2MpL"> </span>
+                                <br>
+                                Color:
+                                <br>
+                                <span id="stage2ColorL"> </span>
+                            </div>
+                        </li>
+                    </ul>
+                    
+                </div>
+                <div id="sidebar" class='sidebar'>
+                    <div class='nameDiv'>
+                    </div>
+                    <canvas id='canvasL'></canvas>
+                </div>
+                
+            </div>
+            <div class="over down uk-grid-small uk-child-width-auto uk-grid">
+                <input id="zoomInput" class="uk-input" type="number" style="width: 20%;" placeholder="Zoom">
+                <label><input id="fuelCheckbox" class="uk-checkbox" type="checkbox"> Show fuel</label>
+            </div>
+        </div>
+        <div class="vertical"> 
+            <div class="missionPanel over">
+                Mission Panel
+                <hr>
+                <form id="missionForm" class="uk-form-horizontal">
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="payloadMass">Type of mission:</label>
+                    <select id='missionSelect' class="uk-select uk-form-width-medium">
+                        <option value='SUB flight'>SubOrbital</option>
+                        <option value='LEO orbit'> LEO </option>
+                        <option value='GTO orbit'> GTO </option>           
+                    </select>
+                </div>
+                <hr>
+                
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="altitudeInput">Altitude/Semi-major axis (km):</label>
+                    <input class="uk-input uk-form-width-medium" id="altitudeInput" type="number" placeholder="Altitude"  step="0.01" name='payloadMass' autocomplete="off">
+                </div> 
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="excentricityInput">Excentricity Target:</label>
+                    <input class="uk-input uk-form-width-medium" id="excentricityInput" type="number" placeholder="Excentricity"  step="0.01" name='payloadMass' autocomplete="off">
+                </div> 
+                <hr>
+                <div class="uk-margin">
+                    <label class="uk-form-label" for="payloadMassInput">Payload mass (kg):</label>
+                    <input class="uk-input uk-form-width-medium" id="payloadMassInput" type="number" placeholder="Payload mass"  step="0.01" name='payloadMass' autocomplete="off">
+                </div> 
+                </form>
+            </div>
+            <div class="parameterPanel over">
+                Simulation Panel 
+                <hr>
+                <form id="simulationForm" class="uk-form-horizontal">
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="algoSelect">Type of algorithm :</label>
+                        <select id='algoSelect' class="uk-select uk-form-width-medium">
+                            <option value='SUB flight'>Random Optimizer</option>
+                            <option value='LEO orbit'> Genetic Optimizer </option>          
+                        </select>
+                    </div>
+                <hr>
+                </form>
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+
+    <!-- Pop-up -->
+    <div id="load-toggleL" uk-modal>
+        <div class="uk-modal-dialog uk-modal-body"> 
+            Select the rocket to load :
+            <select id='rocketSelectorL' class="uk-select uk-form-width-medium">                     
+            </select>
+            <button id="selectButtonL" class='uk-button uk-button-default uk-button-primary'  type='button' onClick=loadNFill_L()> Load </button>
+        </div>
+    </div>
+
+    <!-- Front scripts -->
+    <script src="../static/js/design/main.js"></script>
+    <script src="../static/js/optimize/front.js"></script>
+    <script src="../static/js/optimize/main.js"></script>
+    <script src="../static/js/compare/front.js"></script>
+    <script src="../static/js/draw.js"></script>
+    <!-- UIKIT Theme -->
+    <script src="../static/js/uikit.min.js"></script>
+    <script src="../static/js/uikit-icons.min.js"></script>
+</body>
+</html>

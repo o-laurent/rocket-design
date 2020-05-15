@@ -105,6 +105,19 @@ def cList2array(cList):
         commands.append(cList2.contents.c)
         times.append(cList2.contents.t)
     return commands, times
+
+def modPi(cList, dimension: int):
+    """
+    Modifies the cList in place 
+    Makes c in ]-pi;pi] at all times
+    """
+    pCrawler = ctypes.POINTER(commandList)
+    pCrawler = cList
+    for i in range(dimension):
+        while not (-np.pi<pCrawler.contents.c<=np.pi):
+            pCrawler.contents.c -= 2*np.pi * np.sign(pCrawler.contents.c)
+        pCrawler = pCrawler.contents.next
+        
 #Utility to read the stock
 def read_stock(pstock):
     stock_list = []
@@ -146,6 +159,15 @@ ArianeD = rocket_data(
 )
 
 def random_optimizer(N=100000):
+    """
+    Optimizing function :
+
+    INPUT :
+    N is the number of tries
+
+    OUTPUT :
+
+    """
     #Initial condition
     cBivector = bivector(ctypes.c_longdouble(0), ctypes.c_longdouble(6371000), ctypes.c_longdouble(-1700/3.6), ctypes.c_longdouble(0))
     stock_Lists = []
@@ -181,25 +203,45 @@ def random_optimizer(N=100000):
 
 def gradient_descent(cList, dimension, gd_step_nb, threshold, rk_step_nb, h0, t_0, init_state, rockedD):
     -1
-def genetic_optimizer(POP_SIZE, DIM, MAX_ITER, GENERATION_RATE=2, dt=1):
-    #Condition initiale
+
+
+def genetic_optimizer(rocketD: rocket_data, POP_SIZE: int, DIM: int, MAX_ITER: int, GENERATION_RATE: int=2, FINAL_OPTSTEPS: int=1000):
+    """
+    Optimizing function :
+
+    INPUT :
+    POP_SIZE is the number of people after selection POP_SIZE must be >= 2
+    DIM is the dimension of the hypercube ]-pi;pi]^DIM in which we define the command. DIM must be >=2.
+    MAX_ITER is the number of iterations of the genetic algorithm
+    GENERATION_RATE is the inverse of the selection rate
+
+    OUTPUT :
+    STOCK is the history of all the visited points in our hypercube
+    STOCK_J is the history of the cost values associated to these commands
+    """
+    if POP_SIZE < 2 or DIM < 2 or MAX_ITER < 1 or GENERATION_RATE <= 1:
+        print("ERROR. BAD PARAMETERS")
+        return -1
+
     print("Genetic optimizer initializing...")
     cBivector = bivector(ctypes.c_longdouble(0), ctypes.c_longdouble(6371000), ctypes.c_longdouble(-1700/3.6), ctypes.c_longdouble(0))
-    Tf = ArianeD.T2
+    Tf = int(rocketD.T2)
+    
     times = np.linspace(0, Tf+1, DIM+1, endpoint=False).astype(int)[1::]
     i = 0
     Mat_X = np.pi*(np.random.rand(POP_SIZE*GENERATION_RATE, DIM)*2- 1)
     parent_M = np.zeros((POP_SIZE*GENERATION_RATE, DIM))
     v_j = np.zeros(POP_SIZE*GENERATION_RATE)
 
+    #Generating and computing the cost function for each point
     for i in range(POP_SIZE*GENERATION_RATE):
         commands = Mat_X[i]
         parent_M[i] = commands 
         cList = gen_commandList(commands, times)
-        ArianeD.cList = cList
-        v_j[i] = forces.runge_kutta_J_GTO(ctypes.c_int(1375), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(ArianeD))
+        rocketD.cList = cList
+        v_j[i] = forces.runge_kutta_J_GTO(ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
     
-    
+    #Will contain all the data
     STOCK = np.zeros((MAX_ITER+1, POP_SIZE, DIM))
     STOCK_J = np.zeros((MAX_ITER+1, POP_SIZE))
     
@@ -223,7 +265,8 @@ def genetic_optimizer(POP_SIZE, DIM, MAX_ITER, GENERATION_RATE=2, dt=1):
         #Exchanging the genes
         ind = np.argmin(new_parent_j)
         children_M = np.zeros((POP_SIZE*GENERATION_RATE, DIM)) #Will contain the future children
-        children_M[0] = new_parent_M[ind]
+        children_M[0] = new_parent_M[ind] #We keep the minimum so that every epoch has a better minimum 
+
         choice_M = np.random.randint(0, POP_SIZE, POP_SIZE*2*GENERATION_RATE)
         doubles = 0
         i = 2
@@ -255,44 +298,56 @@ def genetic_optimizer(POP_SIZE, DIM, MAX_ITER, GENERATION_RATE=2, dt=1):
         new_parent_j = []
         true_children_M = np.zeros((length,DIM))
         j_M = np.zeros(length)
+        #Defining the progress bar
         bar = IncrementalBar('Betterment', max = length)
         for k in range(length):
             child = children_M[k]
             cList = gen_commandList(child, times)
-            ArianeD.cList = cList
+            rocketD.cList = cList
             #Optimizing the commands a little
-            true_child = forces.gradient_descent(cList, ctypes.c_uint(DIM), ctypes.c_uint(10), ctypes.c_longdouble(10**(-4)), ctypes.c_int(1375), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(ArianeD))
-            ArianeD.cList = true_child
+            true_child = forces.gradient_descent(cList, ctypes.c_uint(DIM), ctypes.c_uint(10), ctypes.c_longdouble(10**(-4)), ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
+            modPi(true_child, DIM)
+            rocketD.cList = true_child
             #Fetching the real value
-            j = forces.runge_kutta_J_GTO(ctypes.c_int(1375), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(ArianeD))
+            j = forces.runge_kutta_J_GTO(ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
             true_children_M[k] = cList2array(true_child)[0]
             j_M[k] = j
+            #Advancing the bar
             bar.next()
         bar.finish()
         
         parent_M = true_children_M
         v_j = j_M
     
-    #On garde le meilleur quart que l'on am�liore au maximum
+    #We keep only a part and we optimize it as much as possible
     bar = IncrementalBar('Finalization', max = POP_SIZE//2)
     comp = np.partition(v_j.flatten(), POP_SIZE//2)[POP_SIZE//2]
-    final_parents_j = np.zeros(POP_SIZE)
-    final_parents_M = np.zeros((POP_SIZE, DIM))
+    final_parents_j = np.zeros(POP_SIZE//2)
+    final_parents_M = np.zeros((POP_SIZE//2, DIM))
+    #print(v_j)
     i = 0
-    for j in range(POP_SIZE*GENERATION_RATE):
-        if v_j[j]<=comp:
-            true_child = forces.gradient_descent(cList, ctypes.c_uint(DIM), ctypes.c_uint(1000), ctypes.c_longdouble(10**(-10)), ctypes.c_int(1375), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(ArianeD))
-            ArianeD.cList = true_child
-            j = forces.runge_kutta_J_GTO(ctypes.c_int(1375), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(ArianeD))
-            final_parents_M[i] = cList2array(true_child)[0]
+    for ind in range(POP_SIZE*GENERATION_RATE):
+        if v_j[ind]<=comp and i<POP_SIZE//2:
+            parent = parent_M[ind]
+            #print(parent)
+            cList = gen_commandList(parent, times)
+            rocketD.cList = cList
+            true_parent = forces.gradient_descent(cList, ctypes.c_uint(DIM), ctypes.c_uint(FINAL_OPTSTEPS), ctypes.c_longdouble(10**(-10)), ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
+            #print(cList2array(true_parent)[0])
+            rocketD.cList = true_parent
+            j = forces.runge_kutta_J_GTO(ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
+            #print(j)
+            final_parents_M[i] = cList2array(true_parent)[0]
             final_parents_j[i] = j
             i += 1 
-        bar.next()
+            bar.next()
     bar.finish()
-    STOCK[epoch+1] = final_parents_M
-    STOCK_J[epoch+1] = final_parents_j
+    STOCK[epoch+1] = np.repeat(final_parents_M, 2, axis=0) 
+    STOCK_J[epoch+1] = np.repeat(final_parents_j, 2)
     ind = np.argmin(final_parents_j)
-    """print(final_parents_M[ind])
-    print(final_parents_j[ind])"""
+    #print(final_parents_j)
+    print("Final command:",final_parents_M[ind])
+    print("Final cost value:", final_parents_j[ind])
+    return STOCK, STOCK_J
 
-genetic_optimizer(200, 10, 10, 4)
+genetic_optimizer(ArianeD, 200, 6, 20, 2)

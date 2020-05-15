@@ -136,3 +136,10 @@ stockBivectors* consSTOCK(bivector* state, stockBivectors* stock) {
     tmp->previous = stock; //Previous Step
     return tmp;
 }
+
+/*Structure containing every information needed to use the multithreaded
+gradient descent function*/
+typedef struct thread_data thread_data;
+struct thread_data {
+    
+};

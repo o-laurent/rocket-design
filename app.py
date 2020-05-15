@@ -26,7 +26,8 @@ def comprocket():
     load_db()
     return render_template("compare_rockets.html")
 
-@app.route('/optimizer.html')
+@app.route('/optimizing.html')
+@app.route('/optimizing')
 def trajectory():
     load_db()
     return render_template("optimizing.html")
@@ -57,6 +58,13 @@ def api_rocket_byname():
     print(request.get_json())
     json = pd.DataFrame(get_rocket_byname(request.get_json()['name'])).to_json()
     print(json)
+    return json, 200
+
+@app.route('/api/optimize', methods = ['POST'])
+def api_optimize():
+    #nom de la fusée 
+    #paramètres de la mission
+    #paramètres de la simulation
     return json, 200
 
 #Utility functions
