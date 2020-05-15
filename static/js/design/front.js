@@ -774,14 +774,14 @@ function editOrAdd() {
 }
 
 function checkMasses () {
-    s1M0 = document.getElementById("stage1M0").value
-    bM0 = document.getElementById("boosterM0").value
-    s2M0 = document.getElementById("stage2M0").value
-    s1Mp = document.getElementById("stage1Mp").value
-    bMp = document.getElementById("boosterMp").value
-    s2Mp = document.getElementById("stage2Mp").value
-    pM = document.getElementById("payloadMass").value/1000
-    mass = document.getElementById("liftOffMass").value
+    s1M0 = Number(document.getElementById("stage1M0").value)
+    bM0 = Number(document.getElementById("boosterM0").value)
+    s2M0 = Number(document.getElementById("stage2M0").value)
+    s1Mp = Number(document.getElementById("stage1Mp").value)
+    bMp = Number(document.getElementById("boosterMp").value)
+    s2Mp = Number(document.getElementById("stage2Mp").value)
+    pM = Number(document.getElementById("payloadMass").value)/1000
+    mass = Number(document.getElementById("liftOffMass").value)
     if (mass < s1M0 + bM0 + s2M0 + pM) {
         document.getElementById("liftOffMass").classList.remove('uk-form-success')
         document.getElementById("liftOffMass").classList.add('uk-form-danger')
@@ -829,9 +829,9 @@ function checkMasses () {
 }
 
 function checkHeights () {
-    s1H = document.getElementById("stage1Height").value
-    s2H = document.getElementById("stage2Height").value
-    height = document.getElementById("totalHeight").value
+    s1H = Number(document.getElementById("stage1Height").value)
+    s2H = Number(document.getElementById("stage2Height").value)
+    height = Number(document.getElementById("totalHeight").value)
     if (height < s1H + s2H) {
         height = document.getElementById("totalHeight").classList.remove('uk-form-success')
         height = document.getElementById("totalHeight").classList.add('uk-form-danger')
