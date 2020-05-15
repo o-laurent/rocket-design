@@ -35,7 +35,10 @@ async function loadNFill() {
     document.getElementById("rocketName").value = rocket["Name"][i]
     document.getElementById("rocketYear").value = rocket["Year"][i]
     document.getElementById("rocketCountry").value = rocket["Country"][i]
-
+    document.getElementById("missionSelect").value = rocket["Mission"][i]
+    document.getElementById("totalHeight").value = rocket["Height [m]"][i]
+    document.getElementById("liftOffMass").value = rocket["Lift-off mass [tons]"][i]
+    document.getElementById("payloadMass").value = rocket["Payload mass [kg]"][i]
     if (stageNumber==1 && booster==false) {
         document.getElementById("stage1Height").value = rocket["S1 height [m]"][i]
         document.getElementById("stage1Diameter").value = rocket["S1 diameter [m]"][i]
@@ -142,11 +145,11 @@ document.getElementById("boosterSelect").addEventListener("change", function (e)
     }
 })
 
-document.getElementById("rocketName").addEventListener("keyup", function (e){
+document.getElementById("rocketName").addEventListener("change", function (e){
     document.getElementById("dName").innerHTML = document.getElementById("rocketName").value
 })
 
-document.getElementById("rocketYear").addEventListener("keyup", function (e){
+document.getElementById("rocketYear").addEventListener("change", function (e){
     document.getElementById("dYear").innerHTML = document.getElementById("rocketYear").value
 })
 
@@ -157,6 +160,8 @@ function all_info() {
     stageNumber = Number(document.getElementById("stageNumber").value)
     booster = Boolean(Number(document.getElementById("boosterSelect").value))
     boolean = false
+    editOrAdd()
+    
     if (stageNumber==1 && booster==false) {
         fSheight = document.getElementById("stage1Height").value
         fSdiameter = document.getElementById("stage1Diameter").value
@@ -297,7 +302,7 @@ function getRocketInfo() {
         fSisp = document.getElementById("stage1Isp").value
         fSm0 = document.getElementById("stage1M0").value
         fSmp = document.getElementById("stage1Mp").value
-        fColor = document.getElementById("stage1Color").value
+        fScolor = document.getElementById("stage1Color").value
 
         bheight = document.getElementById("boosterHeight").value
         bdiameter = document.getElementById("boosterDiameter").value
@@ -336,7 +341,7 @@ function getRocketInfo() {
             sSisp: '',
             sSm0: '',
             sSmp: '',
-            fScolor: fSColor,
+            fScolor: fScolor,
             bcolor: bColor,
             sScolor: ''
         }
@@ -348,7 +353,7 @@ function getRocketInfo() {
         fSisp = document.getElementById("stage1Isp").value
         fSm0 = document.getElementById("stage1M0").value
         fSmp = document.getElementById("stage1Mp").value
-        fSColor = document.getElementById("stage1Color").value
+        fScolor = document.getElementById("stage1Color").value
 
         sSheight = document.getElementById("stage2Height").value
         sSdiameter = document.getElementById("stage2Diameter").value
@@ -387,7 +392,7 @@ function getRocketInfo() {
             sSisp: sSisp,
             sSm0: sSm0,
             sSmp: sSmp,
-            fScolor: fSColor,
+            fScolor: fScolor,
             bcolor: '',
             sScolor: sScolor
         }
@@ -399,7 +404,7 @@ function getRocketInfo() {
         fSisp = document.getElementById("stage1Isp").value
         fSm0 = document.getElementById("stage1M0").value
         fSmp = document.getElementById("stage1Mp").value
-        fColor = document.getElementById("stage1Color").value
+        fScolor = document.getElementById("stage1Color").value
 
         sSheight = document.getElementById("stage2Height").value
         sSdiameter = document.getElementById("stage2Diameter").value
@@ -446,7 +451,7 @@ function getRocketInfo() {
             sSisp: sSisp,
             sSm0: sSm0,
             sSmp: sSmp,
-            fScolor: fSColor,
+            fScolor: fScolor,
             bcolor: bcolor,
             sScolor: sScolor
         }
@@ -718,7 +723,7 @@ function cleanForm() {
     document.getElementById("rocketName").value = ''
     document.getElementById("rocketYear").value = 2000
     document.getElementById("rocketCountry").value = ''
-    document.getElementById("missionSelect").value = 'SUB'
+    document.getElementById("missionSelect").value = 'SUB flight'
     document.getElementById("totalHeight").value = ''
     document.getElementById("liftOffMass").value = ''
     document.getElementById("payloadMass").value = ''
@@ -749,7 +754,21 @@ function cleanForm() {
     document.getElementById("zoomInput").value = 140
 }
 
+//Tells if the rocket will be edited or added to the database
+function editOrAdd() {
+    name = document.getElementById('rocketName').value
+    if (names.names.includes(name)) {
+        document.getElementById('addBaseButton').textContent = "Edit Rocket"
+    }
+    else {
+        document.getElementById('addBaseButton').textContent = "Add to the DataBase"
+    }
+
+}
+
+
 //Updating Listeners
+document.getElementById('rocketName').addEventListener("input", editOrAdd)
 document.getElementById("zoomInput").addEventListener("input", drawRocket)
 document.getElementById("fuelCheckbox").addEventListener("change", drawRocket)
 

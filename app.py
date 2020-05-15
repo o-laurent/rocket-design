@@ -35,7 +35,6 @@ def trajectory():
 def api_newrocket():
     print(request.is_json)
     rocket = request.get_json()
-    print(rocket['rocket'])
     add_rocket_db(rocket['rocket'])
     return pd.DataFrame().to_json(), 200
 

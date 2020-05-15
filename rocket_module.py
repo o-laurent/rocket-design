@@ -129,7 +129,13 @@ class rocket:
         print(data)
 
         data1 = pd.read_csv('rocket_database.csv')
+        names = list(data1['Name'])
+        #edit if two rockets share the same name
+        if data['Name'][0] in names:
+            data1 = data1[data1['Name'] != data['Name'][0]]
+            print(data)
         data = pd.concat([data1, data])
+        data.sort_values(by=['Year'])
         data.to_csv('rocket_database.csv', index=False)
 
 

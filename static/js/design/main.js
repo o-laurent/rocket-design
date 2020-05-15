@@ -1,3 +1,4 @@
+//Function that gets the names of the rockets already built
 async function getNames() {
     const param = {
         method : 'GET',
@@ -6,7 +7,7 @@ async function getNames() {
             'Content-Type': 'application/json'
         }
     }
-    // On appelle le serveur
+    // Calling the server
     return fetch ('/api/rockets/names',param)
     .then(response =>{
         if (response.status != 200) {
@@ -21,6 +22,7 @@ async function getNames() {
     .catch(console.error)
 }
 
+//Function to search a rocket by name
 async function getRocketbyName(name) {
     const param = {
         method : 'POST',
@@ -32,7 +34,7 @@ async function getRocketbyName(name) {
             name: name
         })
     }
-    // On appelle le serveur
+    // Calling the server
     return fetch ('/api/rockets/byname', param)
     .then(response =>{
         if (response.status != 200) {
@@ -47,6 +49,7 @@ async function getRocketbyName(name) {
     .catch(console.error)
 }
 
+//Function to add a rocket into the database
 async function addRocket() {
     rocket = getRocketInfo()
     console.log(rocket)
@@ -58,11 +61,12 @@ async function addRocket() {
         },
         body: JSON.stringify({rocket : rocket})
     }
-    // On appelle le serveur
+    // Calling the server
     return fetch ('/api/newrocket', param)
     .then(response =>{
         if (response.status!=200) {
-            console.log("Erreur")
+            //Something has went wrong
+            console.log("Error")
             UIkit.notification({
                 message: 'Error : Please contact the developpers',
                 status: 'danger',
@@ -74,6 +78,7 @@ async function addRocket() {
             return response.json()
         } 
     }).then(response =>{
+        //Everything is fine, clean the form for a new rocket to come
         cleanForm()
         UIkit.notification({
             message: 'Rocket saved !',
@@ -86,15 +91,14 @@ async function addRocket() {
     .catch(console.error)
 }
 
+//Allows to choose the rocket you want to load
 async function fillRocketSelector(rocketS) {
     // Affiche les options d'un select avec toutes les catégories possibles et en value les _id des catégories
         for(name of names.names)
         {
             var option = document.createElement('option')
             option.innerHTML = name
-            option.value = name // ou _id pour enregisrter les id
+            option.value = name // ou _id pour enregistrer les id
             document.getElementById(rocketS).appendChild(option);
         }
 }
-//Fonction de chargement d'une fusée en particulier 
-//Fonction d'envoi de fusée
