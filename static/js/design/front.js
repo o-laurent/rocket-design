@@ -752,6 +752,13 @@ function cleanForm() {
     document.getElementById("boosterMp").value = ''
     document.getElementById('fuelCheckbox').checked = false
     document.getElementById("zoomInput").value = 140
+
+    document.getElementById("stageNumber").value = '1'
+    document.getElementById("boosterSelect").value = '0'
+    document.getElementById("stage1Color").value = '#CCE6FF'
+    document.getElementById("boosterColor").value = '#CCE6FF'
+    document.getElementById("stage2Color").value = '#CCE6FF'    
+    draw1Adapt(canvas, 80, 8, 140, '#CCE6FF')
 }
 
 //Tells if the rocket will be edited or added to the database
@@ -766,26 +773,103 @@ function editOrAdd() {
 
 }
 
+function checkMasses () {
+    s1M0 = document.getElementById("stage1M0").value
+    bM0 = document.getElementById("boosterM0").value
+    s2M0 = document.getElementById("stage2M0").value
+    s1Mp = document.getElementById("stage1Mp").value
+    bMp = document.getElementById("boosterMp").value
+    s2Mp = document.getElementById("stage2Mp").value
+    pM = document.getElementById("payloadMass").value/1000
+    mass = document.getElementById("liftOffMass").value
+    if (mass < s1M0 + bM0 + s2M0 + pM) {
+        document.getElementById("liftOffMass").classList.remove('uk-form-success')
+        document.getElementById("liftOffMass").classList.add('uk-form-danger')
+    }
+    else {
+        document.getElementById("liftOffMass").classList.remove('uk-form-danger')
+        document.getElementById("liftOffMass").classList.add('uk-form-success')
+    }
+    if (s1Mp>s1M0) {
+        document.getElementById("stage1M0").classList.remove('uk-form-success')
+        document.getElementById("stage1M0").classList.add('uk-form-danger')
+        document.getElementById("stage1Mp").classList.remove('uk-form-success')
+        document.getElementById("stage1Mp").classList.add('uk-form-danger')
+    }
+    else {
+        document.getElementById("stage1M0").classList.remove('uk-form-danger')
+        document.getElementById("stage1M0").classList.add('uk-form-success')
+        document.getElementById("stage1Mp").classList.remove('uk-form-danger')
+        document.getElementById("stage1Mp").classList.add('uk-form-success')
+    }
+    if (s2Mp>s2M0) {
+        document.getElementById("stage2M0").classList.remove('uk-form-success')
+        document.getElementById("stage2M0").classList.add('uk-form-danger')
+        document.getElementById("stage2Mp").classList.remove('uk-form-success')
+        document.getElementById("stage2Mp").classList.add('uk-form-danger')
+    }
+    else {
+        document.getElementById("stage2M0").classList.remove('uk-form-danger')
+        document.getElementById("stage2M0").classList.add('uk-form-success')
+        document.getElementById("stage2Mp").classList.remove('uk-form-danger')
+        document.getElementById("stage2Mp").classList.add('uk-form-success')
+    }
+    if (bMp>bM0) {
+        document.getElementById("boosterM0").classList.remove('uk-form-success')
+        document.getElementById("boosterM0").classList.add('uk-form-danger')
+        document.getElementById("boosterMp").classList.remove('uk-form-success')
+        document.getElementById("boosterMp").classList.add('uk-form-danger')
+    }
+    else {
+        document.getElementById("boosterM0").classList.remove('uk-form-danger')
+        document.getElementById("boosterM0").classList.add('uk-form-success')
+        document.getElementById("boosterMp").classList.remove('uk-form-danger')
+        document.getElementById("boosterMp").classList.add('uk-form-success')
+    }
+}
+
+function checkHeights () {
+    s1H = document.getElementById("stage1Height").value
+    s2H = document.getElementById("stage2Height").value
+    height = document.getElementById("totalHeight").value
+    if (height < s1H + s2H) {
+        height = document.getElementById("totalHeight").classList.remove('uk-form-success')
+        height = document.getElementById("totalHeight").classList.add('uk-form-danger')
+    }
+    else {
+        document.getElementById("totalHeight").classList.remove('uk-form-danger')
+        document.getElementById("totalHeight").classList.add('uk-form-success')
+    }
+}
 
 //Updating Listeners
 document.getElementById('rocketName').addEventListener("input", editOrAdd)
 document.getElementById("zoomInput").addEventListener("input", drawRocket)
 document.getElementById("fuelCheckbox").addEventListener("change", drawRocket)
 
+document.getElementById("totalHeight").addEventListener("keyup", checkHeights)
 document.getElementById("stage1Height").addEventListener("keyup", drawRocket)
+document.getElementById("stage1Height").addEventListener("keyup", checkHeights)
 document.getElementById("stage1Diameter").addEventListener("keyup", drawRocket)
 document.getElementById("boosterHeight").addEventListener("keyup", drawRocket)
 document.getElementById("boosterDiameter").addEventListener("keyup", drawRocket)
 document.getElementById("stageNumber").addEventListener("click", drawRocket)
 document.getElementById("boosterSelect").addEventListener("click", drawRocket)
 document.getElementById("stage2Height").addEventListener("keyup", drawRocket)
+document.getElementById("stage2Height").addEventListener("keyup", checkHeights)
 document.getElementById("stage2Diameter").addEventListener("keyup", drawRocket)
 document.getElementById("stage1M0").addEventListener("keyup", drawRocket)
+document.getElementById("stage1M0").addEventListener("keyup", checkMasses)
+document.getElementById("stage1Mp").addEventListener("keyup", checkMasses)
 document.getElementById("stage1Mp").addEventListener("keyup", drawRocket)
 document.getElementById("boosterM0").addEventListener("keyup", drawRocket)
+document.getElementById("boosterM0").addEventListener("keyup", checkMasses)
 document.getElementById("boosterMp").addEventListener("keyup", drawRocket)
+document.getElementById("boosterMp").addEventListener("keyup", checkMasses)
 document.getElementById("stage2M0").addEventListener("keyup", drawRocket)
+document.getElementById("stage2M0").addEventListener("keyup", checkMasses)
 document.getElementById("stage2Mp").addEventListener("keyup", drawRocket)
+document.getElementById("stage2Mp").addEventListener("keyup", checkMasses)
 
 document.getElementById("stage1Thrust").addEventListener("keyup", all_info)
 document.getElementById("stage1Isp").addEventListener("keyup", all_info)
