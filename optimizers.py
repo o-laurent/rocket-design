@@ -194,20 +194,15 @@ def random_optimizer(rocketD: rocket_data=ArianeD, N: int=10000, gd_steps: int=1
     print("A minimum has been found ! Its value is ", min(stock_J))
     #Gradient-descent betterment
     ind = np.argmin(stock_J)
-    #print(stock_J[ind])
     cList = gen_commandList(stock_Lists[ind], times)
-    #print(stock_Lists[ind])
     rocketD.cList = cList
     cList = forces.gradient_descent(cList, ctypes.c_uint(gd_dim), ctypes.c_uint(gd_steps), ctypes.c_longdouble(10**(-10)), ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
-    #
-    #print(list(cList2array(cList)[0]))
     modPi(cList, gd_dim)
     opt_commands = list(cList2array(cList)[0])
     rocketD.cList = gen_commandList(opt_commands, times)
     j = forces.runge_kutta_J_GTO(ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
     print("A second minimum has been found ! Its value is ", j)
     opt_value = j
-    #print(opt_commands)
     pstock = forces.runge_kutta4(ctypes.c_int(10*(Tf+1)), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
     stock = read_stock(pstock)
 

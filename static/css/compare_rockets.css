@@ -50,3 +50,9 @@
 body {
     align-items: center;
 }
+
+#moving_form {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
