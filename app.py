@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 import rocket_module as rkt_module
+from optimizers import random_optimizer, genetic_optimizer
 from flask import Flask, render_template, request
 import csv
 
@@ -63,9 +64,16 @@ def api_rocket_byname():
 @app.route('/api/optimize', methods = ['POST'])
 def api_optimize():
     #nom de la fusée 
+    """
+    req_json_body = request.get_json().body
+    name = req_json_body.name
+    """
     #paramètres de la mission
     #paramètres de la simulation
-    return json, 200
+    #opt_data = genetic_optimizer()
+    opt_data = random_optimizer()
+    #print(opt_data)
+    return opt_data, 200
 
 #Utility functions
 def load_db():
