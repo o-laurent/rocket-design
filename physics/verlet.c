@@ -75,5 +75,6 @@ stockBivectors* verlet (bivector* init_state1, bivector* init_state2) {
         
         free(state);
     }
+    free(position_t);
     return(stock);
 }
