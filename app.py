@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 import rocket_module as rkt_module
+import ctypes
 from optimizers import random_optimizer, genetic_optimizer, rocket_data
 from flask import Flask, render_template, request
 import csv
@@ -69,19 +70,23 @@ def api_rocket_byname():
 
 @app.route('/api/optimize', methods = ['POST'])
 def api_optimize():
-    req_json_body = request.get_json().body
-    name = req_json_body.name
+    print('in request')
+    print(request.get_json())
+    req_json_body = request.get_json()
+    
+    name = req_json_body['name']
+    print(name)
+    missionParams = req_json_body['missionParams']
+    algoParams = req_json_body['algoParams']
 
-    missionParams = req_json_body.missionParams
-    algoParams = req_json_body.algoParams
-
-    algo = algoParams.algorithm
+    algo = algoParams['algorithm']
     rocketD = name2rocketD(name)
-    rocketD.payload_mass = missionParams.payloadMass
+
+    rocketD.pM = float(missionParams['payloadMass'])
     if algo == "genetic":
-        opt_data = genetic_optimizer(rocketD, algoParams.popSize, algoParams.dimension, algoParams.maxIter, algoParams.gRate, algoParams.gdSteps)
+        opt_data = genetic_optimizer(rocketD, int(algoParams['popSize']), int(algoParams['dimension']), int(algoParams['iterNb']), int(algoParams['gRate']), int(algoParams['gdSteps']))
     elif algo == "random":
-        opt_data = random_optimizer(rocketD, algoParams.testNb, algoParams.gdSteps, algoParams.dimension)
+        opt_data = random_optimizer(rocketD, int(algoParams['testNb']), int(algoParams['gdSteps']), int(algoParams['dimension']))
     return opt_data, 200
 
 #Utility functions
@@ -92,24 +97,35 @@ def name2rocketD(name: str):
     g0 = 9.80665
     rocket = get_rocket_byname(name)
     ind = rocket['Name'].index[0]
-    stageNb = rocket['Stage number']
-    boosters = rocket['B thrust [kN]'][ind] != None
+    stageNb = int(rocket['Stage number'][ind])
+    boosters = int(rocket['B thrust [kN]'][ind] != None)
 
     #First stage parameters
-    fISP = rocket['S1 ISP [s]']
-    fF = rocket['S1 thrust [kN]']
+    fISP = float(rocket['S1 Isp [s]'][ind])
+    #print(fISP)
+    fF = float(rocket['S1 thrust [kN]'][ind])*1000
+    
     fO = fF/(fISP*g0)
-    T1 = rocket['S1 M0 [tons]']/fO
-    fM = rocket['S2 M0 [tons]']
-    pM = rocket['Payload Mass [kg]']
+    #print(fO)
+    T1 = float(rocket['S1 mp [tons]'][ind])*1000/fO
+    print(T1)
+    fM = float(rocket['S1 m0 [tons]'][ind])*1000
+    #print(fM)
+    pM = float(rocket['Payload mass [kg]'][ind])
+    #print(pM)
 
     #Second Stage parameters
     if stageNb == 2:
-        sF = rocket['S2 thrust [kN]']
-        sISP = rocket['S2 ISP [s]']
+        sF = float(rocket['S2 thrust [kN]'][ind])*1000
+        sISP = float(rocket['S2 Isp [s]'][ind])
+        #print(sF)
+        #print(sISP)
+        #print(g0)
         sO = sF/(sISP*g0)
-        T2 = rocket['S2 MP [tons]']/sO
-        sM = rocket['S2 M0 [tons]']
+        T2 = float(rocket['S2 mp [tons]'][ind])/sO*1000 + T1
+        print(T2)
+        sM = float(rocket['S2 m0 [tons]'][ind])*1000
+        #print(sM)
     else:
         sO = 0
         sISP = 0
@@ -118,18 +134,22 @@ def name2rocketD(name: str):
 
     #Booster parameters 
     if boosters:
-        bF = rocket['B thrust [kN]']
-        bISP = rocket['B ISP [s]']
+        bF = float(rocket['B thrust [kN]'][ind])*1000
+        bISP = float(rocket['B Isp [s]'][ind])
+        #print(bISP)
         bO = bF/(bISP*g0)
-        bM = rocket['B M0 [tons]']
-        TB = rocket['B MP [tons]']/bO
+        #print(bO)
+        bM = float(rocket['B m0 [tons]'][ind])*1000
+        #print(bM)
+        TB = float(rocket['B mp [tons]'][ind])*1000/bO
+        print(TB)
     else:
         bO = 0
         bISP = 0
         bM = 0
         TB = 0
 
-    return rocket_data(stageNb, boosters, fO, fISP, sO, sISP, bO, bISP, T1, T2, TB, fM, sM, bM, pM, None)
+    return rocket_data(ctypes.c_int(stageNb), ctypes.c_int(boosters), ctypes.c_longdouble(fO), ctypes.c_longdouble(fISP), ctypes.c_longdouble(sO), ctypes.c_longdouble(sISP), ctypes.c_longdouble(bO), ctypes.c_longdouble(bISP), ctypes.c_longdouble(T1), ctypes.c_longdouble(T2), ctypes.c_longdouble(TB), ctypes.c_longdouble(fM), ctypes.c_longdouble(sM), ctypes.c_longdouble(bM), ctypes.c_longdouble(pM), None)
 
 def load_db():
     """

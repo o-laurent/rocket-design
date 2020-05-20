@@ -774,6 +774,7 @@ function editOrAdd() {
 }
 
 function checkMasses () {
+    //Check that the masses are coherent
     s1M0 = Number(document.getElementById("stage1M0").value)
     bM0 = Number(document.getElementById("boosterM0").value)
     s2M0 = Number(document.getElementById("stage2M0").value)
