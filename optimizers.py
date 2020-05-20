@@ -252,6 +252,7 @@ def genetic_optimizer(rocketD: rocket_data=ArianeD, POP_SIZE: int=50, DIM: int=3
     cBivector = bivector(ctypes.c_longdouble(0), ctypes.c_longdouble(6371000), ctypes.c_longdouble(-1700/3.6), ctypes.c_longdouble(0))
     if int(rocketD.T2)!= 0:
         Tf = int(rocketD.T2)
+        print(Tf)
     else:
         Tf = int(rocketD.T1)
     
@@ -279,7 +280,6 @@ def genetic_optimizer(rocketD: rocket_data=ArianeD, POP_SIZE: int=50, DIM: int=3
 
         print("---------------- epoch", epoch+1, "----------------")
         comp = np.partition(v_j.flatten(), POP_SIZE)[POP_SIZE]
-        print("first quantile : ", comp, "minimum :", min(v_j))
         i = 0
         for j in range(POP_SIZE*2):
             if i<=POP_SIZE-1 and v_j[j]<=comp: #If the cost is lower than the first quartile
@@ -377,7 +377,7 @@ def genetic_optimizer(rocketD: rocket_data=ArianeD, POP_SIZE: int=50, DIM: int=3
 
     cList = cList = gen_commandList(opt_commands, times)
     rocketD.cList = cList
-    pstock = forces.runge_kutta4(ctypes.c_int(10*(Tf+1)), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
+    pstock = forces.runge_kutta4(ctypes.c_int(30*(Tf+1)), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
     stock = read_stock(pstock)
     opt_stock_x = list(map(lambda x : x[0], stock))[::-1]
     opt_stock_y = list(map(lambda x : x[1], stock))[::-1]

@@ -1,3 +1,7 @@
+data = JSON.parse(localStorage.getItem("optimizedValues"))
+points = getPoints(data)
+traceTrajectory(points)
+
 function getPoints(data) {
     x_data = data.stock_x 
     y_data = data.stock_y
@@ -44,8 +48,7 @@ function traceTrajectory(points) {
     var line = d3.line()                     // SVG line generator
         .x(function(d) { return x(d.x); } )
         .y(function(d) { return y(d.y); } );
-	console.log(d3.extent(data, xValue)[1]-d3.extent(data, xValue)[0])
-console.log(d3.extent(data, yValue)[1]-d3.extent(data, yValue)[0])
+
     var xAxis = d3.axisBottom(x)
         .ticks(4)                            // request 5 ticks on the x axis
 
@@ -91,4 +94,8 @@ console.log(d3.extent(data, yValue)[1]-d3.extent(data, yValue)[0])
         .duration(1000)
         .style('stroke', '#6b93d6')
 
+}
+
+function SpinnerOn() {
+    -1
 }

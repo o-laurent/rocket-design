@@ -107,7 +107,7 @@ async function loadNFill_A(add, canvas) {
 
 function drawRocket_A(add, canvas) {
     stageNumber = Number(document.getElementById("stageNumber"+add).textContent)
-    booster = document.getElementById("boosters"+add).textContent=='1'
+    booster = document.getElementById("boosters"+add).textContent
     zoom = document.getElementById("zoomInput").value
     showMass = document.getElementById('fuelCheckbox').checked
     if (stageNumber==1 && booster==false) {
@@ -206,6 +206,7 @@ function drawRocket_A(add, canvas) {
         draw1BAdapt(canvas, fSheight, fSdiameter, bheight, bdiameter, zoom, fScolor, bcolor, fSM0, fSMp, bM0, bMp, showMass)
     }
     else if (stageNumber==2 && booster==false) {
+        console.log('in')
         fSheight = document.getElementById("stage1Height"+add).textContent
         fSdiameter = document.getElementById("stage1Diameter"+add).textContent
         sSheight = document.getElementById("stage2Height"+add).textContent
