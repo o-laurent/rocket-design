@@ -40,7 +40,6 @@ function checkExcentricity() {
 
 function updateSimulationForm() {
     formType = document.getElementById("algoSelect").value
-    console.log(formType)
     if (formType=="random") {
         document.getElementById("moving_form").innerHTML = `<div class="vertical" style="height: 100%;">
             <div>

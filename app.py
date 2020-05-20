@@ -16,22 +16,28 @@ def start():
 
 @app.route('/designrocket.html')
 @app.route('/designrocket')
-def designrocket():
+def designrocketTemplate():
     load_db()
     return render_template("designrocket.html")
 
 
 @app.route('/compare_rockets.html')
 @app.route('/compare_rockets')
-def comprocket():
+def comprocketTemplate():
     load_db()
     return render_template("compare_rockets.html")
 
 @app.route('/optimizing.html')
 @app.route('/optimizing')
-def trajectory():
+def optimizeTemplate():
     load_db()
     return render_template("optimizing.html")
+
+@app.route('/trajectory.html')
+@app.route('/trajectory')
+def trajectory():
+    load_db()
+    return render_template("trajectory.html")
 
 @app.route('/api/newrocket', methods = ['POST'])
 def api_newrocket():

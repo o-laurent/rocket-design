@@ -123,13 +123,11 @@ def modPi(cList: commandList, dimension: int):
         pCrawler = pCrawler.contents.next
         
 #Utility to read the stock
-def read_stock(pstock: stockBivectors):
+def read_stock(pstock: stockBivectors, skip: int=1):
+    print("Reading trajectory...")
     stock_list = []
     test = True
-    i = 0
     while test:
-        if i%1000==0:
-            print(i)
         stock = pstock.contents
         x = stock.state.contents.x
         y = stock.state.contents.y
@@ -138,7 +136,11 @@ def read_stock(pstock: stockBivectors):
         stock_list.append([x,y,dx,dy])
         pstock = stock.previous
         test = not ctypes.cast(pstock, ctypes.c_void_p).value == None
-        i+=1
+        j = 1
+        while test and j<skip:
+            pstock = stock.previous
+            j += 1
+            test = not ctypes.cast(pstock, ctypes.c_void_p).value == None
     return stock_list
 
 #Utility to build the rocket with its name
@@ -203,8 +205,8 @@ def random_optimizer(rocketD: rocket_data=ArianeD, N: int=10000, gd_steps: int=1
     j = forces.runge_kutta_J_GTO(ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
     print("A second minimum has been found ! Its value is ", j)
     opt_value = j
-    pstock = forces.runge_kutta4(ctypes.c_int(10*(Tf+1)), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
-    stock = read_stock(pstock)
+    pstock = forces.runge_kutta4(ctypes.c_int(30*(Tf+1)), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
+    stock = read_stock(pstock, 10)
 
     opt_stock_x = list(map(lambda x : x[0], stock))[::-1]
     opt_stock_y = list(map(lambda x : x[1], stock))[::-1]
