@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 import rocket_module as rkt_module
-from optimizers import random_optimizer, genetic_optimizer
+from optimizers import random_optimizer, genetic_optimizer, rocket_data
 from flask import Flask, render_template, request
 import csv
 
@@ -69,31 +69,88 @@ def api_rocket_byname():
 
 @app.route('/api/optimize', methods = ['POST'])
 def api_optimize():
-    #nom de la fusée 
-    """
     req_json_body = request.get_json().body
     name = req_json_body.name
-    """
-    #paramètres de la mission
-    #paramètres de la simulation
-    #opt_data = genetic_optimizer()
-    opt_data = random_optimizer()
-    #print(opt_data)
+
+    missionParams = req_json_body.missionParams
+    algoParams = req_json_body.algoParams
+
+    algo = algoParams.algorithm
+    rocketD = name2rocketD(name)
+    rocketD.payload_mass = missionParams.payloadMass
+    if algo == "genetic":
+        opt_data = genetic_optimizer(rocketD, algoParams.popSize, algoParams.dimension, algoParams.maxIter, algoParams.gRate, algoParams.gdSteps)
+    elif algo == "random":
+        opt_data = random_optimizer(rocketD, algoParams.testNb, algoParams.gdSteps, algoParams.dimension)
     return opt_data, 200
 
 #Utility functions
+def name2rocketD(name: str):
+    """
+    Returns the rocket_data data structure associated to a specific rocket
+    """
+    g0 = 9.80665
+    rocket = get_rocket_byname(name)
+    ind = rocket['Name'].index[0]
+    stageNb = rocket['Stage number']
+    boosters = rocket['B thrust [kN]'][ind] != None
+
+    #First stage parameters
+    fISP = rocket['S1 ISP [s]']
+    fF = rocket['S1 thrust [kN]']
+    fO = fF/(fISP*g0)
+    T1 = rocket['S1 M0 [tons]']/fO
+    fM = rocket['S2 M0 [tons]']
+    pM = rocket['Payload Mass [kg]']
+
+    #Second Stage parameters
+    if stageNb == 2:
+        sF = rocket['S2 thrust [kN]']
+        sISP = rocket['S2 ISP [s]']
+        sO = sF/(sISP*g0)
+        T2 = rocket['S2 MP [tons]']/sO
+        sM = rocket['S2 M0 [tons]']
+    else:
+        sO = 0
+        sISP = 0
+        T2 = 0
+        sM = 0
+
+    #Booster parameters 
+    if boosters:
+        bF = rocket['B thrust [kN]']
+        bISP = rocket['B ISP [s]']
+        bO = bF/(bISP*g0)
+        bM = rocket['B M0 [tons]']
+        TB = rocket['B MP [tons]']/bO
+    else:
+        bO = 0
+        bISP = 0
+        bM = 0
+        TB = 0
+
+    return rocket_data(stageNb, boosters, fO, fISP, sO, sISP, bO, bISP, T1, T2, TB, fM, sM, bM, pM, None)
+
 def load_db():
+    """
+    Loads the database
+    """
     global rocket_db
     rocket_db = pd.read_csv('rocket_database.csv')
 
 def get_rocket_names():
+    """
+    Gets the name of the rockets stored in the database
+    """
     return list(rocket_db['Name'])
 
-def get_rocket_byname(name: str)->list:
+def get_rocket_byname(name: str)-> pd.DataFrame:
     return rocket_db.loc[rocket_db['Name'] == name]
 
 def add_rocket_db(rocket):
-    print(rocket)
+    """
+    Add a rocket to the database 
+    """
     name = rocket["Name"]
     year = rocket["Year"]
     country = rocket["Country"]

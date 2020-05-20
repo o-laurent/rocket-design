@@ -138,7 +138,7 @@ def read_stock(pstock: stockBivectors, skip: int=1):
         test = not ctypes.cast(pstock, ctypes.c_void_p).value == None
         j = 1
         while test and j<skip:
-            pstock = stock.previous
+            pstock = pstock.contents.previous
             j += 1
             test = not ctypes.cast(pstock, ctypes.c_void_p).value == None
     return stock_list
@@ -178,7 +178,10 @@ def random_optimizer(rocketD: rocket_data=ArianeD, N: int=10000, gd_steps: int=1
     opt_data_json is a JSON string which contains the precision, the associated commands and the trajectory
     """
     #initialization
-    Tf = int(rocketD.T2)
+    if int(rocketD.T2)!= 0:
+        Tf = int(rocketD.T2)
+    else:
+        Tf = int(rocketD.T1)
     times = np.linspace(0, Tf+1, gd_dim+1, endpoint=False).astype(int)[1::]
     cBivector = bivector(ctypes.c_longdouble(0), ctypes.c_longdouble(6371000), ctypes.c_longdouble(-1700/3.6), ctypes.c_longdouble(0))
     stock_Lists = []
@@ -247,7 +250,10 @@ def genetic_optimizer(rocketD: rocket_data=ArianeD, POP_SIZE: int=50, DIM: int=3
 
     print("Genetic optimizer initializing...")
     cBivector = bivector(ctypes.c_longdouble(0), ctypes.c_longdouble(6371000), ctypes.c_longdouble(-1700/3.6), ctypes.c_longdouble(0))
-    Tf = int(rocketD.T2)
+    if int(rocketD.T2)!= 0:
+        Tf = int(rocketD.T2)
+    else:
+        Tf = int(rocketD.T1)
     
     times = np.linspace(0, Tf+1, DIM+1, endpoint=False).astype(int)[1::]
     i = 0
