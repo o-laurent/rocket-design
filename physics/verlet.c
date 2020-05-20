@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "verlet.h"
 #include "structures.h"
+#include "forces.h"
 
 //Computes the gravitationnal field anywhere in Earth's influence sphere (Disc in 2D)
 vector* weight (vector* r) {
@@ -58,7 +59,8 @@ stockBivectors* verlet (bivector* init_state1, bivector* init_state2) {
     state->y = position_t->y;
     stock = consSTOCK(state, stock);
     free(state);
-    while (theta < 2*3.14) {
+    int i = 0;
+    while (i != 2) {
         
         bivector* state = malloc(sizeof(bivector)+1);
         state->x = stock->state->x;
@@ -72,6 +74,9 @@ stockBivectors* verlet (bivector* init_state1, bivector* init_state2) {
         state->y = position_t->y;
         stock = consSTOCK(state, stock);
 
+        if (init_state1->x == state->x) {
+            i=i+1
+        }
         
         free(state);
     }
