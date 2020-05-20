@@ -5,7 +5,7 @@ sudo apt-get install python-pip build-essential python
 
 pip3 install --user virtualenv
 
-dsudo apt-get install python3-venv
+sudo apt-get install python3-venv
 
 python3 -m venv .python-env
 
