@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "verlet.h"
 #include "structures.h"
+#include "forces.h"
 
 //Computes the gravitationnal field anywhere in Earth's influence sphere (Disc in 2D)
 vector* weight (vector* r) {
@@ -33,39 +34,52 @@ pointVerlet* new_acceleration(pointVerlet* u){
     return(u);
 }
 
-stockBivectors* verlet (int step_nb, int t_0, bivector* init_state, rocket_data* rocketD) { 
+stockBivectors* verlet (bivector* init_state1, bivector* init_state2) { 
     stockBivectors* stock = malloc(sizeof(stockBivectors));
     stock->state = NULL;
     stock->previous = NULL;
     bivector* state = malloc(sizeof(bivector)+1);
-    if (step_nb >=1) {
-        int step = 0;
-        long double t = t_0;
-        state->x = init_state->x;
-        state->y = init_state->y;
-        state->dx = init_state->dx;
-        state->dy = init_state->dy;
-        stock->state = state;
-        for (step=0; step<step_nb; step++) {
-            
-            state = linBivector5(1, state, h/6, k1, h/3, k2, h/3, k3, h/6, k4);
-            stock = consSTOCK(state, stock);
-            bivector* state = malloc(sizeof(bivector)+1);
-            state->x = stock->state->x;
-            state->y = stock->state->y;
-            state->dx = stock->state->dx;
-            state->dy = stock->state->dy;
-            t += h;
+    double theta;
+    
+    state->x = init_state1->x;
+    state->y = init_state1->y;
+    state->dx = init_state1->dx;
+    state->dy = init_state1->dy;
+    stock->state = state;
+
+    pointVerlet* position_t = malloc(sizeof(pointVerlet)+1);
+    position_t->x = init_state1->x;
+    position_t->y = init_state1->y;
+    position_t->old_x = init_state2->x;
+    position_t->old_y = init_state2->y;
+    position_t = new_acceleration(position_t);
+    position_t = new_position(position_t);
+
+    state->x = position_t->x;
+    state->y = position_t->y;
+    stock = consSTOCK(state, stock);
+    free(state);
+    int i = 0;
+    while (i != 2) {
+        
+        bivector* state = malloc(sizeof(bivector)+1);
+        state->x = stock->state->x;
+        state->y = stock->state->y;
+        state->dx = stock->state->dx;
+        state->dy = stock->state->dy;
+        position_t = new_acceleration(position_t);
+        position_t = new_position(position_t);
+
+        state->x = position_t->x;
+        state->y = position_t->y;
+        stock = consSTOCK(state, stock);
+
+        if (init_state1->x == state->x) {
+            i=i+1
         }
+        
         free(state);
-        return stock;
     }
-    else {
-        free(state);
-        state->x = 0;
-        state->y = 0;
-        state->dx = 0;
-        state->dy = 0;
-        return stock;
-    }
+    free(position_t);
+    return(stock);
 }

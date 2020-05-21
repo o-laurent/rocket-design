@@ -15,6 +15,7 @@ struct pointVerlet{
 pointVerlet* new_m(pointVerlet* u,double M);
 pointVerlet* new_position(pointVerlet* x);
 pointVerlet* new_acceleration(pointVerlet* u);
+stockBivectors* verlet (bivector* init_state1, bivector* init_state2);
 
 
 #endif
