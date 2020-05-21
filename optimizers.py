@@ -167,7 +167,7 @@ ArianeD = rocket_data(
     cList
 )
 
-def random_optimizer(rocketD: rocket_data=ArianeD, N: int=10000, gd_steps: int=1000, gd_dim: int=3, gd_step_threshold=10^(-10)):
+def random_optimizer(rocketD: rocket_data=ArianeD, N: int=10000, gd_steps: int=1000, gd_dim: int=3, missionParams={"a": 0, "e": 1}, gd_step_threshold=10^(-10)):
     """
     Optimizing function :
 
@@ -177,6 +177,7 @@ def random_optimizer(rocketD: rocket_data=ArianeD, N: int=10000, gd_steps: int=1
     OUTPUT :
     opt_data_json is a JSON string which contains the precision, the associated commands and the trajectory
     """
+    print(missionParams["a"])
     #initialization
     if int(rocketD.T2)!= 0:
         Tf = int(rocketD.T2)
@@ -209,7 +210,7 @@ def random_optimizer(rocketD: rocket_data=ArianeD, N: int=10000, gd_steps: int=1
     print("A second minimum has been found ! Its value is ", j)
     opt_value = j
     pstock = forces.runge_kutta4(ctypes.c_int(30*(Tf+1)), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
-    stock = read_stock(pstock, 10)
+    stock = read_stock(pstock, 50)
 
     opt_stock_x = list(map(lambda x : x[0], stock))[::-1]
     opt_stock_y = list(map(lambda x : x[1], stock))[::-1]
@@ -217,6 +218,7 @@ def random_optimizer(rocketD: rocket_data=ArianeD, N: int=10000, gd_steps: int=1
     opt_stock_dy = list(map(lambda x : x[3], stock))[::-1]
     #Converting to JSON
     opt_data_dict = {
+        "a": missionParams["a"],
         "value": opt_value,
         "commands": opt_commands,
         "stock_x": opt_stock_x,
@@ -231,7 +233,7 @@ def gradient_descent(cList, dimension, gd_step_nb, threshold, rk_step_nb, h0, t_
     -1
 
 
-def genetic_optimizer(rocketD: rocket_data=ArianeD, POP_SIZE: int=50, DIM: int=3, MAX_ITER: int=10, GENERATION_RATE: int=2, FINAL_OPTSTEPS: int=1000):
+def genetic_optimizer(rocketD: rocket_data=ArianeD, POP_SIZE: int=50, DIM: int=3, MAX_ITER: int=10, GENERATION_RATE: int=2, FINAL_OPTSTEPS: int=1000, missionParams={"a": 0, "e": 1}):
     """
     Optimizing function :
 
@@ -379,7 +381,7 @@ def genetic_optimizer(rocketD: rocket_data=ArianeD, POP_SIZE: int=50, DIM: int=3
     cList = cList = gen_commandList(opt_commands, times)
     rocketD.cList = cList
     pstock = forces.runge_kutta4(ctypes.c_int(30*(Tf+1)), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
-    stock = read_stock(pstock)
+    stock = read_stock(pstock, 50)
     opt_stock_x = list(map(lambda x : x[0], stock))[::-1]
     opt_stock_y = list(map(lambda x : x[1], stock))[::-1]
     opt_stock_dx = list(map(lambda x : x[2], stock))[::-1]

@@ -4,6 +4,7 @@ async function updateNames() {
     fillRocketSelector('rocketSelectorL')
 }
 
+document.getElementById('algoSelect').value = "random"
 function updateMissionForm() {
     form = document.getElementById("missionForm")
     mission = document.getElementById("missionSelect").value 

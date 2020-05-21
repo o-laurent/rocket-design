@@ -158,6 +158,7 @@ long double J_GTO (bivector* X) {
 
 //Runge_Kutta function
 stockBivectors* runge_kutta4 (int step_nb, long double h, int t_0, bivector* init_state, rocket_data* rocketD) { 
+    //printf("Payload mass %Lf\n", rocketD->pM);
     stockBivectors* stock = malloc(sizeof(stockBivectors)); //Memorizes the state vector at each step
     stock->state = NULL;
     stock->previous = NULL;
@@ -192,7 +193,12 @@ stockBivectors* runge_kutta4 (int step_nb, long double h, int t_0, bivector* ini
             free(linvector);
             //Computing the result
             bivector* nstate = linBivector5(1, state, h/6, k1, h/3, k2, h/3, k3, h/6, k4);
-            
+
+            //Crash
+            /*if (norm(nstate->x, state->y)<((long double)6371000.0)) {
+                return stock;
+            }*/
+
             //Memorizing
             stock = consSTOCK(nstate, stock);
             state->x = stock->state->x;

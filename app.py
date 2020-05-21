@@ -42,7 +42,6 @@ def trajectory():
 
 @app.route('/api/newrocket', methods = ['POST'])
 def api_newrocket():
-    print(request.is_json)
     rocket = request.get_json()
     add_rocket_db(rocket['rocket'])
     return pd.DataFrame().to_json(), 200
@@ -56,37 +55,35 @@ def api_rocket_names():
 
 @app.route('/api/rockets/all', methods = ['GET'])
 def api_rocket_all():
-    print('inside')
     json = rocket_db.to_json()
-    print(json)
     return json, 200
 
 @app.route('/api/rockets/byname', methods = ['POST'])
 def api_rocket_byname():
-    print(request.get_json())
     json = pd.DataFrame(get_rocket_byname(request.get_json()['name'])).to_json()
-    print(json)
     return json, 200
 
 @app.route('/api/optimize', methods = ['POST'])
 def api_optimize():
-    print('in request')
-    print(request.get_json())
     req_json_body = request.get_json()
-    
     name = req_json_body['name']
-    print(name)
     missionParams = req_json_body['missionParams']
     algoParams = req_json_body['algoParams']
-
+    print(missionParams)
+    if missionParams["mission"]=="GTO orbit":
+        a = (35786+6371)*1000
+        e = 1
+    else:
+        a = missionParams["a"]
+        e = missionParams["e"]
     algo = algoParams['algorithm']
     rocketD = name2rocketD(name)
-
+    missionParam = {"a": a, "e": e}
     rocketD.pM = float(missionParams['payloadMass'])
     if algo == "genetic":
-        opt_data = genetic_optimizer(rocketD, int(algoParams['popSize']), int(algoParams['dimension']), int(algoParams['iterNb']), int(algoParams['gRate']), int(algoParams['gdSteps']))
+        opt_data = genetic_optimizer(rocketD, int(algoParams['popSize']), int(algoParams['dimension']), int(algoParams['iterNb']), int(algoParams['gRate']), int(algoParams['gdSteps']), missionParam)
     elif algo == "random":
-        opt_data = random_optimizer(rocketD, int(algoParams['testNb']), int(algoParams['gdSteps']), int(algoParams['dimension']))
+        opt_data = random_optimizer(rocketD, int(algoParams['testNb']), int(algoParams['gdSteps']), int(algoParams['dimension']), missionParam)
     return opt_data, 200
 
 #Utility functions
@@ -110,9 +107,9 @@ def name2rocketD(name: str):
     T1 = float(rocket['S1 mp [tons]'][ind])*1000/fO
     print(T1)
     fM = float(rocket['S1 m0 [tons]'][ind])*1000
-    #print(fM)
+    print(fM)
     pM = float(rocket['Payload mass [kg]'][ind])
-    #print(pM)
+    print(pM)
 
     #Second Stage parameters
     if stageNb == 2:
