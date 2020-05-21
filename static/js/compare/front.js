@@ -31,6 +31,17 @@ async function loadNFill_A(add, canvas) {
     document.getElementById("rocketName"+add).textContent = rocket["Name"][i]
     document.getElementById("rocketYear"+add).textContent = rocket["Year"][i]
     document.getElementById("rocketCountry"+add).textContent = rocket["Country"][i]
+    mission = rocket["Mission"][i]
+    if (mission=="GTO orbit") {
+        mission = "GTO"
+    } 
+    else {
+        mission = "LEO" 
+    }
+    document.getElementById("mission"+add).textContent = mission
+    document.getElementById("totalHeight"+add).textContent = rocket["Height [m]"][i]
+    document.getElementById("liftOffMass"+add).textContent = rocket["Lift-off mass [tons]"][i]
+    document.getElementById("payloadMass"+add).textContent = rocket["Payload mass [kg]"][i]
 
     if (stageNumber==1 && booster==false) {
         document.getElementById("stage1Height"+add).textContent = rocket["S1 height [m]"][i]
@@ -107,7 +118,7 @@ async function loadNFill_A(add, canvas) {
 
 function drawRocket_A(add, canvas) {
     stageNumber = Number(document.getElementById("stageNumber"+add).textContent)
-    booster = document.getElementById("boosters"+add).textContent
+    booster = document.getElementById("boosters"+add).textContent=="true"
     zoom = document.getElementById("zoomInput").value
     showMass = document.getElementById('fuelCheckbox').checked
     if (stageNumber==1 && booster==false) {

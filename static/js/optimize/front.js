@@ -85,14 +85,31 @@ function updateSimulationForm() {
     }
 }
 
+function checkMass () {
+    mass = Number(document.getElementById("payloadMassInput").value)
+    if (mass > 0) {
+        document.getElementById("payloadMassInput").classList.remove('uk-form-danger')
+        document.getElementById("payloadMassInput").classList.add('uk-form-success')
+        document.getElementById("selectButton").disabled = false 
+    } 
+    else {
+        document.getElementById("payloadMassInput").classList.remove('uk-form-success')
+        document.getElementById("payloadMassInput").classList.add('uk-form-danger')
+        document.getElementById("selectButton").disabled = true
+    }
+}
+
+
 function updatePMass() {
     defaultpmass = Number(document.getElementById("payloadMassL").addEventListener("change", updatePMass).textContent)
     document.getElementById("payloadMassInput").value = defaultpmass
 }
 
+
 function spinnerOn() {
     document.getElementById("overlay").style.display = "block";
 }
+
 
 function spinnerOff() {
     document.getElementById("overlay").style.display = "none";
@@ -102,4 +119,5 @@ function spinnerOff() {
 document.getElementById("algoSelect").addEventListener("change", updateSimulationForm)
 document.getElementById("missionSelect").addEventListener("change", updateMissionForm)
 document.getElementById("excentricityInput").addEventListener("keyup", checkExcentricity)
+document.getElementById("payloadMassInput").addEventListener("keyup", checkMass)
 document.getElementById("payloadMassL").addEventListener("change", updatePMass)
