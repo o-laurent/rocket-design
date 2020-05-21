@@ -101,7 +101,7 @@ function checkMass () {
 
 
 function updatePMass() {
-    defaultpmass = Number(document.getElementById("payloadMassL").addEventListener("change", updatePMass).textContent)
+    defaultpmass = Number(document.getElementById("payloadMassL").textContent)
     document.getElementById("payloadMassInput").value = defaultpmass
 }
 
@@ -120,4 +120,3 @@ document.getElementById("algoSelect").addEventListener("change", updateSimulatio
 document.getElementById("missionSelect").addEventListener("change", updateMissionForm)
 document.getElementById("excentricityInput").addEventListener("keyup", checkExcentricity)
 document.getElementById("payloadMassInput").addEventListener("keyup", checkMass)
-document.getElementById("payloadMassL").addEventListener("change", updatePMass)

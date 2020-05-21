@@ -3,6 +3,7 @@ var names
 document.getElementById("zoomInput").value = 140
 
 
+//Triggering the LoadNFille_A function for the left-hand side with the correct canvas
 function loadNFill_L() {
     //triggers LoadNFill with 'L' as argument
     canvas = document.getElementById("canvasL")
@@ -10,6 +11,7 @@ function loadNFill_L() {
 }
 
 
+//Triggering the LoadNFille_A function for the right-hand side with the correct canvas
 function loadNFill_R() {
     //triggers loadNFill with 'R' as argument
     canvas = document.getElementById("canvasR")
@@ -17,13 +19,15 @@ function loadNFill_R() {
 }
 
 
+//Loading a rocket by name and filling its information
 async function loadNFill_A(add, canvas) {
-    //Loading a rocket by name and filling its information
-    console.log(add)
+    //Resets the fields
     cleanFields(add)
+
+    //Fetching general specifications
     name = document.getElementById('rocketSelector'+add).value
     rocket = await getRocketbyName(name)
-    i = Object.keys(rocket["Stage number"])[0]
+    i = Object.keys(rocket["Stage number"])[0] //Non null index
     stageNumber = rocket["Stage number"][i]
     booster = rocket["B Isp [s]"][i] != null
     document.getElementById("stageNumber"+add).textContent = stageNumber
@@ -43,24 +47,20 @@ async function loadNFill_A(add, canvas) {
     document.getElementById("liftOffMass"+add).textContent = rocket["Lift-off mass [tons]"][i]
     document.getElementById("payloadMass"+add).textContent = rocket["Payload mass [kg]"][i]
 
-    if (stageNumber==1 && booster==false) {
-        document.getElementById("stage1Height"+add).textContent = rocket["S1 height [m]"][i]
-        document.getElementById("stage1Diameter"+add).textContent = rocket["S1 diameter [m]"][i]
-        document.getElementById("stage1Thrust"+add).textContent = rocket["S1 thrust [kN]"][i]
-        document.getElementById("stage1Isp"+add).textContent = rocket["S1 Isp [s]"][i]
-        document.getElementById("stage1M0"+add).textContent = rocket["S1 m0 [tons]"][i]
-        document.getElementById("stage1Mp"+add).textContent = rocket["S1 mp [tons]"][i]
-        document.getElementById("stage1Color"+add).textContent = rocket["S1 color"][i]
-    }
-    else if (stageNumber == 1){
-        document.getElementById("stage1Height"+add).textContent = rocket["S1 height [m]"][i]
-        document.getElementById("stage1Diameter"+add).textContent = rocket["S1 diameter [m]"][i]
-        document.getElementById("stage1Thrust"+add).textContent = rocket["S1 thrust [kN]"][i]
-        document.getElementById("stage1Isp"+add).textContent = rocket["S1 Isp [s]"][i]
-        document.getElementById("stage1M0"+add).textContent = rocket["S1 m0 [tons]"][i]
-        document.getElementById("stage1Mp"+add).textContent = rocket["S1 mp [tons]"][i]
-        document.getElementById("stage1Color"+add).textContent = rocket["S1 color"][i]
+    //Updating the payload mass if it is on the optimizing page
+    updatePMass()
+    
+    //Fetching first stage specifications and filling the associated spans
+    document.getElementById("stage1Height"+add).textContent = rocket["S1 height [m]"][i]
+    document.getElementById("stage1Diameter"+add).textContent = rocket["S1 diameter [m]"][i]
+    document.getElementById("stage1Thrust"+add).textContent = rocket["S1 thrust [kN]"][i]
+    document.getElementById("stage1Isp"+add).textContent = rocket["S1 Isp [s]"][i]
+    document.getElementById("stage1M0"+add).textContent = rocket["S1 m0 [tons]"][i]
+    document.getElementById("stage1Mp"+add).textContent = rocket["S1 mp [tons]"][i]
+    document.getElementById("stage1Color"+add).textContent = rocket["S1 color"][i]
 
+    if (stageNumber==1 && booster == true) {
+        //Fetching booster specifications
         document.getElementById("boosterHeight"+add).textContent = rocket["B height [m]"][i]
         document.getElementById("boosterDiameter"+add).textContent = rocket["B diameter [m]"][i]
         document.getElementById("boosterThrust"+add).textContent = rocket["B thrust [kN]"][i]
@@ -70,14 +70,7 @@ async function loadNFill_A(add, canvas) {
         document.getElementById("boosterColor"+add).textContent = rocket["Booster color"][i]
     }
     else if (stageNumber==2 && booster==false) {
-        document.getElementById("stage1Height"+add).textContent = rocket["S1 height [m]"][i]
-        document.getElementById("stage1Diameter"+add).textContent = rocket["S1 diameter [m]"][i]
-        document.getElementById("stage1Thrust"+add).textContent = rocket["S1 thrust [kN]"][i]
-        document.getElementById("stage1Isp"+add).textContent = rocket["S1 Isp [s]"][i]
-        document.getElementById("stage1M0"+add).textContent = rocket["S1 m0 [tons]"][i]
-        document.getElementById("stage1Mp"+add).textContent = rocket["S1 mp [tons]"][i]
-        document.getElementById("stage1Color"+add).textContent = rocket["S1 color"][i]
-
+        //Fetching second stage specifications
         document.getElementById("stage2Height"+add).textContent = rocket["S2 height [m]"][i]
         document.getElementById("stage2Diameter"+add).textContent = rocket["S2 diameter [m]"][i]
         document.getElementById("stage2Thrust"+add).textContent = rocket["S2 thrust [kN]"][i]
@@ -87,14 +80,7 @@ async function loadNFill_A(add, canvas) {
         document.getElementById("stage2Color"+add).textContent = rocket["S2 color"][i]
     }
     else {
-        document.getElementById("stage1Height"+add).textContent = rocket["S1 height [m]"][i]
-        document.getElementById("stage1Diameter"+add).textContent = rocket["S1 diameter [m]"][i]
-        document.getElementById("stage1Thrust"+add).textContent = rocket["S1 thrust [kN]"][i]
-        document.getElementById("stage1Isp"+add).textContent = rocket["S1 Isp [s]"][i]
-        document.getElementById("stage1M0"+add).textContent = rocket["S1 m0 [tons]"][i]
-        document.getElementById("stage1Mp"+add).textContent = rocket["S1 mp [tons]"][i]
-        document.getElementById("stage1Color"+add).textContent = rocket["S1 color"][i]
-
+        //Fetching boosters and second satge specifications
         document.getElementById("stage2Height"+add).textContent = rocket["S2 height [m]"][i]
         document.getElementById("stage2Diameter"+add).textContent = rocket["S2 diameter [m]"][i]
         document.getElementById("stage2Thrust"+add).textContent = rocket["S2 thrust [kN]"][i]
@@ -116,12 +102,14 @@ async function loadNFill_A(add, canvas) {
     drawRocket_A(add, canvas)
 }
 
+
+//This function chooses the right draw function to call and gives the right parameters
 function drawRocket_A(add, canvas) {
     stageNumber = Number(document.getElementById("stageNumber"+add).textContent)
     booster = document.getElementById("boosters"+add).textContent=="true"
     zoom = document.getElementById("zoomInput").value
     showMass = document.getElementById('fuelCheckbox').checked
-    if (stageNumber==1 && booster==false) {
+    if (stageNumber==1 && booster==false) { //It is a rocket with one stage
         fSheight = document.getElementById("stage1Height"+add).textContent
         fSdiameter = document.getElementById("stage1Diameter"+add).textContent
         fSM0 = document.getElementById("stage1M0"+add).textContent
@@ -154,7 +142,7 @@ function drawRocket_A(add, canvas) {
         clearCanvas(canvas)
         draw1Adapt(canvas, fSheight, fSdiameter, zoom, fScolor, fSM0, fSMp, showMass)
     }
-    else if (stageNumber == 1) {
+    else if (stageNumber == 1) { //It is a rocket with one stage and boosters
         fSheight = document.getElementById("stage1Height"+add).textContent
         fSdiameter = document.getElementById("stage1Diameter"+add).textContent
         bheight = document.getElementById("boosterHeight"+add).textContent
@@ -216,7 +204,7 @@ function drawRocket_A(add, canvas) {
         clearCanvas(canvas)
         draw1BAdapt(canvas, fSheight, fSdiameter, bheight, bdiameter, zoom, fScolor, bcolor, fSM0, fSMp, bM0, bMp, showMass)
     }
-    else if (stageNumber==2 && booster==false) {
+    else if (stageNumber==2 && booster==false) { //It is a rocket with two stages
         console.log('in')
         fSheight = document.getElementById("stage1Height"+add).textContent
         fSdiameter = document.getElementById("stage1Diameter"+add).textContent
@@ -280,7 +268,7 @@ function drawRocket_A(add, canvas) {
         draw2Adapt(canvas,fSheight, fSdiameter, sSheight, sSdiameter, zoom, fScolor, sScolor, fSM0, fSMp, sSM0, sSMp, showMass)
     
     }
-    else {
+    else { //It is a rocket with two stages and boosters
         fSheight = document.getElementById("stage1Height"+add).textContent
         fSdiameter = document.getElementById("stage1Diameter"+add).textContent
         sSheight = document.getElementById("stage2Height"+add).textContent
@@ -375,7 +363,8 @@ function drawRocket_A(add, canvas) {
 }
 
 function cleanFields(add) {
-    //resets the comparing fields when the rocket is changed
+    //Resets the comparing fields befor changing the rocket changed
+    //General
     document.getElementById("rocketName"+add).textContent = ''
     document.getElementById("rocketYear"+add).textContent = ''
     document.getElementById("rocketCountry"+add).textContent = ''
@@ -386,6 +375,7 @@ function cleanFields(add) {
     document.getElementById("stageNumber"+add).textContent = ''
     document.getElementById("boosters"+add).textContent = ''
 
+    //First Stage
     document.getElementById("stage1Height"+add).textContent = ''
     document.getElementById("stage1Diameter"+add).textContent = ''
     document.getElementById("stage1Thrust"+add).textContent = ''
@@ -393,6 +383,7 @@ function cleanFields(add) {
     document.getElementById("stage1M0"+add).textContent = ''
     document.getElementById("stage1Mp"+add).textContent = ''
 
+    //Boosters
     document.getElementById("stage2Height"+add).textContent = ''
     document.getElementById("stage2Diameter"+add).textContent = ''
     document.getElementById("stage2Thrust"+add).textContent = ''
@@ -400,6 +391,7 @@ function cleanFields(add) {
     document.getElementById("stage2M0"+add).textContent = ''
     document.getElementById("stage2Mp"+add).textContent = ''
 
+    //Second Stage
     document.getElementById("boosterHeight"+add).textContent = ''
     document.getElementById("boosterDiameter"+add).textContent = ''
     document.getElementById("boosterThrust"+add).textContent = ''

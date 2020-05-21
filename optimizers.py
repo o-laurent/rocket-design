@@ -280,6 +280,7 @@ def genetic_optimizer(rocketD: rocket_data=ArianeD, POP_SIZE: int=50, DIM: int=3
 
         print("---------------- epoch", epoch+1, "----------------")
         comp = np.partition(v_j.flatten(), POP_SIZE)[POP_SIZE]
+        print("First quantile:", comp,"Minimum:", min(v_j))
         i = 0
         for j in range(POP_SIZE*2):
             if i<=POP_SIZE-1 and v_j[j]<=comp: #If the cost is lower than the first quartile

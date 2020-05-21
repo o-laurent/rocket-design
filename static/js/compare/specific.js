@@ -8,3 +8,8 @@ async function updateNames() {
     fillRocketSelector('rocketSelectorL')
     fillRocketSelector('rocketSelectorR')
 }
+
+//Fake function to prevent an error when used on the compare page
+function updatePMass() {
+    -1
+}
