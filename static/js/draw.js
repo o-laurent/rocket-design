@@ -20,6 +20,7 @@ function draw1Adapt(canvas, fStageHeight, fStageDiameter, zoom, fStageColor, M0=
     ctx.lineTo(midx-150*ratioV, 0);
     ctx.stroke();
 
+    //Computing the heights
     CanvasfStageHeight = fStageHeight*((canvas.height-50)/zoom-0.07)
     CanvasfStageWidth = fStageDiameter*((canvas.height-50)/zoom-0.07)
 
@@ -91,6 +92,7 @@ function draw1BAdapt(canvas, fStageHeight, fStageDiameter, bHeight, bDiameter, z
     ctx.lineTo(midx-150*ratioV, 0);
     ctx.stroke();
 
+    //Computing the heights
     CanvasfStageHeight = fStageHeight*((canvas.height-50)/zoom-0.07)
     CanvasfStageWidth = fStageDiameter*((canvas.height-50)/zoom-0.07)
     CanvasBHeight = bHeight*((canvas.height-50)/zoom-0.07)
@@ -236,6 +238,7 @@ function draw2Adapt(canvas, fStageHeight, fStageDiameter, sStageHeight, sStageDi
     ctx.lineTo(midx-150*ratioV, 0);
     ctx.stroke();
 
+    //Computing the heights
     CanvasfStageHeight = fStageHeight*((canvas.height-50)/zoom-0.07)
     CanvasfStageWidth = fStageDiameter*((canvas.height-50)/zoom-0.07)
     CanvassStageHeight = sStageHeight*((canvas.height-50)/zoom-0.07)
@@ -332,6 +335,7 @@ function draw2BAdapt(canvas, fStageHeight, fStageDiameter, sStageHeight, sStageD
     ctx.lineTo(midx-150*ratioV, 0);
     ctx.stroke();
 
+    //Computing the heights
     CanvasfStageHeight = fStageHeight*((canvas.height-50)/zoom-0.07)
     CanvasfStageWidth = fStageDiameter*((canvas.height-50)/zoom-0.07)
     CanvassStageHeight = sStageHeight*((canvas.height-50)/zoom-0.07)

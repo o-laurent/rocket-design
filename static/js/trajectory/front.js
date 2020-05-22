@@ -1,9 +1,11 @@
-data = JSON.parse(localStorage.getItem("optimizedValues"))
+//Gathering the data
+data = JSON.parse(localStorage.getItem("optimizedValues")) //It has been stored locally to change the page
 a = data.a
+e = data.e
 points = getPoints(data)
-traceTrajectory(points, a)
+traceTrajectory(points, a, e)
 
-
+//transforms the time series into points
 function getPoints(data) {
     x_data = data.stock_x 
     y_data = data.stock_y
@@ -15,16 +17,20 @@ function getPoints(data) {
 }
 
 
-function traceTrajectory(points, a) {
+//Tracing the trajectory with d3
+function traceTrajectory(points, a, e) {
+    //Computing the circles (the Earth and the desired altitude)
     circle = []
     circle_a = []
     centerX = 0
     centerY = 0
-    radius = 6371000
+    radius = 6378137 //radius of the Earth
     steps = points.length
-    for (var i = 0; i < steps; i++) {
-        xValues = (centerX + a * Math.cos(2 * Math.PI * i / steps));
-        yValues = (centerY + a * Math.sin(2 * Math.PI * i / steps));
+    console.log(a*(1+e))
+    for (var i = 0; i <= steps; i++) {
+        //apoapsis in a*(1+e)
+        xValues = (centerX + a*(1+e) * Math.cos(2 * Math.PI * i / steps));
+        yValues = (centerY + a*(1+e) * Math.sin(2 * Math.PI * i / steps));
         circle_a.push({'x': xValues, 'y': yValues})
 
         xValues = (centerX + radius * Math.cos(2 * Math.PI * i / steps));
@@ -46,6 +52,8 @@ function traceTrajectory(points, a) {
     function xValue(d) { return d.x; }      // accessors
     function yValue(d) { return d.y; }
 
+    /*We take take to create scaled-interpolators using 
+                  (d3.extent(data, xValue)[1]-d3.extent(data, xValue)[0])/(d3.extent(data, yValue)[1]-d3.extent(data, yValue)[0])*/
     var x = d3.scaleLinear()                // interpolator for X axis -- inner plot region
         .domain(d3.extent(data, xValue))
         .range([0,height*(d3.extent(data, xValue)[1]-d3.extent(data, xValue)[0])/(d3.extent(data, yValue)[1]-d3.extent(data, yValue)[0])]);
@@ -59,7 +67,7 @@ function traceTrajectory(points, a) {
         .y(function(d) { return y(d.y); } );
 
     var xAxis = d3.axisBottom(x)
-        .ticks(4)                            // request 5 ticks on the x axis
+        .ticks(4)                            // request 4 ticks on the x axis
 
     var yAxis = d3.axisLeft(y)                // y Axis
         .ticks(4)
@@ -115,6 +123,7 @@ function traceTrajectory(points, a) {
 
 }
 
+//Fake function to avoid an error
 function SpinnerOn() {
     -1
 }

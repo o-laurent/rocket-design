@@ -71,10 +71,10 @@ def api_optimize():
     algoParams = req_json_body['algoParams']
     print(missionParams)
     if missionParams["mission"]=="GTO orbit":
-        a = (35786+6371)*1000
-        e = 1
+        a = 24535135.0
+        e = 0.7185206032
     else:
-        a = missionParams["a"]
+        a = missionParams["a"]*1000
         e = missionParams["e"]
     algo = algoParams['algorithm']
     rocketD = name2rocketD(name)

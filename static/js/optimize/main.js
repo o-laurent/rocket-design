@@ -1,11 +1,11 @@
 async function startOptimization() {
-    spinnerOn();
+    spinnerOn(); //Starting spinner
+    //Gathering the msision type
     mission = document.getElementById('missionSelect').value
-    if (mission=='SUB flight') {
-        a = document.getElementById('altitudeInput').value
-        e = 0
-    }
-    else if (mission=='LEO') {
+
+    //Gathering mission params
+    if (mission=='custom') {
+        console.log('in')
         a = document.getElementById('altitudeInput').value
         e = document.getElementById('excentricityInput').value
     }
@@ -23,6 +23,7 @@ async function startOptimization() {
 
     rocketName = document.getElementById("rocketNameL").textContent
 
+    //Gathering algo params
     algorithm = document.getElementById("algoSelect").value
     if (algorithm=="random") {
         testNb = document.getElementById("testNb").value

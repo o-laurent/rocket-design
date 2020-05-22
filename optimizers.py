@@ -64,8 +64,9 @@ except :
 #Setting the right response types
 forces.runge_kutta4.restype = ctypes.POINTER(stockBivectors)
 forces.runge_kutta_J_GTO.restype = ctypes.c_longdouble
+forces.runge_kutta_J.restype = ctypes.c_longdouble
 forces.gradient_descent.restype = ctypes.POINTER(commandList)
-
+forces.gradient_descent_S.restype = ctypes.POINTER(commandList)
 
 #Utilities for linked list 
 def gen_commandList(commands: list, times: list):
@@ -185,12 +186,14 @@ def random_optimizer(rocketD: rocket_data=ArianeD, N: int=10000, gd_steps: int=1
     OUTPUT :
     opt_data_json is a JSON string which contains the precision, the associated commands and the trajectory
     """
-    print(missionParams["a"])
     #initialization
     if int(rocketD.T2)!= 0:
         Tf = int(rocketD.T2)
     else:
         Tf = int(rocketD.T1)
+    
+    a, e =missionParams['a'], missionParams['e']
+    print(a,e)
     times = np.linspace(0, Tf+1, gd_dim+1, endpoint=False).astype(int)[1::]
     cBivector = bivector(ctypes.c_longdouble(0), ctypes.c_longdouble(6371000), ctypes.c_longdouble(-1700/3.6), ctypes.c_longdouble(0))
     stock_Lists = []
@@ -203,18 +206,18 @@ def random_optimizer(rocketD: rocket_data=ArianeD, N: int=10000, gd_steps: int=1
         
         rocketD.cList, commands = random_cList(times, gd_dim, Tf)
         stock_Lists.append(list(commands))
-        J = forces.runge_kutta_J_GTO(ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
+        J = forces.runge_kutta_J(ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD), ctypes.c_longdouble(a), ctypes.c_longdouble(e))
         stock_J.append(J)
     print("A minimum has been found ! Its value is ", min(stock_J))
     #Gradient-descent betterment
     ind = np.argmin(stock_J)
     cList = gen_commandList(stock_Lists[ind], times)
     rocketD.cList = cList
-    cList = forces.gradient_descent(cList, ctypes.c_uint(gd_dim), ctypes.c_uint(gd_steps), ctypes.c_longdouble(10**(-10)), ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
+    cList = forces.gradient_descent_S(cList, ctypes.c_uint(gd_dim), ctypes.c_uint(gd_steps), ctypes.c_longdouble(10**(-10)), ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD), ctypes.c_longdouble(a), ctypes.c_longdouble(e))
     modPi(cList, gd_dim)
     opt_commands = list(cList2array(cList)[0])
     rocketD.cList = gen_commandList(opt_commands, times)
-    j = forces.runge_kutta_J_GTO(ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
+    j = forces.runge_kutta_J(ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD), ctypes.c_longdouble(a), ctypes.c_longdouble(e))
     print("A second minimum has been found ! Its value is ", j)
     opt_value = j
     pstock = forces.runge_kutta4(ctypes.c_int(30*(Tf+1)), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
@@ -226,7 +229,8 @@ def random_optimizer(rocketD: rocket_data=ArianeD, N: int=10000, gd_steps: int=1
     opt_stock_dy = list(map(lambda x : x[3], stock))[::-1]
     #Converting to JSON
     opt_data_dict = {
-        "a": missionParams["a"],
+        "a": a,
+        "e": e,
         "value": opt_value,
         "commands": opt_commands,
         "stock_x": opt_stock_x,
@@ -267,6 +271,8 @@ def genetic_optimizer(rocketD: rocket_data=ArianeD, POP_SIZE: int=50, DIM: int=3
     
     times = np.linspace(0, Tf+1, DIM+1, endpoint=False).astype(int)[1::]
     i = 0
+    a, e =missionParams['a'], missionParams['e'] 
+    print(e)
     Mat_X = np.pi*(np.random.rand(POP_SIZE*GENERATION_RATE, DIM)*2- 1)
     parent_M = np.zeros((POP_SIZE*GENERATION_RATE, DIM))
     v_j = np.zeros(POP_SIZE*GENERATION_RATE)
@@ -277,7 +283,7 @@ def genetic_optimizer(rocketD: rocket_data=ArianeD, POP_SIZE: int=50, DIM: int=3
         parent_M[i] = commands 
         cList = gen_commandList(commands, times)
         rocketD.cList = cList
-        v_j[i] = forces.runge_kutta_J_GTO(ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
+        v_j[i] = forces.runge_kutta_J(ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD), ctypes.c_longdouble(a), ctypes.c_longdouble(e))
     
     #Will contain all the data
     STOCK = np.zeros((MAX_ITER+1, POP_SIZE, DIM))
@@ -343,11 +349,11 @@ def genetic_optimizer(rocketD: rocket_data=ArianeD, POP_SIZE: int=50, DIM: int=3
             cList = gen_commandList(child, times)
             rocketD.cList = cList
             #Optimizing the commands a little
-            true_child = forces.gradient_descent(cList, ctypes.c_uint(DIM), ctypes.c_uint(10), ctypes.c_longdouble(10**(-6)), ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
+            true_child = forces.gradient_descent_S(cList, ctypes.c_uint(DIM), ctypes.c_uint(10), ctypes.c_longdouble(10**(-6)), ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD), ctypes.c_longdouble(a), ctypes.c_longdouble(e))
             modPi(true_child, DIM)
             rocketD.cList = true_child
             #Fetching the real value
-            j = forces.runge_kutta_J_GTO(ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
+            j = forces.runge_kutta_J(ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD), ctypes.c_longdouble(a), ctypes.c_longdouble(e))
             true_children_M[k] = cList2array(true_child)[0]
             j_M[k] = j
             #Advancing the bar
@@ -368,9 +374,9 @@ def genetic_optimizer(rocketD: rocket_data=ArianeD, POP_SIZE: int=50, DIM: int=3
             parent = parent_M[ind]
             cList = gen_commandList(parent, times)
             rocketD.cList = cList
-            true_parent = forces.gradient_descent(cList, ctypes.c_uint(DIM), ctypes.c_uint(FINAL_OPTSTEPS), ctypes.c_longdouble(10**(-10)), ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
+            true_parent = forces.gradient_descent_S(cList, ctypes.c_uint(DIM), ctypes.c_uint(FINAL_OPTSTEPS), ctypes.c_longdouble(10**(-10)), ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD), ctypes.c_longdouble(a), ctypes.c_longdouble(e))
             rocketD.cList = true_parent
-            j = forces.runge_kutta_J_GTO(ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD))
+            j = forces.runge_kutta_J(ctypes.c_int(Tf+1), ctypes.c_longdouble(1), ctypes.c_int(0), ctypes.pointer(cBivector), ctypes.pointer(rocketD), ctypes.c_longdouble(a), ctypes.c_longdouble(e))
             final_parents_M[i] = cList2array(true_parent)[0]
             final_parents_j[i] = j
             i += 1 
@@ -396,6 +402,8 @@ def genetic_optimizer(rocketD: rocket_data=ArianeD, POP_SIZE: int=50, DIM: int=3
 
     #Converting to JSON
     opt_data_dict = {
+        "a": a,
+        "e": e,
         "value": opt_value,
         "commands": opt_commands,
         "stock_x": opt_stock_x,
@@ -410,4 +418,4 @@ def genetic_optimizer(rocketD: rocket_data=ArianeD, POP_SIZE: int=50, DIM: int=3
 
     return opt_data_json
 
-#genetic_optimizer(ArianeD, 200, 6, 20, 2)
+#genetic_optimizer(ArianeD, 50, 3, 10, 2, 10,{'a': 20000000, 'e': 0.5})
