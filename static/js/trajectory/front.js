@@ -3,6 +3,7 @@ a = data.a
 points = getPoints(data)
 traceTrajectory(points, a)
 
+
 function getPoints(data) {
     x_data = data.stock_x 
     y_data = data.stock_y
@@ -12,6 +13,7 @@ function getPoints(data) {
     } 
     return points
 }
+
 
 function traceTrajectory(points, a) {
     circle = []

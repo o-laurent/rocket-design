@@ -87,10 +87,14 @@ def gen_commandList(commands: list, times: list):
         cList.next = ctypes.c_void_p(None)
     return cFirst
 
+
+#Creates a random commandList according to specified parameters
 def random_cList(times: list, gd_dim: int=6, Tf: int=1500):
     commands = np.random.rand(1, gd_dim)*2*np.pi - np.pi
     return gen_commandList(list(commands)[0], times), list(commands)[0]
 
+
+#Print a commandList
 def print_cList(cList: commandList):
     cList2 = ctypes.POINTER(commandList)
     cList2 = cList
@@ -98,6 +102,7 @@ def print_cList(cList: commandList):
     while ctypes.cast(cList2.contents.next, ctypes.c_void_p).value != None:
         cList2 = cList2.contents.next
         print(cList2.contents.t, cList2.contents.c)
+
 
 def cList2array(cList: commandList):
     cList2 = ctypes.POINTER(commandList)
@@ -109,6 +114,7 @@ def cList2array(cList: commandList):
         commands.append(cList2.contents.c)
         times.append(cList2.contents.t)
     return commands, times
+
 
 def modPi(cList: commandList, dimension: int):
     """
@@ -122,6 +128,7 @@ def modPi(cList: commandList, dimension: int):
             pCrawler.contents.c -= 2*np.pi * np.sign(pCrawler.contents.c)
         pCrawler = pCrawler.contents.next
         
+
 #Utility to read the stock
 def read_stock(pstock: stockBivectors, skip: int=1):
     print("Reading trajectory...")
@@ -172,6 +179,7 @@ def random_optimizer(rocketD: rocket_data=ArianeD, N: int=10000, gd_steps: int=1
     Optimizing function :
 
     INPUT :
+    RocketD is a rocket_data structure which contain all important information about the rocket
     N is the number of tries
 
     OUTPUT :
@@ -229,8 +237,6 @@ def random_optimizer(rocketD: rocket_data=ArianeD, N: int=10000, gd_steps: int=1
     opt_data_json = json.dumps(opt_data_dict)
     return opt_data_json
 
-def gradient_descent(cList, dimension, gd_step_nb, threshold, rk_step_nb, h0, t_0, init_state, rockedD):
-    -1
 
 
 def genetic_optimizer(rocketD: rocket_data=ArianeD, POP_SIZE: int=50, DIM: int=3, MAX_ITER: int=10, GENERATION_RATE: int=2, FINAL_OPTSTEPS: int=1000, missionParams={"a": 0, "e": 1}):
@@ -238,6 +244,7 @@ def genetic_optimizer(rocketD: rocket_data=ArianeD, POP_SIZE: int=50, DIM: int=3
     Optimizing function :
 
     INPUT :
+    RocketD is a rocket_data structure which contain all important information about the rocket
     POP_SIZE is the number of people after selection POP_SIZE must be >= 2
     DIM is the dimension of the hypercube ]-pi;pi]^DIM in which we define the command. DIM must be >=2.
     MAX_ITER is the number of iterations of the genetic algorithm
