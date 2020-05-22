@@ -1,20 +1,25 @@
+//Filling the Selector and initializating
 updateNames()
 async function updateNames() {
     names = await getNames()
     fillRocketSelector('rocketSelectorL')
 }
-
 document.getElementById('algoSelect').value = "random"
+
+
+//Allows or not the enter data according to the chosen mission
 function updateMissionForm() {
     form = document.getElementById("missionForm")
     mission = document.getElementById("missionSelect").value 
     altitudeInput = document.getElementById("altitudeInput")
     excentricityInput = document.getElementById("excentricityInput")
     if (mission=="GTO orbit") {
+        //No need for excentricity nor altitude since GTO is already defined
         altitudeInput.disabled = true
         excentricityInput.disabled = true
     }
     else if (mission=="SUB flight") {
+        //The excentricity has no meaning here
         altitudeInput.disabled = false
         excentricityInput.disabled = true
     }
@@ -25,6 +30,7 @@ function updateMissionForm() {
 }
 
 
+//Check that e in [0,1[
 function checkExcentricity() {
     excentricity = Number(document.getElementById("excentricityInput").value)
     excentricityInput = document.getElementById("excentricityInput")
@@ -39,6 +45,7 @@ function checkExcentricity() {
 }
 
 
+//Puts the parameters that correspond to the chosen optimizer
 function updateSimulationForm() {
     formType = document.getElementById("algoSelect").value
     if (formType=="random") {
@@ -86,6 +93,7 @@ function updateSimulationForm() {
     }
 }
 
+//Check that the payload mass has been given and that if is >0 (the optimizer answers Nan if it is not verified)
 function checkMass () {
     mass = Number(document.getElementById("payloadMassInput").value)
     if (mass > 0) {
@@ -101,22 +109,26 @@ function checkMass () {
 }
 
 
+//Update the payload mass to its default values when the rocket is loaded
 function updatePMass() {
     defaultpmass = Number(document.getElementById("payloadMassL").textContent)
     document.getElementById("payloadMassInput").value = defaultpmass
 }
 
 
+//Display the spinner
 function spinnerOn() {
     document.getElementById("overlay").style.display = "block";
 }
 
 
+//Stop displaying the spinner
 function spinnerOff() {
     document.getElementById("overlay").style.display = "none";
 }
 
 
+//Triggers
 document.getElementById("algoSelect").addEventListener("change", updateSimulationForm)
 document.getElementById("missionSelect").addEventListener("change", updateMissionForm)
 document.getElementById("excentricityInput").addEventListener("keyup", checkExcentricity)

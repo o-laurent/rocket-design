@@ -176,8 +176,7 @@
                 <div class="uk-margin">
                     <label class="uk-form-label" for="missionSelect">Type of mission:</label>
                     <select id='missionSelect' class="uk-select uk-form-width-medium">
-                        <option value='SUB flight'>SubOrbital</option>
-                        <option value='LEO orbit'> LEO </option>
+                        <option value='custom'> Custom Orbit </option>
                         <option value='GTO orbit'> GTO </option>           
                     </select>
                 </div>
@@ -201,7 +200,7 @@
             <div class="parameterPanel over">
                 Simulation Panel 
                 <hr>
-                <form id="simulationForm" class="uk-form-vertical">
+                <form id="simulationForm" class="uk-form">
                     <div class="uk-margin">
                         <label class="uk-form-label" for="algoSelect">Type of algorithm :</label>
                         <select id='algoSelect' class="uk-select uk-form-width-medium">
@@ -209,7 +208,9 @@
                             <option value='genetic'> Genetic Optimizer </option>          
                         </select>
                     </div>
+                </form>
                 <hr>
+                <form class="uk-form">
                 <div id="moving_form">
                     <div class="vertical" style="height: 100%;">
                         <div>
@@ -226,6 +227,7 @@
                         </div> 
                     </div>
                 </div>
+            </form>
                 <button id="selectButton" class='uk-button uk-button-default uk-button-primary'  type='button' onclick='startOptimization()'> Launch ! </button>
                 </form>
             </div>

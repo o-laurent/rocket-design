@@ -146,15 +146,20 @@ long double semi_major_axis (bivector* X) {
 
 
 //computes least squares between (a_o, e_o) and (a_GTO, e_GTO)
-long double J_GTO (bivector* X) {
-    long double agto = (long double)24535135.0;
-    long double egto = (long double)0.7185206032;
+long double J_GTO (bivector* X, long double agto, long double egto) {
     long double semi_major = semi_major_axis(X)-agto;
     long double excen = excentricity(X)-egto;
     long double j = semi_major*semi_major/agto/agto + excen*excen/egto/egto; 
     return j;
 }
 
+//Generalized cost function
+long double J (bivector* X, long double a, long double e) {
+    long double semi_major = semi_major_axis(X)-a;
+    long double excen = excentricity(X)-e;
+    long double j = semi_major*semi_major/a/a + excen*excen/e/e; 
+    return j;
+}
 
 //Runge_Kutta function
 stockBivectors* runge_kutta4 (int step_nb, long double h, int t_0, bivector* init_state, rocket_data* rocketD) { 
@@ -234,12 +239,27 @@ void free_sB (stockBivectors* stock) {
 
 //Computes trajectory, frees the stock and returns J_GTO
 long double runge_kutta_J_GTO (int step_nb, long double h, int t_0, bivector* init_state, rocket_data* rocketD) {
+    long double agto = (long double)24535135.0;
+    long double egto = (long double)0.7185206032;
     stockBivectors* stock = runge_kutta4(step_nb, h, t_0, init_state, rocketD);
-    long double j = J_GTO(stock->state);
+    long double j = J_GTO(stock->state, agto, egto);
     free_sB(stock);
     return j;
 }
 
+//Computes trajectory, frees the stock and returns J_GTO
+long double runge_kutta_J (int step_nb, long double h, int t_0, bivector* init_state, rocket_data* rocketD, long double a, long double e) {
+    long double agto = (long double)24535135.0;
+    long double egto = (long double)0.7185206032;
+    if (a==0) {
+        a = agto;
+        e = egto;
+    }
+    stockBivectors* stock = runge_kutta4(step_nb, h, t_0, init_state, rocketD);
+    long double j = J_GTO(stock->state, a, e);
+    free_sB(stock);
+    return j;
+}
 
 //Fonction à vérifier permet de faire varier de h une commande 
 commandList* var_cList (commandList* cList, unsigned int n, unsigned int dimension, long double h) {
@@ -380,6 +400,86 @@ commandList* gradient_descent (commandList* cList0, unsigned int dimension, unsi
         rocketD->cList = X;
         //printf("h %Lf, threshold %Lf, i %d, rk_step_nb %d", h, threshold, i, rk_step_nb);
         j = runge_kutta_J_GTO(rk_step_nb, step_length, t_0, init_state, rocketD);
+    }
+    else {
+        //printf("Erreur; j trop grand pour une amélioration intéressante\n");
+        -1;
+    }
+    //printf("j=%Lf\n", j);
+    return X;
+}
+
+commandList* gradient_descent_S (commandList* cList0, unsigned int dimension, unsigned int gd_step_nb, 
+                                                    long double threshold, int rk_step_nb, long double step_length, int t_0, 
+                                                                        bivector* init_state, rocket_data* rocketD, long double a, long double e) {
+    //Initializations
+    //printf("inside");
+    commandList* X = cList0; 
+    ////printf("X %p\n", X);
+    rocketD->cList = X;
+    commandList* ccList;
+    commandList* hgradient;
+    long double h = 1.0/10;
+    long double pre_j = 1;
+    long double j = runge_kutta_J(rk_step_nb, step_length, t_0, init_state, rocketD, a, e);
+    /*printf("j = %Lf\n", j);
+    printf("X %p\n", X);*/
+    int i = 0;
+    long double* resh = malloc(dimension*sizeof(long double));
+
+    if (j < 1) {
+        //printf("h - thres %Lf, i %d, gd_step_nb %d", h - threshold, i, gd_step_nb);
+        while (h>threshold && i<gd_step_nb) {
+            //printf("in while");
+            while (j<=pre_j && h>threshold && i<gd_step_nb) {
+                //printf("i = %d\n",i);
+                pre_j = j;
+                for (unsigned int k = 0; k<dimension; k++) {
+                    //printf("k=%d\n", k);
+                    ccList = var_cList(X, k, dimension, h);
+                    //cList_modPi(dimension, ccList);
+                    rocketD->cList = ccList;
+                    resh[k] = runge_kutta_J(rk_step_nb, step_length, t_0, init_state, rocketD, a, e);
+                    //printf("resh[%d]=%Lf\n", k, resh[k]);
+                }
+
+                hgradient = hgradient_computation(dimension, resh, j);
+                X = lin_cList(1, X, -1, hgradient, dimension);
+                rocketD->cList = X;
+                
+                //printf("X2 %p\n", X);
+                //A sup
+                //cList_modPi(dimension, X);
+                j = runge_kutta_J(rk_step_nb, step_length, t_0, init_state, rocketD, a, e);
+                //printf("fonctionnelle = %Lf\n", j);
+                i++;
+                //printf("grad1\n");
+            }
+            //printf("grad2\n");
+            if (i<=gd_step_nb && j>pre_j && h>threshold) {
+                //printf("in if");
+                //We've been too far
+                j = pre_j;
+                pre_j = 1; 
+                //cList_modPi(dimension, X);
+                //printf("grad\n");
+                X = lin_cList(1, X, 1, hgradient, dimension); //Come back to the previous point
+                rocketD->cList = X;
+                j = runge_kutta_J(rk_step_nb, step_length, t_0, init_state, rocketD, a, e);
+                //printf("fonctionnelle = %Lf\n", j);
+                h = h/2; //reducing h
+                i--;
+                if (i==gd_step_nb) {
+                    i--;
+                }
+            }
+        }
+        //printf("X1 %p\n", X);
+        //cList_modPi(dimension, X);
+        //printf("X %p\n", X);
+        rocketD->cList = X;
+        //printf("h %Lf, threshold %Lf, i %d, rk_step_nb %d", h, threshold, i, rk_step_nb);
+        j = runge_kutta_J(rk_step_nb, step_length, t_0, init_state, rocketD, a, e);
     }
     else {
         //printf("Erreur; j trop grand pour une amélioration intéressante\n");
